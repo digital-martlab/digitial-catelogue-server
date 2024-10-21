@@ -9,14 +9,13 @@ const pool = mysql.createPool({
     multipleStatements: true,
 });
 
-async function query(sql, params) {
+async function sqlQueryRunner(sql, params) {
     try {
         const rows = await pool.query(sql, params);
         return rows[0];
     } catch (error) {
-        console.error(error);
-        throw 'Database query error';
+        throw error;
     }
 }
 
-module.exports = query;
+module.exports = sqlQueryRunner;
