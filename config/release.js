@@ -10,7 +10,7 @@ async function sqlFileRunner() {
         for (const file of files) {
             // Ensure we only read .sql files
             if (path.extname(file) === '.sql') {
-                const data = await query(`SELECT * FROM releases WHERE file_name = ?`, [file]);
+                const data = await sqlQueryRunner(`SELECT * FROM releases WHERE file_name = ?`, [file]);
                 if (data[0]?.file_name != file) {
                     const filePath = path.join(releasesFolder, file);
                     const sql = fs.readFileSync(filePath, 'utf8').trim();
@@ -18,7 +18,7 @@ async function sqlFileRunner() {
                     console.log(`Executing ${file}...`);
                     await sqlQueryRunner(sql);
 
-                    await query(`INSERT INTO releases(file_name) VALUES(?)`, [file]);
+                    await sqlQueryRunner(`INSERT INTO releases(file_name) VALUES(?)`, [file]);
                     console.log(`${file} executed successfully.`);
                 } else {
                     console.log(`${file} has already been executed.`);
@@ -34,7 +34,7 @@ async function sqlFileRunner() {
 async function runReleases() {
     try {
         // Check if releases table exists and create it if not
-        await query(`SELECT * FROM releases`);
+        await sqlQueryRunner(`SELECT * FROM releases`);
         await sqlFileRunner();
         process.exit();
     } catch (error) {

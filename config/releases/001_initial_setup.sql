@@ -19,7 +19,8 @@ CREATE TABLE
         CHECK (
             CHAR_LENGTH(number) >= 10
             AND CHAR_LENGTH(number) <= 15
-        )
+        ),
+        role ENUM ('USER') DEFAULT 'USER'
     );
 
 -- ADMIN TABLE
@@ -27,12 +28,13 @@ CREATE TABLE
     admins (
         admin_id INT AUTO_INCREMENT PRIMARY KEY,
         user_name VARCHAR(255) NOT NULL UNIQUE,
-        password VARCHAR(255) NOT NULL
+        password VARCHAR(255) NOT NULL,
+        role ENUM ('ADMIN') DEFAULT 'ADMIN'
     );
 
--- INITIALZE AMDIN
+-- INITIALIZE ADMIN
 INSERT INTO
-    `digital_catelogue_app`.`admins` (`user_name`, `password`)
+    admins (user_name, password)
 VALUES
     (
         'digitalmahendra',
