@@ -67,7 +67,7 @@ export function AdminSidebarMobile() {
     return (
         <div className="lg:hidden">
             <MenuIcon fontSize="large" onClick={handleToggle} />
-            <div className={cn("fixed w-full h-screen top-0 left-0 bg-black", open ? "block bg-opacity-50" : "hidden bg-opacity-0")}>
+            <div className={cn("fixed z-50 w-full h-screen top-0 left-0 bg-black", open ? "block bg-opacity-50" : "hidden bg-opacity-0")}>
                 <div
                     ref={sidebarRef}
                     className={cn("fixed w-[200px] h-screen bg-background transition-left duration-300", open ? "left-0" : "-left-1/2")}

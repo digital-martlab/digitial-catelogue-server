@@ -1,17 +1,23 @@
 import AddUpdateCoupons from "@/components/admin/add-update-coupons";
+import NotFound from "@/components/not-found";
 import { Button } from "@/components/ui/button";
 import Title from "@/components/ui/title";
 import { showAlert } from "@/lib/catch-async-api";
 import { deleteCouponFn, getAllCouponFn } from "@/services/admin/coupon-service";
+import CategoryCouponShimmer from "@/shimmer/coupon-category-shimmer";
 import { useCallback, useEffect, useState } from "react";
 
 export default function AdminCoupons() {
+    const [loading, setLoading] = useState(true);
     const [coupons, setCoupons] = useState([]);
     const [toggle, setToggle] = useState(null);
 
     const getAllCoupon = useCallback(() => {
         getAllCouponFn()
-            .then(({ data }) => setCoupons(data));
+            .then(({ data }) => {
+                setCoupons(data)
+                setLoading(false);
+            });
     }, []);
 
     useEffect(() => {
@@ -41,34 +47,37 @@ export default function AdminCoupons() {
 
             <AddUpdateCoupons toggle={toggle} setToggle={setToggle} getAllCoupon={getAllCoupon} />
 
-            {/* Displaying Categories in Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {coupons.map((coupon) => (
-                    <div
-                        key={coupons.cpn_id}
-                        className="border rounded-lg p-4 shadow-md flex justify-between items-center"
-                    >
-                        <div>
-                            <h3 className="text-lg font-semibold">{coupon.cpn_name}</h3>
-                            <p>{coupon.cpn_discount}%</p>
+            {loading && <CategoryCouponShimmer />}
+            {coupons.length === 0 && <NotFound className={"md:w-1/2 lg:w-1/3 mx-auto mt-0"} />}
+            {!loading &&
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    {coupons.map((coupon) => (
+                        <div
+                            key={coupons.cpn_id}
+                            className="border rounded-lg p-4 shadow-md flex justify-between items-center"
+                        >
+                            <div>
+                                <h3 className="text-lg font-semibold">{coupon.cpn_name}</h3>
+                                <p>{coupon.cpn_discount}%</p>
+                            </div>
+                            <div className="flex space-x-2">
+                                <Button
+                                    variant="outline"
+                                    onClick={() => handleEdit(coupon)}
+                                >
+                                    Edit
+                                </Button>
+                                <Button
+                                    variant="destructive"
+                                    onClick={() => handleDelete(coupon.cpn_id)}
+                                >
+                                    Delete
+                                </Button>
+                            </div>
                         </div>
-                        <div className="flex space-x-2">
-                            <Button
-                                variant="outline"
-                                onClick={() => handleEdit(coupon)}
-                            >
-                                Edit
-                            </Button>
-                            <Button
-                                variant="destructive"
-                                onClick={() => handleDelete(coupon.cpn_id)}
-                            >
-                                Delete
-                            </Button>
-                        </div>
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </div>
+            }
         </>
     );
 }
