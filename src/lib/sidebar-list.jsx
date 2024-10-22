@@ -13,10 +13,10 @@ export const AdminSidbarList = [
         icon: StoreIcon,
         link: "/super-admin/stores"
     },
-    {
-        _id: 3,
-        title: "Themes",
-        icon: LayoutGridIcon,
-        link: "/super-admin/themes"
-    }
+    // {
+    //     _id: 3,
+    //     title: "Themes",
+    //     icon: LayoutGridIcon,
+    //     link: "/super-admin/themes"
+    // }
 ]

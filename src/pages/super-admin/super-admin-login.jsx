@@ -3,13 +3,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import useAuth from "@/hooks/use-auth";
 import { showAlert } from "@/lib/catch-async-api";
-import { loginSuperAdminFn } from "@/services/super-admin/login";
+import { ROLES } from "@/lib/roles";
+import { loginSuperAdminFn } from "@/services/super-admin/login-service";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function SuperAdminLogin() {
   const navigate = useNavigate();
-  const { setAuthFn } = useAuth();
+  const { setAuthFn, auth, authLoading } = useAuth();
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
 
@@ -23,17 +24,24 @@ export default function SuperAdminLogin() {
       password
     })
     showAlert(data);
-    localStorage.setItem("digital_mahendra_token", data?.data?.token);
+    localStorage.setItem("digital_martlab_token", data?.data?.token);
     setAuthFn(data?.data?.token)
     navigate("/super-admin/")
   };
 
   useEffect(() => {
+    if (auth && !authLoading) {
+      if (auth?.role === ROLES.SUPER_ADMIN)
+        navigate("/super-admin/")
+      else
+        navigate("/admin/")
+    }
+
     return () => {
       setUserName("");
       setPassword("");
     }
-  }, [])
+  }, [auth, authLoading, navigate])
 
   return (
     <div className="flex justify-center items-center h-screen">

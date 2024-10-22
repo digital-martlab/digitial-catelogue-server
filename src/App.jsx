@@ -18,10 +18,9 @@ export default function App() {
           {protectedRoutes.map(route => (
             <Route
               key={route._id}
-              path={route.link}
               element={<RequireAuth allowedRoles={route.assignedRoles} />}
             >
-              <Route element={route.element} />
+              <Route path={route.link} element={route.element} />
             </Route>
           ))}
         </Route>

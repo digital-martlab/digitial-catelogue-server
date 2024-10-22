@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     function logoutFn() {
-        localStorage.removeItem("digital_mahendra_token");
+        localStorage.removeItem("digital_martlab_token");
         setAuth(null);
         setAuthLoading(false);
         if (auth?.role === ROLES.SUPER_ADMIN) {
@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     useEffect(() => {
-        const token = localStorage.getItem("digital_mahendra_token");
+        const token = localStorage.getItem("digital_martlab_token");
         if (token) {
             setAuthFn(token);
         } else {
