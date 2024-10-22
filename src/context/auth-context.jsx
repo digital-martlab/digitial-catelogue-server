@@ -11,6 +11,7 @@ export const AuthProvider = ({ children }) => {
     const navigate = useNavigate();
 
     function setAuthFn(token) {
+        localStorage.setItem("digital_martlab_token", token);
         setAuth(jwtDecode(token));
         setAuthLoading(false);
     }
