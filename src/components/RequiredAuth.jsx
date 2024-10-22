@@ -14,7 +14,7 @@ const RequireAuth = ({ allowedRoles }) => {
             ? <Outlet />
             : auth?.user_name || auth?.name
                 ? <Navigate to="/" state={{ from: location }} replace />
-                : <Navigate to="/login" state={{ from: location }} replace />
+                : <Navigate to="/admin/login" state={{ from: location }} replace />
     );
 };
 

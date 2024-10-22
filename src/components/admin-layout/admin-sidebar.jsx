@@ -1,12 +1,15 @@
-import { AdminSidbarList } from "@/lib/sidebar-list";
+import { AdminSidbarList, SuperAdminSidbarList } from "@/lib/sidebar-list";
 import { cn } from "@/lib/utils";
 import { MenuIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { buttonVariants } from "../ui/button";
+import useAuth from "@/hooks/use-auth";
+import { ROLES } from "@/lib/roles";
 
 
 export default function AdminSidebar() {
+    const { auth } = useAuth();
     const { pathname } = useLocation();
 
 
@@ -16,7 +19,7 @@ export default function AdminSidebar() {
 
             <div className="mt-8 space-y-2">
                 {
-                    AdminSidbarList.map((item) => (
+                    [...(auth?.role === ROLES.SUPER_ADMIN ? SuperAdminSidbarList : AdminSidbarList)].map((item) => (
                         <Link to={item.link} key={item?._id} className={cn(buttonVariants({
                             size: "sm",
                             variant: pathname === item.link ? "default" : "ghost"

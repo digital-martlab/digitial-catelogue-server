@@ -4,6 +4,7 @@ export const enpoints = {
         store: "/super-admin/store"
     },
     admin: {
-        login: "/admin/login"
+        login: "/admin/login",
+        category: "/admin/category"
     }
 }
