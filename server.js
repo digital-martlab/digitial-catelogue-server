@@ -6,6 +6,7 @@ const constantVariables = require("./config/constant-variables");
 const superAdminRoutes = require("./routes/super-admin-routes");
 const createResponse = require("./config/create-response-config");
 const { StatusCodes } = require("http-status-codes");
+const adminRoutes = require("./routes/admin-routes");
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.get('/', (_, res) => {
     );
 });
 app.use('/super-admin', superAdminRoutes);
+app.use('/admin', adminRoutes);
 
 // Error Handler
 app.use(errorHandler);
