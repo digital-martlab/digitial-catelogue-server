@@ -30,12 +30,12 @@ export default function SuperAdminLogin() {
   };
 
   useEffect(() => {
-    if (auth && !authLoading) {
-      if (auth?.role === ROLES.SUPER_ADMIN)
-        navigate("/super-admin/")
-      else
-        navigate("/admin/")
-    }
+    // if (auth && !authLoading) {
+    //   if (auth?.role === ROLES.SUPER_ADMIN)
+    //     navigate("/super-admin/")
+    //   else
+    //     navigate("/admin/")
+    // }
 
     return () => {
       setUserName("");
