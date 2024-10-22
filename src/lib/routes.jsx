@@ -5,6 +5,7 @@ import SuperAdminLogin from "@/pages/super-admin/super-admin-login";
 import SuperAdminStoreList from "@/pages/super-admin/super-admin-stores";
 import { ROLES } from "./roles";
 import AdminCategory from "@/pages/admin/admin-category";
+import AdminCoupons from "@/pages/admin/admin-coupons";
 
 export const protectedRoutes = [
     // SUPER ADMIN ROUTES
@@ -50,6 +51,12 @@ export const protectedRoutes = [
         _id: "A2",
         element: <AdminCategory />,
         link: "/admin/category",
+        assignedRoles: [ROLES.ADMIN]
+    },
+    {
+        _id: "A3",
+        element: <AdminCoupons />,
+        link: "/admin/coupons",
         assignedRoles: [ROLES.ADMIN]
     }
 ]

@@ -15,7 +15,15 @@ export default function AdminSidebar() {
 
     return (
         <aside className="border-r p-4 h-full">
-            <img src="https://digicatalog.top/storage/uploads/logo/logo-dark.png?timestamp=1729508148" alt="logo" className="h-10 object-contain" />
+            <img
+                src={
+                    auth?.role === ROLES.SUPER_ADMIN
+                        ? "https://digicatalog.top/storage/uploads/logo/logo-dark.png?timestamp=1729508148"
+                        : auth?.logo
+                }
+                alt="logo"
+                className="h-10 object-contain"
+            />
 
             <div className="mt-8 space-y-2">
                 {

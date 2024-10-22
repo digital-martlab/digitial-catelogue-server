@@ -27,6 +27,7 @@ export default function AddUpdateProductCategory({ toggle, setToggle, getAllCate
                 .then((data) => {
                     showAlert(data);
                     handleOnChange();
+                    getAllCategory();
                 })
                 .finally(() => setLoading(false));
         } else {
