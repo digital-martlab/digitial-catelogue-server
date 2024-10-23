@@ -43,6 +43,7 @@ export default function AdminSidebar() {
 }
 
 export function AdminSidebarMobile() {
+    const { pathname } = useLocation();
     const [open, setOpen] = useState(false);
     const sidebarRef = useRef(null);
 
@@ -63,6 +64,9 @@ export function AdminSidebarMobile() {
         };
     }, [open]);
 
+    useEffect(() => {
+        setOpen(false);
+    }, [pathname])
 
     return (
         <div className="lg:hidden">
