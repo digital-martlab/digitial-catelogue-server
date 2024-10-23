@@ -1,9 +1,10 @@
 import useAuth from "@/hooks/use-auth";
 import { ROLES } from "@/lib/roles";
-import { ChevronDownIcon, LogOut, User } from "lucide-react";
+import { ChevronDownIcon, KeyIcon, LogOut, User } from "lucide-react";
 import { Button } from "../ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { AdminSidebarMobile } from "./admin-sidebar";
+import { Link } from "react-router-dom";
 
 export default function AdminTopBar() {
     const { auth, logoutFn } = useAuth();
@@ -24,6 +25,11 @@ export default function AdminTopBar() {
                     <DropdownMenuContent className="mr-4">
                         {auth?.store_id && <DropdownMenuLabel>{auth?.store_id}</DropdownMenuLabel>}
                         <DropdownMenuSeparator />
+                        <DropdownMenuItem>
+                            <Link to={"/admin/change-password"} className="flex gap-1 items-center cursor-pointer">
+                                <KeyIcon className="w-4 h-4" /> Password Change
+                            </Link>
+                        </DropdownMenuItem>
                         <DropdownMenuItem>
                             <div className="flex gap-1 items-center cursor-pointer" onClick={logoutFn}>
                                 <LogOut className="w-4 h-4" /> Logout

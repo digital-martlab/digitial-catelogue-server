@@ -6,6 +6,7 @@ import SuperAdminStoreList from "@/pages/super-admin/super-admin-stores";
 import { ROLES } from "./roles";
 import AdminCategory from "@/pages/admin/admin-category";
 import AdminCoupons from "@/pages/admin/admin-coupons";
+import AdminPasswordChange from "@/components/admin/change-password-admin";
 
 export const protectedRoutes = [
     // SUPER ADMIN ROUTES
@@ -58,5 +59,11 @@ export const protectedRoutes = [
         element: <AdminCoupons />,
         link: "/admin/coupons",
         assignedRoles: [ROLES.ADMIN]
+    },
+    {
+        _id: "A4",
+        element: <AdminPasswordChange />,
+        link: "/admin/change-password",
+        assignedRoles: [ROLES.ADMIN],
     }
 ]
