@@ -6,6 +6,7 @@ export const enpoints = {
     admin: {
         login: "/admin/login",
         category: "/admin/category",
-        coupon: "/admin/coupon"
+        coupon: "/admin/coupon",
+        password_change: "/admin/change-password"
     }
 }
