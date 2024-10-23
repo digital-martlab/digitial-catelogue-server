@@ -1,17 +1,23 @@
 import AddUpdateProductCategory from "@/components/admin/add-update-product-category";
+import NotFound from "@/components/not-found";
 import { Button } from "@/components/ui/button";
 import Title from "@/components/ui/title";
 import { showAlert } from "@/lib/catch-async-api";
 import { deleteProductCategoryFn, getAllProductCategoryFn } from "@/services/admin/category-service";
+import CategoryCouponShimmer from "@/shimmer/coupon-category-shimmer";
 import { useCallback, useEffect, useState } from "react";
 
 export default function AdminCategory() {
+    const [loading, setLoading] = useState(true);
     const [categories, setCategories] = useState([]);
     const [toggle, setToggle] = useState(null);
 
     const getAllCategory = useCallback(() => {
         getAllProductCategoryFn({})
-            .then(({ data }) => setCategories(data));
+            .then(({ data }) => {
+                setCategories(data)
+                setLoading(false);
+            });
     }, []);
 
     useEffect(() => {
@@ -41,8 +47,9 @@ export default function AdminCategory() {
 
             <AddUpdateProductCategory toggle={toggle} setToggle={setToggle} getAllCategory={getAllCategory} />
 
-            {/* Displaying Categories in Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {loading && <CategoryCouponShimmer />}
+            {categories.length === 0 && <NotFound className={"md:w-1/2 lg:w-1/3 mx-auto mt-0"} />}
+            {!loading && <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {categories.map((category) => (
                     <div
                         key={category.ctg_id}
@@ -67,7 +74,7 @@ export default function AdminCategory() {
                         </div>
                     </div>
                 ))}
-            </div>
+            </div>}
         </>
     );
 }
