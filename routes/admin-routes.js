@@ -4,6 +4,7 @@ const categoryAdminController = require("../controllers/admin/category-admin-con
 const verifyJWT = require("../middlewares/auth-middleware");
 const { ROLES } = require("../config/roles-config");
 const couponAdminController = require("../controllers/admin/coupon-admin-controller");
+const passwordChangeAdmin = require("../controllers/admin/password-change-admin");
 
 const adminRoutes = express.Router();
 
@@ -24,5 +25,8 @@ adminRoutes.route("/coupon")
     .get(couponAdminController.getAllCoupons)
     .patch(couponAdminController.updateCoupon)
     .delete(couponAdminController.deleteCoupon);
+
+
+adminRoutes.post("/change-password", verifyJWT([ROLES.ADMIN]), passwordChangeAdmin)
 
 module.exports = adminRoutes;
