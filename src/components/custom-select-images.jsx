@@ -104,10 +104,9 @@ export default function SelectedImages() {
                                 {selectedImages.map((img) => (
                                     <CarouselItem
                                         className="basis-1/2 lg:basis-1/4 max-w-[180px]"
-                                        key={img?._id}
+                                        key={img?.url}
                                     >
                                         <div
-                                            key={img?._id}
                                             className="relative w-full aspect-square overflow-hidden rounded-lg cursor-pointer group"
                                         >
                                             <img
@@ -141,7 +140,7 @@ export default function SelectedImages() {
                                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4  gap-4 max-h-[500px] overflow-y-scroll">
                                     {images.map((img) => (
                                         <div
-                                            key={img?._id}
+                                            key={img?.url}
                                             className="relative w-full aspect-square overflow-hidden rounded-lg cursor-pointer group shadow-sm hover:shadow-lg"
                                         >
                                             <img

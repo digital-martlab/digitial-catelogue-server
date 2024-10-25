@@ -1,21 +1,22 @@
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import useSelectImages from "@/hooks/use-select-image";
 import { showAlert } from "@/lib/catch-async-api";
 import { getAllProductCategoryFn } from "@/services/admin/category-service";
-import { createProductAdminFn } from "@/services/admin/product-service";
+import { createProductAdminFn, getSingleProductFn, updateProductFn } from "@/services/admin/product-service";
 import { Camera, Trash2Icon } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import Title from "../ui/title";
 
 export default function AddUpdateProduct() {
+    const { status, product_id } = useParams();
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-    const { selectedImages, setSelectDialogOpen, handelDeleteSingleSelectedImages, handleDeleteAllSelectedImages } = useSelectImages();
+    const { selectedImages, setSelectDialogOpen, handelDeleteSingleSelectedImages, handleDeleteAllSelectedImages, setSelectedImages } = useSelectImages();
     const [categories, setCategories] = useState([]);
     const [categoryId, setCategoryId] = useState('');
     const [title, setTitle] = useState("");
@@ -33,7 +34,7 @@ export default function AddUpdateProduct() {
         if (variants.length < 3) {
             setVariants([...variants, { variantId: variants.length + 1, variantTitle: "", price: "", stock: "" }]);
         } else {
-            showAlert({ message: "You can create at most 4 variants." });
+            showAlert({ message: "You can create at most 3 variants." });
         }
     };
 
@@ -59,20 +60,54 @@ export default function AddUpdateProduct() {
         }
 
         setLoading(true);
-        createProductAdminFn(data).then((data) => {
-            showAlert(data)
-            navigate("/admin/products");
-            handleDeleteAllSelectedImages();
-        }).finally(() => setLoading(false))
+
+        if (status === "update")
+            updateProductFn({ ...data, product_id })
+                .then(data => {
+                    showAlert(data);
+                    navigate("/admin/products");
+                    handleDeleteAllSelectedImages();
+                })
+                .finally(() => setLoading(false))
+        else
+            createProductAdminFn(data)
+                .then((data) => {
+                    showAlert(data)
+                    navigate("/admin/products");
+                    handleDeleteAllSelectedImages();
+                }).finally(() => setLoading(false))
     };
 
     useEffect(() => {
         getAllProductCategoryFn().then(({ data }) => setCategories(data));
-    }, []);
+
+        return () => handleDeleteAllSelectedImages();
+    }, [handleDeleteAllSelectedImages])
+
+    useEffect(() => {
+        if (status === "update" && product_id) {
+            getSingleProductFn(product_id).then(({ data }) => {
+                setTitle(data?.title);
+                setCategoryId(data?.ctg_id);
+                setDescription(data?.description);
+                const variants = data?.variants?.map((item) => ({
+                    variantId: item?.variant_id,
+                    variantTitle: item?.variant_title,
+                    price: item?.price,
+                    stock: item?.stock
+                }))
+                setVariants(variants);
+                setSelectedImages(data?.images);
+            })
+        }
+    }, [status, product_id, setSelectedImages]);
 
     return (
         <>
-            <Title title="Add Product" className="text-center mb-6" />
+            <div className="flex justify-between items-center max-w-3xl mx-auto">
+                <Title title={status === "update" ? "Update Product" : "Add Product"} className="text-center mb-6" />
+                <Link to={"/admin/products"} className={buttonVariants({ size: "sm" })}>Back</Link>
+            </div>
             <form onSubmit={handleSubmit} className="max-w-3xl mx-auto p-6 shadow-md rounded-lg">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="flex flex-col space-y-4">
@@ -143,7 +178,7 @@ export default function AddUpdateProduct() {
                                     <div className="absolute bottom-2 right-2 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                                         <label
                                             className="cursor-pointer h-8 w-8 bg-primary rounded-full flex items-center justify-center"
-                                            onClick={() => setSelectDialogOpen(6)}
+                                            onClick={() => setSelectDialogOpen(3)}
                                         >
                                             <Camera className="w-4 text-black h-4" />
                                         </label>
@@ -156,7 +191,7 @@ export default function AddUpdateProduct() {
                                     </div>
                                 </div>
                             ))}
-                            {selectedImages.length <= 3 && (
+                            {selectedImages.length < 3 && (
                                 <div className="w-full h-24 border rounded-md flex justify-center items-center cursor-pointer">
                                     <label
                                         className="cursor-pointer"
@@ -170,7 +205,7 @@ export default function AddUpdateProduct() {
                     </div>
                 </div>
                 <div className="text-end my-4">
-                    <Button type="button" size="sm" onClick={handleAddVariant}>
+                    <Button type="button" size="sm" disabled={variants.length === 3} onClick={handleAddVariant}>
                         Add Another Variant
                     </Button>
                 </div>
@@ -223,7 +258,7 @@ export default function AddUpdateProduct() {
                 </fieldset>
 
                 <Button type="submit" className="w-full mt-4 bg-primary hover:bg-primary-dark">
-                    {loading ? "Saving..." : "Add"} Product
+                    {loading ? "Saving..." : status === "update" ? "Update" : "Add"}
                 </Button>
             </form>
         </>
