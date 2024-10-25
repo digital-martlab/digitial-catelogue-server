@@ -1,13 +1,12 @@
 import { ThemeProvider } from "@/components/theme-provider";
 import { Route, Routes } from 'react-router-dom';
+import RequireAuth from "./components/RequiredAuth";
 import { Toaster } from './components/ui/toaster';
 import { default as AdminLayout } from './layouts/admin-layout';
 import { protectedRoutes } from "./lib/routes";
-import SuperAdminLogin from './pages/super-admin/super-admin-login';
-import RequireAuth from "./components/RequiredAuth";
 import AdminLogin from "./pages/admin/admin-login";
-import SelectedImages from "./components/custom-select-images";
-import UploadImages from "./components/custom-upload-images";
+import StoreProductListing from "./pages/store/store-product-listing";
+import SuperAdminLogin from './pages/super-admin/super-admin-login';
 
 export default function App() {
   return (
@@ -15,6 +14,7 @@ export default function App() {
       <Routes>
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/super-admin/login" element={<SuperAdminLogin />} />
+        <Route path="/store/:store_name" element={<StoreProductListing />} />
 
         <Route element={<AdminLayout />}>
           {protectedRoutes.map(route => (
@@ -28,8 +28,6 @@ export default function App() {
         </Route>
       </Routes>
       <Toaster />
-      <SelectedImages />
-      <UploadImages />
     </ThemeProvider>
   );
 }
