@@ -10,7 +10,7 @@ export default function AdminTopBar() {
     const { auth, logoutFn } = useAuth();
 
     return (
-        <div className="flex justify-between items-center border-b p-4">
+        <div className="flex justify-between items-center border-b p-4 h-16">
             <div className="flex items-center gap-2">
                 <AdminSidebarMobile />
                 <h1 className="text-xl md:text-2xl lg:text-3xl font-bold">{auth?.role === ROLES.SUPER_ADMIN ? "Super Admin Panel" : "Admin Panel"} </h1>

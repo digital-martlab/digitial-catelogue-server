@@ -7,6 +7,8 @@ import { ROLES } from "./roles";
 import AdminCategory from "@/pages/admin/admin-category";
 import AdminCoupons from "@/pages/admin/admin-coupons";
 import AdminPasswordChange from "@/components/admin/change-password-admin";
+import AdminProductList from "@/pages/admin/product-list-admin";
+import AddUpdateProduct from "@/components/admin/add-update-product";
 
 export const protectedRoutes = [
     // SUPER ADMIN ROUTES
@@ -64,6 +66,24 @@ export const protectedRoutes = [
         _id: "A4",
         element: <AdminPasswordChange />,
         link: "/admin/change-password",
+        assignedRoles: [ROLES.ADMIN],
+    },
+    {
+        _id: "A5",
+        element: <AdminProductList />,
+        link: "/admin/products",
+        assignedRoles: [ROLES.ADMIN],
+    },
+    {
+        _id: "A6",
+        element: <AddUpdateProduct />,
+        link: "/admin/products/:status",
+        assignedRoles: [ROLES.ADMIN],
+    },
+    {
+        _id: "A7",
+        element: <AddUpdateProduct />,
+        link: "/admin/products/:status/:product_id",
         assignedRoles: [ROLES.ADMIN],
     }
 ]
