@@ -2,7 +2,7 @@ const { StatusCodes } = require("http-status-codes");
 const createResponse = require("../../config/create-response-config");
 const catchAsyncHandler = require("../../middlewares/catch-async-handler-middleware");
 const ErrorCreator = require("../../config/error-creator-config");
-const sqlQueryRunner = require("../../config/database");
+const { sqlQueryRunner } = require("../../config/database");
 
 module.exports = {
     createCategory: catchAsyncHandler(async (req, res, next) => {

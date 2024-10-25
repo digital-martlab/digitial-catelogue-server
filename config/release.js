@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs');
-const sqlQueryRunner = require('./database');
+const { sqlQueryRunner } = require('./database');
 
 async function sqlFileRunner() {
     try {
