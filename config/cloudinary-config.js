@@ -2,6 +2,7 @@ const { StatusCodes } = require("http-status-codes");
 const ErrorCreator = require("../config/error-creator-config");
 const { v2: cloudinary } = require("cloudinary");
 const constantVariables = require("./constant-variables");
+const fs = require('fs');
 
 
 // Connecting to Cloudinary
@@ -83,13 +84,21 @@ const deleteImage = async (publicId) => {
         console.log(error);
         throw new ErrorCreator(
             StatusCodes.INTERNAL_SERVER_ERROR,
-            `Failed to delete image`,
+            `Unable to delete the image because it is currently in use elsewhere.`,
         );
     }
+};
+
+// Helper to convert file to Base64
+const imageToBase64 = (file) => {
+    if (file?.size > 500 * 1024)
+        throw new Error("File size must be less than 500kb");
+    return file.buffer.toString("base64");
 };
 
 module.exports = {
     uploadImage,
     uploadMultipleImages,
-    deleteImage
+    deleteImage,
+    imageToBase64
 }

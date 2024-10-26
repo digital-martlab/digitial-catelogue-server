@@ -14,6 +14,7 @@ superAdminRoutes.use('/store', verifyJWT([ROLES.SUPER_ADMIN]));
 superAdminRoutes.route('/store')
     .post(storesAdminController.createStore)
     .get(verifyJWT([ROLES.SUPER_ADMIN]), storesAdminController.getAllStores)
+
 superAdminRoutes.route('/store/:store_id')
     .get(storesAdminController.getSingleStore)
     .post(storesAdminController.updateStoreActiveStatus)

@@ -1,8 +1,7 @@
-DROP TABLE IF EXISTS stores;
+DROP TABLE IF EXISTS "stores";
 
-DROP TABLE IF EXISTS admins;
+DROP TABLE IF EXISTS "admins";
 
--- STORE TABLE
 CREATE TABLE
     stores (
         acc_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -26,7 +25,6 @@ CREATE TABLE
         password VARCHAR(255) NOT NULL
     );
 
--- ADMIN TABLE
 CREATE TABLE
     admins (
         admin_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -35,7 +33,6 @@ CREATE TABLE
         role ENUM ('SUPER_ADMIN') DEFAULT 'SUPER_ADMIN'
     );
 
--- INITIALIZE ADMIN
 INSERT INTO
     admins (user_name, password)
 VALUES

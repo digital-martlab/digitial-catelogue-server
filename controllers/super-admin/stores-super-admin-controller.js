@@ -3,7 +3,7 @@ const createResponse = require("../../config/create-response-config");
 const catchAsyncHandler = require("../../middlewares/catch-async-handler-middleware");
 const createSlug = require("../../config/slug-creator-config")
 const ErrorCreator = require("../../config/error-creator-config");
-const sqlQueryRunner = require("../../config/database");
+const { sqlQueryRunner } = require("../../config/database");
 const bcrypt = require('bcrypt');
 const { uploadImage, deleteImage, uploadMultipleImages } = require("../../config/cloudinary-config");
 const constantVariables = require("../../config/constant-variables");
@@ -61,7 +61,7 @@ module.exports = {
         }
 
         // Add LIMIT and OFFSET for pagination
-        baseSql += ` LIMIT ? OFFSET ?`;
+        // baseSql += ` LIMIT ? OFFSET ?`;
 
         // Values to be passed to the query
         const values = search ? [search, search, search, search, limit, offset] : [limit, offset];
@@ -89,10 +89,9 @@ module.exports = {
             });
 
         } catch (error) {
-            return next(new ErrorCreator(StatusCodes.INTERNAL_SERVER_ERROR, "An error occurred while fetching stores."));
+            throw error;
         }
     }),
-
 
     updateStoreActiveStatus: catchAsyncHandler(async (req, res, next) => {
         const { store_id } = req.params;
@@ -115,7 +114,6 @@ module.exports = {
 
         return createResponse(res, StatusCodes.OK, "Store active status updated successfully.");
     }),
-
 
     getSingleStore: catchAsyncHandler(async (req, res, next) => {
         const { store_id } = req.params;
