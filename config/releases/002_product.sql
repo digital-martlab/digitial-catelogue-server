@@ -19,7 +19,7 @@ SET
 CREATE TABLE
     product_category (
         ctg_id INT PRIMARY KEY AUTO_INCREMENT,
-        ctg_name VARCHAR(50) UNIQUE NOT NULL,
+        ctg_name VARCHAR(50) NOT NULL,
         acc_id INT NOT NULL,
         FOREIGN KEY (acc_id) REFERENCES stores (acc_id)
     );
@@ -27,7 +27,7 @@ CREATE TABLE
 CREATE TABLE
     coupons (
         cpn_id INT PRIMARY KEY AUTO_INCREMENT,
-        cpn_name VARCHAR(50) UNIQUE NOT NULL,
+        cpn_name VARCHAR(50) NOT NULL COLLATE utf8mb4_bin,
         cpn_discount INT NOT NULL,
         acc_id INT NOT NULL,
         FOREIGN KEY (acc_id) REFERENCES stores (acc_id),
