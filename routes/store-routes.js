@@ -9,6 +9,8 @@ const storeRoutes = express.Router();
 storeRoutes.get("/:store_slug", storeInfoController.getStoreInfo);
 storeRoutes.route("/products/:acc_id")
     .get(storeProductController.getAllProducts)
+storeRoutes.route("/filtered-products/:acc_id")
+    .get(storeProductController.getFilteredProduct);
 storeRoutes.route("/coupon/:acc_id").get(couponStoreController.applyCoupon);
 storeRoutes.route("/order").post(storeOrderController.createOrder);
 
