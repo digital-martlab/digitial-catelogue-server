@@ -11,5 +11,11 @@ export const enpoints = {
         product: "/admin/product",
         gallery: "/admin/gallery",
         dashboard: "/admin/dashboard"
+    },
+    store: {
+        storeInfo: "/store",
+        products: "/store/products",
+        coupon: "/store/coupon",
+        order: "/store/order"
     }
 }

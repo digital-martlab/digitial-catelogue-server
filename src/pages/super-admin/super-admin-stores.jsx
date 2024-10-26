@@ -1,3 +1,4 @@
+import NotFound from "@/components/not-found";
 import { buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
@@ -76,6 +77,12 @@ export default function SuperAdminStoreList() {
                     {loading && <ShimmerTableBody row={10} coloumn={11} />}
                     {!loading &&
                         <TableBody>
+                            {!loading && stores.length === 0 && (<TableRow>
+                                <TableCell className="min-h-[500px]" colSpan={11}>
+                                    <NotFound className="mx-auto" />
+                                </TableCell>
+                            </TableRow>
+                            )}
                             {stores?.map(store => (
                                 <TableRow key={store.store_id}>
                                     <TableCell>
@@ -88,7 +95,7 @@ export default function SuperAdminStoreList() {
                                     <TableCell className="text-sm text-center">{store.email}</TableCell>
                                     <TableCell className="text-sm text-center">{store.number}</TableCell>
                                     <TableCell className="text-sm text-center">
-                                        <img src={store.logo} alt="logo" className="w-10 h-10 rounded-full mx-auto" />
+                                        <img src={store.logo} alt="logo" className="w-10 h-10 rounded-full mx-auto object-contain" />
                                     </TableCell>
                                     <TableCell className="text-sm text-center">{new Date(store.created_at).toLocaleDateString()}</TableCell>
                                     <TableCell className="text-sm text-center">{new Date(store.updated_at).toLocaleDateString()}</TableCell>

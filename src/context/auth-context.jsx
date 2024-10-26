@@ -11,13 +11,13 @@ export const AuthProvider = ({ children }) => {
     const navigate = useNavigate();
 
     function setAuthFn(token) {
-        localStorage.setItem("digital_martlab_token", token);
+        localStorage.setItem("digital_catelogue_app_token", token);
         setAuth(jwtDecode(token));
         setAuthLoading(false);
     }
 
     function logoutFn() {
-        localStorage.removeItem("digital_martlab_token");
+        localStorage.removeItem("digital_catelogue_app_token");
         setAuth(null);
         setAuthLoading(false);
         if (auth?.role === ROLES.SUPER_ADMIN) {
@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     useEffect(() => {
-        const token = localStorage.getItem("digital_martlab_token");
+        const token = localStorage.getItem("digital_catelogue_app_token");
         if (token) {
             setAuthFn(token);
         } else {

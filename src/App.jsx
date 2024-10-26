@@ -14,7 +14,7 @@ export default function App() {
       <Routes>
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/super-admin/login" element={<SuperAdminLogin />} />
-        <Route path="/store/:store_name" element={<StoreProductListing />} />
+        <Route path="/store/:store_slug" element={<StoreProductListing />} />
 
         <Route element={<AdminLayout />}>
           {protectedRoutes.map(route => (

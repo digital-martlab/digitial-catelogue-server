@@ -1,16 +1,19 @@
+import { cn } from "@/lib/utils";
+import { priceIcon } from "@/utils/constants";
 import { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
-import { cn } from "@/lib/utils";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../ui/select";
-import { priceIcon } from "@/utils/constants";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { Button } from "../ui/button";
+import useStore from "@/hooks/use-store";
 
 export default function StoreProductDetails({ item, setDisplayProductDetails }) {
     const [displayImage, setDisplayImage] = useState(null);
     const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
+    const { handleSetCartItem } = useStore();
 
     useEffect(() => {
         if (item) {
-            setDisplayImage(item.product_images[0]?.url);
+            setDisplayImage(item?.images?.[0]?.url);
             setSelectedVariantIndex(0);
         }
         return () => {
@@ -21,7 +24,8 @@ export default function StoreProductDetails({ item, setDisplayProductDetails }) 
 
     if (!item) return null;
 
-    const selectedVariant = item.product_variants[selectedVariantIndex];
+
+    const selectedVariant = item.variants[selectedVariantIndex];
 
     return (
         <Dialog open={!!item} onOpenChange={() => setDisplayProductDetails(null)}>
@@ -41,7 +45,7 @@ export default function StoreProductDetails({ item, setDisplayProductDetails }) 
                             )}
                         </div>
                         <div className="grid grid-cols-3 gap-4 pt-4">
-                            {item.product_images.map((img) => (
+                            {item?.images.map((img) => (
                                 <div
                                     key={img.img_id}
                                     className={cn(
@@ -62,12 +66,6 @@ export default function StoreProductDetails({ item, setDisplayProductDetails }) 
                     <div className="space-y-4">
                         <div className="flex gap-2">
                             <span className="rounded-sm bg-accent px-2 py-1 text-xs">{item.ctg_name}</span>
-                            <span className={cn(
-                                'rounded-sm px-2 py-1 text-xs text-white',
-                                item.is_active ? 'bg-green-500' : 'bg-red-500'
-                            )}>
-                                {item.is_active ? "Available" : "Unavailable"}
-                            </span>
                         </div>
                         <p className="text-2xl font-bold">{item.title}</p>
                         <p className="text-sm text-gray-600">{item.description}</p>
@@ -82,7 +80,7 @@ export default function StoreProductDetails({ item, setDisplayProductDetails }) 
                                     <SelectValue placeholder="Choose a variant" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {item.product_variants.map((variant, index) => (
+                                    {item.variants.map((variant, index) => (
                                         <SelectItem key={variant.variant_id} value={index.toString()}>
                                             {variant.variant_title}
                                         </SelectItem>
@@ -93,7 +91,30 @@ export default function StoreProductDetails({ item, setDisplayProductDetails }) 
                             <div className="mt-4">
                                 <p className="font-semibold">Selected Variant: <span className="font-bold">{selectedVariant?.variant_title}</span></p>
                                 <p className="mt-2 text-lg font-bold">{priceIcon}{selectedVariant?.price}</p>
-                                <p className="mt-1">Stock: <span className={selectedVariant?.stock > 0 ? 'text-green-500' : 'text-red-500'}>{selectedVariant?.stock}</span></p>
+                                <p className="mt-1">
+                                    {selectedVariant?.stock <= 20 && selectedVariant?.stock > 0 &&
+                                        <span className='text-red-500'>
+                                            Only {selectedVariant?.stock} Left
+                                        </span>
+                                    }
+                                    {selectedVariant?.stock === 0 &&
+                                        <span className='text-red-500'>
+                                            out of stock
+                                        </span>
+                                    }
+                                </p>
+                                <Button
+                                    size="sm"
+                                    className="mt-2"
+                                    disabled={selectedVariant?.stock === 0}
+                                    onClick={() => handleSetCartItem({
+                                        product_id: item.product_id,
+                                        variant_id: item.variants?.[selectedVariantIndex]?.variant_id,
+                                        acc_id: item?.acc_id
+                                    })}
+                                >
+                                    Add to Cart
+                                </Button>
                             </div>
                         </div>
                     </div>

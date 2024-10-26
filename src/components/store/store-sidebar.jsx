@@ -1,34 +1,48 @@
+import useStore from "@/hooks/use-store";
 import { cn } from "@/lib/utils";
 import { MenuIcon } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "../ui/button";
-import { categories } from "@/utils/prodcuts";
 
 export default function StoreSidebar() {
-    const [selected, setSelected] = useState(1.9999);
+    const { storeInfo, categories, setSelectedCategories, selectedCategories } = useStore();
+
+    const handleSelected = (value) => setSelectedCategories(value)
 
     return (
         <aside className="border-r p-4 h-full">
             <img
-                src={"https://digicatalog.top/storage/uploads/logo/logo-dark.png?timestamp=1729508148"}
+                src={storeInfo?.logo}
                 alt="logo"
-                className="h-10 object-contain"
+                className="h-10 object-contain mx-auto"
             />
 
             <div className="mt-8 space-y-2">
+                <Button
+                    key={1.9999}
+                    variant={selectedCategories === 1.9999 ? "default" : "ghost"}
+                    className="w-full justify-start"
+                    onClick={() => handleSelected(1.9999)}
+                >
+                    All
+                </Button>
                 {categories?.map((cat) =>
-                    <Button key={cat.ctg_id} variant={selected === cat.ctg_id ? "default" : "ghost"} className="w-full justify-start">
+                    <Button
+                        key={cat.ctg_id}
+                        variant={selectedCategories === cat.ctg_id ? "default" : "ghost"}
+                        className="w-full justify-start"
+                        onClick={() => handleSelected(cat?.ctg_id)}
+                    >
                         {cat.ctg_name}
                     </Button>
                 )}
             </div>
-        </aside>
+        </aside >
     )
 }
 
 export function StoreSidebarMobile() {
-    const { pathname } = useLocation();
+    const { selectedCategories } = useStore();
     const [open, setOpen] = useState(false);
     const sidebarRef = useRef(null);
 
@@ -51,7 +65,7 @@ export function StoreSidebarMobile() {
 
     useEffect(() => {
         setOpen(false);
-    }, [pathname])
+    }, [selectedCategories])
 
     return (
         <div className="lg:hidden">
