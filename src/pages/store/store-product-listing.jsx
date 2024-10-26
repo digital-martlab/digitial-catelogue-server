@@ -3,6 +3,7 @@ import StoreProductDetails from "@/components/store/store-product-details";
 import { ProductGridLayout, ProductListLayout } from "@/components/store/store-product-layout";
 import StoreSidebar, { StoreSidebarMobile } from "@/components/store/store-sidebar";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import useStore from "@/hooks/use-store";
 import { getStoreInfoFn } from "@/services/store/store-service";
 import { sampleProducts } from "@/utils/prodcuts";
@@ -14,7 +15,7 @@ import { useNavigate, useParams } from "react-router-dom";
 export default function StoreProductListing() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
-    const { setStoreInfo, storeInfo, setCategories } = useStore();
+    const { setStoreInfo, storeInfo, setCategories, search, setSearch } = useStore();
     const [showCart, setShowCart] = useState(true);
     const onlyWidth = useWindowWidth();
     const [layout, setLayout] = useState('grid');
@@ -45,7 +46,10 @@ export default function StoreProductListing() {
                         <StoreSidebarMobile />
                         <h1 className="text-xl md:text-2xl lg:text-3xl font-bold">{storeInfo?.store_name}</h1>
                     </div>
-                    <ShoppingCart className="lg:hidden" onClick={() => setShowCart(!showCart)} />
+                    <div>
+                        <Input value={search} onChange={(e) => setSearch(e.target.value)} className="hidden md:block" placeholder={"search"} />
+                        <ShoppingCart className="lg:hidden" onClick={() => setShowCart(!showCart)} />
+                    </div>
                 </div>
                 <div className="p-4 h-[calc(100vh-64px)] overflow-y-auto">
                     {

@@ -1,5 +1,5 @@
 import { showAlert } from "@/lib/catch-async-api";
-import { getAllProducts } from "@/services/store/store-service";
+import { getAllProductsFn, getFilteredProductsFn } from "@/services/store/store-service";
 import { createContext, useEffect, useState } from "react";
 
 export const StoreContext = createContext();
@@ -10,10 +10,12 @@ export default function StoreContextProvider({ children }) {
     const [selectedCategories, setSelectedCategories] = useState(1.9999);
     const [products, setProducts] = useState([]);
     const [cartItems, setCartItems] = useState([]);
+    const [filteredProducts, setFilteredProducts] = useState([]);
+    const [search, setSearch] = useState("");
 
     useEffect(() => {
         if (storeInfo && categories)
-            getAllProducts({
+            getAllProductsFn({
                 acc_id: storeInfo?.acc_id,
                 params: {
                     ...(selectedCategories !== 1.9999 && { ctg_id: selectedCategories })
@@ -22,7 +24,26 @@ export default function StoreContextProvider({ children }) {
                 .then(({ data }) => {
                     setProducts(data);
                 });
-    }, [categories, selectedCategories, storeInfo]);
+    }, [storeInfo]);
+
+    useEffect(() => {
+        let timer;
+        if (storeInfo && categories)
+            timer = setTimeout(() => {
+                getFilteredProductsFn({
+                    acc_id: storeInfo?.acc_id,
+                    params: {
+                        ...(selectedCategories !== 1.9999 && { ctg_id: selectedCategories }),
+                        search
+                    }
+                })
+                    .then(({ data }) => {
+                        setFilteredProducts(data);
+                    });
+            }, 500);
+
+        return () => clearTimeout(timer);
+    }, [categories, selectedCategories, storeInfo, search]);
 
 
     const handleSetCartItem = (item) => {
@@ -80,6 +101,9 @@ export default function StoreContextProvider({ children }) {
             handleSetCartItem,
             handleQuantityChange,
             handelDeleteCartItem,
+            filteredProducts,
+            search,
+            setSearch
         }}>
             {children}
         </StoreContext.Provider>

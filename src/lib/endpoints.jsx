@@ -15,6 +15,7 @@ export const enpoints = {
     store: {
         storeInfo: "/store",
         products: "/store/products",
+        filteredProducts: "/store/filtered-products",
         coupon: "/store/coupon",
         order: "/store/order"
     }

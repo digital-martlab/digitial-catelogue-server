@@ -6,8 +6,14 @@ export const getStoreInfoFn = apiAsyncHandle(async (payload) => {
     return apiRequest.get(`${enpoints.store.storeInfo}/${payload}`)
 })
 
-export const getAllProducts = apiAsyncHandle(async (payload) => {
+export const getAllProductsFn = apiAsyncHandle(async (payload) => {
     return apiRequest.get(`${enpoints.store.products}/${payload.acc_id}`, {
+        params: payload.params
+    })
+})
+
+export const getFilteredProductsFn = apiAsyncHandle(async (payload) => {
+    return apiRequest.get(`${enpoints.store.filteredProducts}/${payload.acc_id}`, {
         params: payload.params
     })
 })

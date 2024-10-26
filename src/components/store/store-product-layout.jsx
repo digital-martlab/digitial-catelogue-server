@@ -3,11 +3,11 @@ import { priceIcon } from '@/utils/constants';
 import { Button } from '../ui/button';
 
 export function ProductGridLayout({ setDisplayProductDetails }) {
-    const { products, handleSetCartItem } = useStore();
+    const { filteredProducts, handleSetCartItem } = useStore();
 
     return (
         <div className="grid gap-4 pt-4 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
-            {products.map((item) => (
+            {filteredProducts.map((item) => (
                 <div
                     key={item.product_id}
                     className="relative z-0 rounded-lg border bg-card"
@@ -57,11 +57,11 @@ export function ProductGridLayout({ setDisplayProductDetails }) {
 }
 
 export function ProductListLayout({ setDisplayProductDetails }) {
-    const { products, handleSetCartItem } = useStore();
+    const { filteredProducts, handleSetCartItem } = useStore();
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
-            {products.map((item) => (
+            {filteredProducts.map((item) => (
                 <div key={item?.product_id} className="flex gap-4 rounded-lg border p-4">
                     <div className="h-40 w-40 rounded-lg border">
                         <img src={item?.images?.[0]?.url} alt="product" className='w-full h-full object-contain' />

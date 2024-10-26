@@ -127,7 +127,7 @@ export default function StoreCart({ setShowCart }) {
                                     </p>
                                     <div className="flex items-center gap-3">
                                         <Button
-                                            className="w-8 h-8 bg-primary rounded-full flex items-center justify-center hover:bg-secondary disabled:bg-gray-400"
+                                            className="w-8 h-8 bg-primary rounded-full flex items-center justify-center hover:bg-secondary"
                                             disabled={item.quantity === 1}
                                             onClick={() => handleQuantityChange(item?.product_id, item?.variant?.variant_id, -1)}
                                         >
@@ -135,7 +135,7 @@ export default function StoreCart({ setShowCart }) {
                                         </Button>
                                         <Button
                                             className="w-8 h-8 bg-primary rounded-full flex items-center justify-center hover:bg-secondary"
-                                            disabled={item?.quantity <= item?.variant?.stock}
+                                            disabled={item?.quantity === item?.variant?.stock}
                                             onClick={() => handleQuantityChange(item?.product_id, item?.variant?.variant_id, 1)}
                                         >
                                             <Plus size={12} />
@@ -218,7 +218,7 @@ export default function StoreCart({ setShowCart }) {
                 )}
 
                 <div className="h-[40%] w-full space-y-4">
-                    <div className="bg-card rounded-lg">
+                    <div className="rounded-lg">
                         <div className="flex justify-between items-end">
                             <span className="font-semibold">Apply Coupon</span>
                             {!!appliedCoupon && <span className="text-xs">Applied {appliedCoupon}% Discount</span>}
