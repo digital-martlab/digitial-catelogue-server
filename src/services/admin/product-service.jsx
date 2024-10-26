@@ -17,3 +17,11 @@ export const productActiveStatusFn = apiAsyncHandle(async (payload) => {
 export const deleteProductFn = apiAsyncHandle(async (payload) => {
     return apiRequest.delete(enpoints.admin.product, { data: payload })
 })
+
+export const getSingleProductFn = apiAsyncHandle(async (payload) => {
+    return apiRequest.get(`${enpoints.admin.product}/${payload}`)
+})
+
+export const updateProductFn = apiAsyncHandle(async (payload) => {
+    return apiRequest.patch(`${enpoints.admin.product}`, payload);
+})

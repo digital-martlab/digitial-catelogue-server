@@ -9,6 +9,7 @@ export const enpoints = {
         coupon: "/admin/coupon",
         password_change: "/admin/change-password",
         product: "/admin/product",
-        gallery: "/admin/gallery"
+        gallery: "/admin/gallery",
+        dashboard: "/admin/dashboard"
     }
 }

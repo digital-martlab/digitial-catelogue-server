@@ -22,7 +22,7 @@ export default function AdminSidebar() {
                         : auth?.logo
                 }
                 alt="logo"
-                className="h-10 object-contain"
+                className="h-10 object-contain mx-auto"
             />
 
             <div className="mt-8 space-y-2">
