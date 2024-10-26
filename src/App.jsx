@@ -6,6 +6,8 @@ import { protectedRoutes } from "./lib/routes";
 import SuperAdminLogin from './pages/super-admin/super-admin-login';
 import RequireAuth from "./components/RequiredAuth";
 import AdminLogin from "./pages/admin/admin-login";
+import SelectedImages from "./components/custom-select-images";
+import UploadImages from "./components/custom-upload-images";
 
 export default function App() {
   return (
@@ -26,6 +28,8 @@ export default function App() {
         </Route>
       </Routes>
       <Toaster />
+      <SelectedImages />
+      <UploadImages />
     </ThemeProvider>
   );
 }

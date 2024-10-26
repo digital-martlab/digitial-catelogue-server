@@ -48,7 +48,7 @@ export default function AdminCoupons() {
             <AddUpdateCoupons toggle={toggle} setToggle={setToggle} getAllCoupon={getAllCoupon} />
 
             {loading && <CategoryCouponShimmer />}
-            {coupons.length === 0 && <NotFound className={"md:w-1/2 lg:w-1/3 mx-auto mt-0"} />}
+            {coupons.length === 0 && !loading && <NotFound className={"md:w-1/2 lg:w-1/3 mx-auto mt-0"} />}
             {!loading &&
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                     {coupons.map((coupon) => (

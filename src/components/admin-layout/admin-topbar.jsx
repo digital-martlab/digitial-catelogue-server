@@ -10,13 +10,13 @@ export default function AdminTopBar() {
     const { auth, logoutFn } = useAuth();
 
     return (
-        <div className="flex justify-between items-center border-b p-4">
+        <div className="flex justify-between items-center border-b p-4 h-16">
             <div className="flex items-center gap-2">
                 <AdminSidebarMobile />
                 <h1 className="text-xl md:text-2xl lg:text-3xl font-bold">{auth?.role === ROLES.SUPER_ADMIN ? "Super Admin Panel" : "Admin Panel"} </h1>
             </div>
             <div className="flex items-center gap-2">
-                <p>{auth?.user_name || auth?.name}</p>
+                <p>{auth?.user_name || auth?.store_name}</p>
                 <DropdownMenu>
                     <DropdownMenuTrigger className="flex items-center gap-1">
                         <Button size="sm" className="rounded-full w-8 h-8"><User /></Button>
