@@ -4,7 +4,6 @@ import { currencyIcon } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { userDetailsSchema } from "@/schemas/cart-shema";
 import { applyCouponFn, cartOrderFn } from "@/services/store/store-service";
-import { priceIcon } from "@/utils/constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Minus, MoveLeft, MoveRight, Plus, Trash } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
@@ -107,7 +106,7 @@ export default function StoreCart({ setShowCart }) {
                         {cartProducts.map((item) => (
                             <div
                                 key={`${item?.variant?.variant_id}-${item?.ctg_id}`}
-                                className="flex gap-6 rounded-lg border shadow-md p-4 transition duration-300 hover:shadow-lg self-start"
+                                className="flex gap-6 rounded-lg border shadow-md p-4 transition duration-300 hover:shadow-lg self-start bg-card"
                             >
                                 <div className="h-24 w-24 rounded-lg overflow-hidden border">
                                     <img
@@ -236,15 +235,15 @@ export default function StoreCart({ setShowCart }) {
                     <div className="rounded-lg border bg-card p-4 shadow-md">
                         <p className="flex items-center justify-between text-sm font-medium">
                             <span>Sub Total</span>
-                            <span>{priceIcon} {totalAmount}</span>
+                            <span>{currencyIcon} {totalAmount}</span>
                         </p>
                         <p className="flex items-center justify-between text-sm font-medium">
                             <span>Coupon Applied</span>
-                            <span>{priceIcon} {Math.floor((totalAmount * (appliedCoupon / 100)))}</span>
+                            <span>{currencyIcon} {Math.floor((totalAmount * (appliedCoupon / 100)))}</span>
                         </p>
                         <p className="mt-2 flex items-center justify-between text-lg font-bold">
                             <span>Total Amount</span>
-                            <span>{priceIcon} {Math.floor((totalAmount - (totalAmount * (appliedCoupon / 100))))}</span>
+                            <span>{currencyIcon} {Math.floor((totalAmount - (totalAmount * (appliedCoupon / 100))))}</span>
                         </p>
                     </div>
                     <div className="flex gap-4">

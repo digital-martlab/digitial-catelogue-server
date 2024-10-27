@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { priceIcon } from "@/utils/constants";
+import { currencyIcon } from "@/lib/constants";
 import { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
@@ -90,7 +90,7 @@ export default function StoreProductDetails({ item, setDisplayProductDetails }) 
 
                             <div className="mt-4">
                                 <p className="font-semibold">Selected Variant: <span className="font-bold">{selectedVariant?.variant_title}</span></p>
-                                <p className="mt-2 text-lg font-bold">{priceIcon}{selectedVariant?.price}</p>
+                                <p className="mt-2 text-lg font-bold">{currencyIcon}{selectedVariant?.price}</p>
                                 <p className="mt-1">
                                     {selectedVariant?.stock <= 20 && selectedVariant?.stock > 0 &&
                                         <span className='text-red-500'>

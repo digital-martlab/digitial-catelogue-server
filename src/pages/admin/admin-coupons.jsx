@@ -54,7 +54,7 @@ export default function AdminCoupons() {
                     {coupons.map((coupon) => (
                         <div
                             key={coupons.cpn_id}
-                            className="border rounded-lg p-4 shadow-md flex justify-between items-center"
+                            className="border rounded-lg p-4 shadow-md flex justify-between items-center bg-card"
                         >
                             <div>
                                 <h3 className="text-lg font-semibold">{coupon.cpn_name}</h3>

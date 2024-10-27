@@ -51,7 +51,6 @@ export default function CreateUpdateStore() {
 
     // Handle form submission
     const onSubmit = async (data) => {
-        console.log(data);
         const formData = new FormData();
 
         // Append form data fields
@@ -115,15 +114,15 @@ export default function CreateUpdateStore() {
         <div className="max-w-[1000px] mx-auto">
             <Title title={status === "add" ? "Add New Store" : "Update Store"} />
             <div className="mt-8">
-                <div className="relative group w-28 h-28 overflow-hidden rounded-full border-2 border-primary">
+                <div className="relative group w-28 h-28 overflow-hidden rounded-sm border-2 border-primary bg-card">
                     <img
                         src={image || "https://placehold.co/100x100?text=logo+here"}
                         alt="Store logo"
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain"
                     />
                     <label
                         htmlFor="input_image"
-                        className="absolute inset-0 bg-black bg-opacity-40 flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer"
+                        className="absolute inset-0 bg-card bg-opacity-40 flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer"
                     >
                         <CameraIcon className="w-8 h-8 text-white" />
                     </label>

@@ -1,5 +1,5 @@
 import useStore from '@/hooks/use-store';
-import { priceIcon } from '@/utils/constants';
+import { currencyIcon } from '@/lib/constants';
 import { Button } from '../ui/button';
 
 export function ProductGridLayout({ setDisplayProductDetails }) {
@@ -10,7 +10,7 @@ export function ProductGridLayout({ setDisplayProductDetails }) {
             {filteredProducts.map((item) => (
                 <div
                     key={item.product_id}
-                    className="relative z-0 rounded-lg border bg-card"
+                    className="relative z-0 rounded-lg border bg-card overflow-hidden shadow-lg"
                 >
                     <span className="absolute left-2 top-2 rounded-lg bg-accent px-2 py-1 text-xs">
                         {item.ctg_name}
@@ -19,7 +19,7 @@ export function ProductGridLayout({ setDisplayProductDetails }) {
                         <img
                             alt={item.title}
                             src={item.images?.[0]?.url}
-                            className="h-full w-full object-contain"
+                            className="h-full w-full object-cover"
                         />
                     </div>
                     <div className="space-y-2 p-4 text-center">
@@ -32,7 +32,7 @@ export function ProductGridLayout({ setDisplayProductDetails }) {
                             {item.title}
                         </p>
                         <p>
-                            {priceIcon}
+                            {currencyIcon}
                             {item?.variants?.[0]?.price}
                         </p>
                         <Button
@@ -60,11 +60,13 @@ export function ProductListLayout({ setDisplayProductDetails }) {
     const { filteredProducts, handleSetCartItem } = useStore();
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 shadow-lg" >
             {filteredProducts.map((item) => (
-                <div key={item?.product_id} className="flex gap-4 rounded-lg border p-4">
-                    <div className="h-40 w-40 rounded-lg border">
-                        <img src={item?.images?.[0]?.url} alt="product" className='w-full h-full object-contain' />
+                <div key={item?.product_id} className="flex gap-4 rounded-lg border p-4 bg-card cursor-pointer "
+                    onClick={() => setDisplayProductDetails(item)}
+                >
+                    <div className="h-40 w-40 rounded-lg border bg-background overflow-hidden">
+                        <img src={item?.images?.[0]?.url} alt="product" className='w-full h-full object-cover' />
                     </div>
                     <div className="flex-1 space-y-2">
                         <p className="flex gap-2">
@@ -73,23 +75,25 @@ export function ProductListLayout({ setDisplayProductDetails }) {
                             </span>
                         </p>
                         <p
-                            className="cursor-pointer text-base font-bold md:text-2xl"
-                            onClick={() => setDisplayProductDetails(item)}
+                            className="text-base font-bold md:text-2xl"
                         >
                             {item?.title}
                         </p>
                         <p>
-                            {priceIcon}
+                            {currencyIcon}
                             {item?.variants[0]?.price}
                         </p>
                         <Button
                             size="sm"
                             disabled={item?.variants?.[0]?.stock === 0}
-                            onClick={() => handleSetCartItem({
-                                product_id: item.product_id,
-                                variant_id: item.variants?.[0]?.variant_id,
-                                acc_id: item?.acc_id
-                            })}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handleSetCartItem({
+                                    product_id: item.product_id,
+                                    variant_id: item.variants?.[0]?.variant_id,
+                                    acc_id: item?.acc_id
+                                })
+                            }}
                         >
                             Add to Cart
                         </Button>

@@ -59,6 +59,10 @@
   }
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 @layer base {
   * {
     @apply border-border;
@@ -86,4 +90,27 @@
   border: 2px solid transparent;
   /* Adds padding around the thumb */
   background-clip: padding-box;
+}
+
+@layer components {
+  .home-button {
+    @apply px-8 py-2 whitespace-nowrap font-semibold text-lg bg-[#02897A] text-white rounded-md cursor-pointer border-[#02897A] hover:bg-white border-2 hover:text-[#02897A] transition-all duration-200 active:scale-90
+  }
+
+  .secondary-button {
+    @apply px-8 py-2 whitespace-nowrap font-semibold text-lg border-2 border-[#BCD0E5] rounded-md cursor-pointer hover:border-[#02897A] hover:text-[#02897A] duration-200 active:scale-90
+  }
+
+  .home-button-white {
+    @apply home-button bg-white text-home hover:bg-home hover:text-white hover:border-white
+  }
+
+  .nav-item {
+    @apply cursor-pointer font-semibold hover:scale-105 transition transform active:scale-90
+  }
+
+  .icon-button {
+    @apply hover:scale-125 active:scale-95 cursor-pointer duration-200
+  }
+
 }

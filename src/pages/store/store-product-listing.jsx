@@ -1,3 +1,4 @@
+import { WindowLoading } from "@/components/loading-spinner";
 import StoreCart from "@/components/store/store-cart";
 import StoreProductDetails from "@/components/store/store-product-details";
 import { ProductGridLayout, ProductListLayout } from "@/components/store/store-product-layout";
@@ -5,8 +6,8 @@ import StoreSidebar, { StoreSidebarMobile } from "@/components/store/store-sideb
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import useStore from "@/hooks/use-store";
+import { useTheme } from "@/hooks/use-theme";
 import { getStoreInfoFn } from "@/services/store/store-service";
-import { sampleProducts } from "@/utils/prodcuts";
 import { useWindowWidth } from "@react-hook/window-size";
 import { LayoutGrid, ShoppingCart, TableCellsSplitIcon } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -15,6 +16,7 @@ import { useNavigate, useParams } from "react-router-dom";
 export default function StoreProductListing() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
+    const { setTheme, setColor } = useTheme();
     const { setStoreInfo, storeInfo, setCategories, search, setSearch } = useStore();
     const [showCart, setShowCart] = useState(true);
     const onlyWidth = useWindowWidth();
@@ -27,14 +29,16 @@ export default function StoreProductListing() {
             .then(({ data }) => {
                 setStoreInfo(data?.store);
                 setCategories(data?.categories);
+                setTheme(data?.store?.theme_mod);
+                setColor(data?.store?.theme_color);
                 setLoading(false);
             }).catch(() => {
                 navigate("/");
             })
-    }, [store_slug, setStoreInfo, setCategories])
+    }, [store_slug, setStoreInfo, setCategories, navigate, setTheme, setColor])
 
     if (loading) {
-        return <div>loading...</div>
+        return <WindowLoading />;
     }
 
     return (
@@ -82,8 +86,8 @@ export default function StoreProductListing() {
                                     </div>
                                     <div className="h-full">
                                         {layout === "grid"
-                                            ? <ProductGridLayout products={sampleProducts} setDisplayProductDetails={setDisplayProductDetails} />
-                                            : <ProductListLayout products={sampleProducts} setDisplayProductDetails={setDisplayProductDetails} />
+                                            ? <ProductGridLayout setDisplayProductDetails={setDisplayProductDetails} />
+                                            : <ProductListLayout setDisplayProductDetails={setDisplayProductDetails} />
                                         }
                                     </div>
                                 </>

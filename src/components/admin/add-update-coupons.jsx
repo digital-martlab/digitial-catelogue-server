@@ -44,7 +44,6 @@ export default function AddUpdateCoupons({ toggle, setToggle, getAllCoupon }) {
     };
 
     useEffect(() => {
-        console.log(toggle);
         if (toggle?.action === "edit" && toggle?.coupon) {
             setCouponName(toggle?.coupon?.cpn_name)
             setCouponDiscount(toggle?.coupon?.cpn_discount)

@@ -53,7 +53,7 @@ export default function AdminCategory() {
                 {categories.map((category) => (
                     <div
                         key={category.ctg_id}
-                        className="border rounded-lg p-4 shadow-md flex justify-between items-center"
+                        className="border rounded-lg p-4 shadow-md flex justify-between items-center bg-card"
                     >
                         <div>
                             <h3 className="text-lg font-semibold">{category.ctg_name}</h3>

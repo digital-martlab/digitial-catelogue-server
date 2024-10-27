@@ -28,7 +28,7 @@ export default function AdminTopBar() {
                                 <DropdownMenuLabel>{auth?.store_id}</DropdownMenuLabel>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem>
-                                    <Link to={`/store/${auth?.store_slug}`} className="flex gap-1 items-center cursor-pointer">
+                                    <Link to={`/store/${auth?.store_slug}`} className="flex gap-1 items-center cursor-pointer w-full">
                                         <Store className="w-4 h-4" /> Visit Store
                                     </Link>
                                 </DropdownMenuItem>
