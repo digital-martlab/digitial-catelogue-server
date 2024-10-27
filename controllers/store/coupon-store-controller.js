@@ -12,7 +12,6 @@ module.exports = {
         const data = await sqlQueryRunner(sql, [acc_id, search]);
 
         if (data.length > 0) {
-            console.log(data)
             return createResponse(res, StatusCodes.OK, "Coupon applied successfully.", data[0]);
         }
         else

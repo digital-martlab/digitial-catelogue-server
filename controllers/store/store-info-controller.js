@@ -9,7 +9,7 @@ module.exports = {
         const { store_slug } = req.params;
 
         // Fetch store information
-        const getSql = `SELECT * FROM stores WHERE store_slug = ?`;
+        const getSql = `SELECT s.*, t.theme_color, t.theme_mod FROM stores s JOIN theme t ON t.acc_id = s.acc_id WHERE store_slug = ?`;
         const storeData = await sqlQueryRunner(getSql, [store_slug]);
         const store = storeData[0];
 

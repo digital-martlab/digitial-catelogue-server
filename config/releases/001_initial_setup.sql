@@ -13,6 +13,8 @@ DROP TABLE IF EXISTS product_category;
 
 DROP TABLE IF EXISTS gallery;
 
+DROP TABLE IF EXISTS theme;
+
 DROP TABLE IF EXISTS stores;
 
 DROP TABLE IF EXISTS admins;
@@ -57,6 +59,15 @@ VALUES
     (
         'digitalmartlab',
         '$2b$12$Rzxx6pFwVvDmYVTMPCzQeeU1/seWXap.kKMQJGYZMA4KypY5s/lvq'
+    );
+
+CREATE TABLE
+    theme (
+        theme_id INT PRIMARY KEY AUTO_INCREMENT,
+        theme_color VARCHAR(20) NOT NULL DEFAULT 'zinc',
+        theme_mod ENUM ('light', 'dark', 'system') DEFAULT 'dark',
+        acc_id INT NOT NULL,
+        FOREIGN KEY (acc_id) REFERENCES stores (acc_id)
     );
 
 CREATE TABLE

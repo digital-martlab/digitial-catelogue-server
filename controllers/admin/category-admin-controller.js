@@ -64,7 +64,6 @@ module.exports = {
         const { ctg_id } = req.body;
         const sql = `DELETE FROM product_category WHERE ctg_id = ? AND acc_id=?`;
         const data = await sqlQueryRunner(sql, [ctg_id, req?.user?.acc_id]);
-        console.log(data, ctg_id);
         return createResponse(res, StatusCodes.OK, "category deleted successfully.");
     })
 }

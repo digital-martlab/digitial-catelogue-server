@@ -60,13 +60,11 @@ module.exports = {
             });
         }
 
-        console.log(products);
-
-        client.messages.create({
-            from: 'whatsapp:+918858704020',
-            body: 'Ahoy world!',
-            to: 'whatsapp:+918917726220'
-        }).then(message => console.log(message.sid));
+        // client.messages.create({
+        //     from: 'whatsapp:+918858704020',
+        //     body: 'Ahoy world!',
+        //     to: 'whatsapp:+918917726220'
+        // }).then(message => console.log(message.sid));
 
         return createResponse(res, StatusCodes.OK, "Order created successfully.");
     })

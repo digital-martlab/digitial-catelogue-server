@@ -8,6 +8,7 @@ const passwordChangeAdmin = require("../controllers/admin/password-change-admin"
 const productAdminController = require("../controllers/admin/product-admin-controller");
 const galleryAdminController = require("../controllers/admin/gallery-admin-controller");
 const adminDashboardController = require("../controllers/admin/admin-dashboard-controller");
+const adminThemeController = require("../controllers/admin/admin-theme-controller");
 
 const adminRoutes = express.Router();
 
@@ -45,6 +46,11 @@ adminRoutes.route("/product")
     .put(productAdminController.productActiveStatus)
     .delete(productAdminController.deleteProduct)
     .patch(productAdminController.updateProduct);
+
+adminRoutes.use("/theme", verifyJWT([ROLES.ADMIN]))
+adminRoutes.route("/theme")
+    .get(adminThemeController.getTheme)
+    .patch(adminThemeController.updateTheme);
 
 adminRoutes.get("/product/:product_id", verifyJWT([ROLES.ADMIN]), productAdminController.getSingleProduct)
 

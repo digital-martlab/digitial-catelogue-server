@@ -36,7 +36,10 @@ module.exports = {
 
         // SQL query to insert a new store
         const insertSql = `INSERT INTO stores (name, email, number, store_name, store_slug, store_id, password, logo, logo_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-        await sqlQueryRunner(insertSql, [name, email, number, store_name, slug, store_id, hashedPassword, imageObj.url, imageObj.public_id]);
+        const insertedData = await sqlQueryRunner(insertSql, [name, email, number, store_name, slug, store_id, hashedPassword, imageObj.url, imageObj.public_id]);
+
+        const themeSql = `INSERT INTO theme (acc_id) VALUES (?)`;
+        await sqlQueryRunner(themeSql, [insertedData?.insertId]);
 
         return createResponse(res, StatusCodes.CREATED, "Store created successfully.");
     }),
