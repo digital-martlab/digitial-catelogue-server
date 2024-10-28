@@ -9,6 +9,7 @@ import AdminCoupons from "@/pages/admin/admin-coupons";
 import AdminPasswordChange from "@/components/admin/change-password-admin";
 import AdminProductList from "@/pages/admin/product-list-admin";
 import AddUpdateProduct from "@/components/admin/add-update-product";
+import AdminThemeCustomizer from "@/pages/admin/admin-theme-customizer";
 
 export const protectedRoutes = [
     // SUPER ADMIN ROUTES
@@ -85,5 +86,11 @@ export const protectedRoutes = [
         element: <AddUpdateProduct />,
         link: "/admin/products/:status/:product_id",
         assignedRoles: [ROLES.ADMIN],
+    },
+    {
+        _id: "A8",
+        element: <AdminThemeCustomizer />,
+        link: "/admin/themes",
+        assignedRoles: [ROLES.ADMIN]
     }
 ]

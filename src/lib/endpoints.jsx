@@ -10,6 +10,14 @@ export const enpoints = {
         password_change: "/admin/change-password",
         product: "/admin/product",
         gallery: "/admin/gallery",
-        dashboard: "/admin/dashboard"
+        dashboard: "/admin/dashboard",
+        theme: "/admin/theme"
+    },
+    store: {
+        storeInfo: "/store",
+        products: "/store/products",
+        filteredProducts: "/store/filtered-products",
+        coupon: "/store/coupon",
+        order: "/store/order",
     }
 }

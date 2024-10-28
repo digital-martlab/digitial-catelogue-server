@@ -111,7 +111,7 @@ export default function AdminProductList() {
                     {loading && <ShimmerTableBody coloumn={11} row={10} />}
                     <TableBody>
                         {!loading && products.length === 0 && (<TableRow>
-                            <TableCell className="min-h-[500px]" colSpan={9}>
+                            <TableCell className="min-h-[500px]" colSpan={11}>
                                 <NotFound className="mx-auto" />
                             </TableCell>
                         </TableRow>

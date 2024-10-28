@@ -22,8 +22,6 @@ export default function AdminDashboard() {
             });
     }, []);
 
-    console.log(dashboardData);
-
     return (
         <>
             <Title title={"Dashboard"} />
@@ -31,44 +29,44 @@ export default function AdminDashboard() {
             {!loading && <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-4">
                 {/* Total Categories */}
                 <Link to="/admin/category">
-                    <div className="p-4 flex flex-col items-center justify-center border rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <div className="p-4 flex flex-col items-center bg-card justify-center border rounded-lg shadow-md hover:shadow-lg transition-shadow">
                         <div className="text-2xl mb-2">
                             <ChartBarStacked />
                         </div>
-                        <h3 className="text-lg font-semibold">Total Categories</h3>
+                        <h3 className="text-center text-lg font-semibold">Total Categories</h3>
                         <p className="text-xl font-bold">{dashboardData?.total_categories}</p>
                     </div>
                 </Link>
 
                 {/* Total Products */}
                 <Link to="/admin/products">
-                    <div className="p-4 flex flex-col items-center justify-center border rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <div className="p-4 flex flex-col items-center bg-card justify-center border rounded-lg shadow-md hover:shadow-lg transition-shadow">
                         <div className="text-2xl mb-2">
                             <ShoppingBasket />
                         </div>
-                        <h3 className="text-lg font-semibold">Total Active Products</h3>
+                        <h3 className="text-center text-lg font-semibold">Total Active Products</h3>
                         <p className="text-xl font-bold">{dashboardData?.total_active_products}</p>
                     </div>
                 </Link>
 
                 {/* Total Products */}
                 <Link to="/admin/products">
-                    <div className="p-4 flex flex-col items-center justify-center border rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <div className="p-4 flex flex-col items-center bg-card justify-center border rounded-lg shadow-md hover:shadow-lg transition-shadow">
                         <div className="text-2xl mb-2">
                             <ShoppingBasket />
                         </div>
-                        <h3 className="text-lg font-semibold">Total Products</h3>
+                        <h3 className="text-center text-lg font-semibold">Total Products</h3>
                         <p className="text-xl font-bold">{dashboardData?.total_products}</p>
                     </div>
                 </Link>
 
                 {/* Total Coupons */}
                 <Link to="/spanel/coupons">
-                    <div className="p-4 flex flex-col items-center justify-center border rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <div className="p-4 flex flex-col items-center bg-card justify-center border rounded-lg shadow-md hover:shadow-lg transition-shadow">
                         <div className="text-2xl mb-2">
                             <TagIcon />
                         </div>
-                        <h3 className="text-lg font-semibold">Total Coupons</h3>
+                        <h3 className="text-center text-lg font-semibold">Total Coupons</h3>
                         <p className="text-xl font-bold">{dashboardData?.total_coupons}</p>
                     </div>
                 </Link>

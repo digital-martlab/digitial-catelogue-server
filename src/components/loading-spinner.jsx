@@ -18,3 +18,11 @@ export default function LoadingSpinner({ className }) {
         </svg>
     );
 }
+
+export function WindowLoading() {
+    return (
+        <div className="h-screen w-full grid place-content-center">
+            <LoadingSpinner className={"w-16 h-16"} />
+        </div>
+    )
+}

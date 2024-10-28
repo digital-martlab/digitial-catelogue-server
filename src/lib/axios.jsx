@@ -15,7 +15,7 @@ export const apiRequest = axios.create({
 apiRequest.interceptors.request.use(
     (config) => {
         // Get the token from local storage
-        const token = localStorage.getItem("digital_martlab_token");
+        const token = localStorage.getItem("digital_catelogue_app_token");
 
         // If the token exists, add it to the Authorization header
         if (token) {
