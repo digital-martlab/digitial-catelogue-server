@@ -30,9 +30,9 @@ export default function Home() {
             <header
                 className="md:container flex justify-between shadow-md md:shadow-none h-20 px-4 items-center sticky top-0 bg-white z-50 animate-in fade-in"
             >
-                <Link to={"/"} className="text-3xl md:text-4xl font-bold">
+                <a href={"#header"} className="text-3xl md:text-4xl font-bold">
                     Catelogue<span className="text-home">Wala</span>
-                </Link>
+                </a>
                 <div className="hidden md:flex gap-4">
                     <a href={"#header"} className="nav-item">Home</a>
                     <a href={"#features"} className="nav-item">Features</a>

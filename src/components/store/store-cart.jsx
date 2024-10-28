@@ -11,13 +11,22 @@ import { useForm, FormProvider } from "react-hook-form";
 import { Button } from "../ui/button";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
+import { useNavigate } from "react-router-dom";
+
+const intialCoupon = {
+    acc_id: "",
+    cpn_discount: 0,
+    cpn_id: "",
+    cpn_name: ""
+}
 
 export default function StoreCart({ setShowCart }) {
+    const navigate = useNavigate("");
     const [cartAction, setCartAction] = useState("items");
     const [cartProducts, setCartProducts] = useState([]);
     const { cartItems, products, handleQuantityChange, handelDeleteCartItem, storeInfo } = useStore();
     const [search, setSearch] = useState("");
-    const [appliedCoupon, setAppliedCoupon] = useState(0);
+    const [appliedCoupon, setAppliedCoupon] = useState(intialCoupon);
 
     const form = useForm({
         resolver: zodResolver(userDetailsSchema),
@@ -69,9 +78,9 @@ export default function StoreCart({ setShowCart }) {
                 .then(data => {
                     if (data?.data) {
                         showAlert(data);
-                        setAppliedCoupon(data?.data?.cpn_discount);
+                        setAppliedCoupon(data?.data);
                     } else {
-                        setAppliedCoupon(0);
+                        setAppliedCoupon(intialCoupon);
                     }
                 });
             return search;
@@ -85,7 +94,13 @@ export default function StoreCart({ setShowCart }) {
     };
 
     const onsubmit = (userDetails) => {
-        cartOrderFn({ userDetails, cartItems });
+        cartOrderFn({ userDetails, cartItems, totalAmount, storeInfo, ...(appliedCoupon?.cpn_name && { appliedCoupon }) })
+            .then((data) => {
+                showAlert(data);
+                window.location.href = data?.data;
+                localStorage.removeItem("digital_catelogue_app_cart")
+            })
+
     }
 
     return (
@@ -220,7 +235,7 @@ export default function StoreCart({ setShowCart }) {
                     <div className="rounded-lg">
                         <div className="flex justify-between items-end">
                             <span className="font-semibold">Apply Coupon</span>
-                            {!!appliedCoupon && <span className="text-xs">Applied {appliedCoupon}% Discount</span>}
+                            {!!appliedCoupon && <span className="text-xs">Applied {appliedCoupon?.cpn_discount}% Discount</span>}
                         </div>
                         <Input
                             className={cn(
@@ -239,11 +254,11 @@ export default function StoreCart({ setShowCart }) {
                         </p>
                         <p className="flex items-center justify-between text-sm font-medium">
                             <span>Coupon Applied</span>
-                            <span>{currencyIcon} {Math.floor((totalAmount * (appliedCoupon / 100)))}</span>
+                            <span>{currencyIcon} {Math.floor((totalAmount * (appliedCoupon?.cpn_discount / 100)))}</span>
                         </p>
                         <p className="mt-2 flex items-center justify-between text-lg font-bold">
                             <span>Total Amount</span>
-                            <span>{currencyIcon} {Math.floor((totalAmount - (totalAmount * (appliedCoupon / 100))))}</span>
+                            <span>{currencyIcon} {Math.floor((totalAmount - (totalAmount * (appliedCoupon?.cpn_discount / 100))))}</span>
                         </p>
                     </div>
                     <div className="flex gap-4">
