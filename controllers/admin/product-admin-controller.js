@@ -97,11 +97,11 @@ module.exports = {
         SELECT p.*, c.ctg_name
         FROM products p
         JOIN product_category c ON p.ctg_id = c.ctg_id
-        WHERE 1=1
+        WHERE p.acc_id = ?
     `;
 
         // Array to hold query parameters
-        const queryParams = [];
+        const queryParams = [req?.user?.acc_id];
 
         // Filter by categoryId if provided
         if (categoryId) {
