@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -29,6 +30,7 @@
     --chart-5: 27 87% 67%;
     --radius: 0.5rem
   }
+
   .dark {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
@@ -56,11 +58,59 @@
     --chart-5: 340 75% 55%
   }
 }
+
+html {
+  scroll-behavior: smooth;
+}
+
 @layer base {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--muted);
+  /* Background of the scrollbar track */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--primary));
+  /* Use primary color for the scrollbar thumb */
+  border-radius: var(--radius);
+  border: 2px solid transparent;
+  /* Adds padding around the thumb */
+  background-clip: padding-box;
+}
+
+@layer components {
+  .home-button {
+    @apply px-8 py-2 whitespace-nowrap font-semibold text-lg bg-[#02897A] text-white rounded-md cursor-pointer border-[#02897A] hover:bg-white border-2 hover:text-[#02897A] transition-all duration-200 active:scale-90
+  }
+
+  .secondary-button {
+    @apply px-8 py-2 whitespace-nowrap font-semibold text-lg border-2 border-[#BCD0E5] rounded-md cursor-pointer hover:border-[#02897A] hover:text-[#02897A] duration-200 active:scale-90
+  }
+
+  .home-button-white {
+    @apply home-button bg-white text-home hover:bg-home hover:text-white hover:border-white
+  }
+
+  .nav-item {
+    @apply cursor-pointer font-semibold hover:scale-105 transition transform active:scale-90
+  }
+
+  .icon-button {
+    @apply hover:scale-125 active:scale-95 cursor-pointer duration-200
+  }
+
 }

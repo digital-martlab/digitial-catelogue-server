@@ -24,18 +24,18 @@ export default function SuperAdminLogin() {
       password
     })
     showAlert(data);
-    localStorage.setItem("digital_martlab_token", data?.data?.token);
+    localStorage.setItem("digital_catelogue_app_token", data?.data?.token);
     setAuthFn(data?.data?.token)
     navigate("/super-admin/")
   };
 
   useEffect(() => {
-    if (auth && !authLoading) {
-      if (auth?.role === ROLES.SUPER_ADMIN)
-        navigate("/super-admin/")
-      else
-        navigate("/admin/")
-    }
+    // if (auth && !authLoading) {
+    //   if (auth?.role === ROLES.SUPER_ADMIN)
+    //     navigate("/super-admin/")
+    //   else
+    //     navigate("/admin/")
+    // }
 
     return () => {
       setUserName("");

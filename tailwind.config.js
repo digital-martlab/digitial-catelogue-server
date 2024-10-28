@@ -6,7 +6,19 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
+    container: {
+      screens: {
+        DEFAULT: "1200px"
+      },
+      padding: {
+        DEFAULT: "20px"
+      },
+      center: true
+    },
     extend: {
+      boxShadow: {
+        "borderShadow": "0px 2px 8px rgba(0, 0, 0, 0.25)"
+      },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
@@ -15,6 +27,8 @@ export default {
       colors: {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
+        home: "#02897A",
+        text: "#22343D",
         card: {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))'
