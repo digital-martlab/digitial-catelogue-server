@@ -6,7 +6,7 @@ export const multpartHeader = {
 };
 
 export const apiRequest = axios.create({
-    baseURL: "http://localhost:3001",
+    baseURL: "http://43.204.214.189/api",
     headers: {
         "Content-Type": "application/json"
     }

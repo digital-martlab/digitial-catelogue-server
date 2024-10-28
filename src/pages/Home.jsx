@@ -1,17 +1,15 @@
 import BenefitItem from "@/components/Home/benefit-item";
 import CheckedItem from "@/components/Home/checked-item";
+import ContactUs from "@/components/Home/contact-us";
 import Feature from "@/components/Home/feature-items";
-import PriceCard from "@/components/Home/price-card";
-import TestimonialItem from "@/components/Home/tesimonial-item";
 import Aos from "aos";
 import "aos/dist/aos.css";
-import { ArrowBigUp, Menu, Palette, PlayIcon, Smartphone, Store, X } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { ArrowBigUp, Contact, Mail, Menu, Palette, PhoneCall, PlayIcon, Smartphone, Store, X } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function Home() {
     const [isMobileNavOpen, setMobileNavOpen] = useState(false);
-    const testimonial = useMemo(() => "Product helps you see how many more days you need to work to reach your financial goal.", []);
 
     useEffect(() => {
         Aos.init({
@@ -30,8 +28,9 @@ export default function Home() {
             <header
                 className="md:container flex justify-between shadow-md md:shadow-none h-20 px-4 items-center sticky top-0 bg-white z-50 animate-in fade-in"
             >
-                <a href={"#header"} className="text-3xl md:text-4xl font-bold">
-                    Catelogue<span className="text-home">Wala</span>
+                <a href={"#header"} className="text-3xl md:text-4xl font-bold h-full py-4">
+                    {/* Catelogue<span className="text-home">Wala</span> */}
+                    <img src="./images/logo.png" className="h-full" />
                 </a>
                 <div className="hidden md:flex gap-4">
                     <a href={"#header"} className="nav-item">Home</a>
@@ -71,10 +70,10 @@ export default function Home() {
                     </p>
                     <div className="mt-8 flex items-center justify-around sm:justify-start sm:space-x-8" data-aos="fade-down">
                         <button className="home-button">Get Started</button>
-                        <p className="font-semibold text-home whitespace-nowrap flex items-center underline hover:scale-110 active:scale-95 duration-200 cursor-pointer">
+                        <Link to="https://youtu.be/Ukwbw_Pl_zM?si=AxsqGnZYoowRxWa6" target="_blank" className="font-semibold text-home whitespace-nowrap flex items-center underline hover:scale-110 active:scale-95 duration-200 cursor-pointer">
                             <PlayIcon className="h-8" />
                             Watch the Video
-                        </p>
+                        </Link>
                     </div>
                 </div>
             </section>
@@ -174,10 +173,31 @@ export default function Home() {
                     )}
                 />
             </section>
+            {/* 
+            <div className="md:flex flex-row-reverse even:flex-row justify-between items-center">
+                <PriceCard
+                    title="Yearly Plan"
+                    description="Brief price description"
+                    price="4500"
+                    features={[
+                        "Theme Customization",
+                        "WhatsApp Integration",
+                        "Product Management",
+                        "Category Creation",
+                        "Coupon Management",
+                    ]}
+                />
 
+                <div className="text-left md:max-w-[40%] mt-14 md:mt-0">
+                    <p className="font-semibold text-base">Lorem ipsum dolor</p>
+                    <h1 className="font-bold text-4xl leading-[60px]" data-aos="fade-right">asdfsadfs</h1>
+                    <p className="my-4"> sit amet consectetur adipisicing elit. Magni officia in totam voluptate, esse mollitia commodi aliquid inventore eligendi nesciunt eos enim est nisi optio velit ducimus facere quidem laudantium!</p>
+                    <Content />
+                </div>
+            </div> */}
 
-            <section id="price" className="container mt-28 text-center" data-aos="fade-up">
-                <h3 className="text-[32px] font-bold">Price Table</h3>
+            {/* <section id="price" className="container mt-28 text-center" data-aos="fade-up">
+                <h3 className="text-[32px] font-bold">Plan</h3>
                 <p className="font-medium">We offer competitive price</p>
 
                 <div className="mt-11 grid gap-8 md:gap-5 md:grid-cols-3 lg:gap-8 xl:gap-16 justify-center">
@@ -195,7 +215,7 @@ export default function Home() {
                         ]}
                     />
                     <span></span>
-                    {/* <PriceCard
+                    <PriceCard
                         title="Standard"
                         description="Brief price description"
                         price="5"
@@ -206,11 +226,11 @@ export default function Home() {
                         description="Brief price description"
                         price="10"
                         operators="10+"
-                    /> */}
+                    />
                 </div>
-            </section>
+            </section> */}
 
-            <section id="testimonials" className="container mt-36 text-center flex flex-col items-center" data-aos="fade-right">
+            {/* <section id="testimonials" className="container mt-36 text-center flex flex-col items-center" data-aos="fade-right">
                 <h3 className="text-4xl font-bold">What Clients Say</h3>
                 <p className="font-medium max-w-lg">
                     Trusted by Small Business Owners Everywhere
@@ -239,7 +259,7 @@ export default function Home() {
                         testimonial={testimonial}
                     />
                 </div>
-            </section>
+            </section> */}
 
             <div className="container mt-28">
                 <div className="max-w-[968px] m-auto p-5 rounded-[32px] bg-home flex items-center flex-col md:flex-row justify-between">
@@ -247,7 +267,7 @@ export default function Home() {
                         <h3 className="text-[32px] font-semibold leading-[150%] text-white">
                             Ready to Take Your Business Online?
                         </h3>
-                        <button className="home-button-white mt-12 md:mt-8 lg:mt-12 ">Book a Demo</button>
+                        <a href="tel:+918299207159" className="home-button-white mt-12 md:mt-8 lg:mt-12 inline-block ">Call Now</a>
                     </div>
                     <img
                         className="mt-6 md:mt-0 sm:w-[80%] md:w-[40%] drop-shadow-2xl"
@@ -257,56 +277,66 @@ export default function Home() {
                 </div>
             </div>
 
-            <footer id="contact" className="mt-24 pt-12 pb-8">
-                <div className="container mb-12 text-center sm:text-left grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-5">
-                    <div className="mx-auto sm:ml-0">
-                        <Link to={"/"} className="text-2xl font-bold">
+            <ContactUs />
+
+            <footer id="contact" className="mt-24 pt-12 pb-8 bg-gray-900 text-gray-300">
+                <div className="container mx-auto px-6 grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 text-center sm:text-left">
+                    {/* Brand Section */}
+                    <div className="flex flex-col items-center sm:items-start lg:col-span-2">
+                        <a href="#header" className="text-3xl font-bold mb-4">
                             Catelogue<span className="text-home">Wala</span>
-                        </Link>
-                        <div className="mt-4 flex justify-around">
-                            <img className="icon-button" src="./images/insta-icon.svg" alt="" />
-                            <img className="icon-button" src="./images/fb-icon.svg" alt="" />
-                            <img
-                                className="icon-button"
-                                src="./images/twitter-icon.svg"
-                                alt=""
-                            />
-                        </div>
+                        </a>
+                        <p className="text-sm leading-relaxed">
+                            CatelogueWala is designed to help small businesses set up an online store quickly and manage orders directly via WhatsApp. With customizable themes and seamless product management, you can provide your customers a professional shopping experience, effortlessly.
+                        </p>
                     </div>
 
+                    {/* Resources Section */}
                     <div>
-                        <h6 className="font-medium text-xl mb-4">Resources</h6>
-                        <a className="block" href="#header" >Home</a>
-                        <a className="block" href="#features" >Features</a>
-                        <a className="block" href="#benifits" >Benifits</a>
-                        <a className="block" href="#price" >Price</a>
+                        <h6 className="font-semibold text-lg mb-4">Resources</h6>
+                        <a className="block mb-2 hover:text-gray-400" href="#header">Home</a>
+                        <a className="block mb-2 hover:text-gray-400" href="#features">Features</a>
+                        <a className="block mb-2 hover:text-gray-400" href="#benefits">Benefits</a>
+                        <a className="block mb-2 hover:text-gray-400" href="#price">Price</a>
                     </div>
 
+                    {/* About Us Section */}
                     <div>
-                        <h6 className="font-medium text-xl mb-4">About Us</h6>
-                        <a className="block" href="#header" >Privacy Polciy</a>
-                        <a className="block" href="#features" >Term Of Service</a>
-                        <a className="block" href="#benifits" >Contact Us</a>
+                        <h6 className="font-semibold text-lg mb-4">About Us</h6>
+                        <a className="block mb-2 hover:text-gray-400" href="#privacy">Privacy Policy</a>
+                        <a className="block mb-2 hover:text-gray-400" href="#terms">Terms of Service</a>
+                        <a className="block mb-2 hover:text-gray-400" href="#contact">Contact Us</a>
                     </div>
 
-                    <div className="lg:col-span-2">
-                        <h6 className="font-medium text-xl">
-                            Get in Touch with Us
-                        </h6>
-                        <div className="mt-9 border border-[#BCD0E5] rounded-md text-left">
-                            <input
-                                className="w-full p-2 bg-transparent outline-none"
-                                type="tel"
-                                placeholder="Enter your phone Number"
-                            />
+                    {/* Contact Us Section */}
+                    <div>
+                        <h6 className="font-semibold text-lg mb-4">Contact Us</h6>
+                        <a className="mb-2 flex items-center justify-center sm:justify-start hover:text-gray-400" href="mailto:info@digitalmartlab.com">
+                            <Mail className="mr-2" /> info@digitalmartlab.com
+                        </a>
+                        <a className="mb-2 flex items-center justify-center sm:justify-start hover:text-gray-400" href="tel:+918299207159">
+                            <PhoneCall className="mr-2" /> +91 82992 07159
+                        </a>
+
+                        {/* Social Media Links */}
+                        <div className="mt-4 flex justify-center sm:justify-start space-x-4">
+                            <a target="_blank" href="https://www.facebook.com/digitalmartlab.in" className="hover:text-gray-400">
+                                <img className="h-6 w-6" src="./images/fb-icon.svg" alt="Facebook" />
+                            </a>
+                            <a target="_blank" href="https://www.instagram.com/digital_mart_lab/" className="hover:text-gray-400">
+                                <img className="h-6 w-6" src="./images/insta-icon.svg" alt="Instagram" />
+                            </a>
+                            <a target="_blank" href="https://x.com/DigitalMartLab" className="hover:text-gray-400">
+                                <img className="h-6 w-6" src="./images/twitter-icon.svg" alt="Twitter" />
+                            </a>
                         </div>
-                        <button className="home-button mt-6">Contact Now</button>
                     </div>
                 </div>
 
-                <p className="text-center mt-12">
-                    Made With Love By Product All Right Reserved
-                </p>
+                {/* Footer Bottom Section */}
+                <a href="https://digitalmartlab.in/" className="block mt-8 text-center text-gray-500 text-xs">
+                    © {new Date().getFullYear()} CatelogueWala. All rights reserved.
+                </a>
             </footer>
         </div>
     )
