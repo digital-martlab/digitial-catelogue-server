@@ -240,7 +240,7 @@ export default function StoreCart({ setShowCart }) {
                         <Input
                             className={cn(
                                 "mt-2 px-4 py-2 rounded-lg shadow-sm border border-gray-300",
-                                appliedCoupon && "border-green-500 border-4",
+                                appliedCoupon?.cpn_discount && "border-green-500 border-4",
                             )}
                             value={search}
                             onChange={couponHandleSearch}

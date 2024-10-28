@@ -11,6 +11,9 @@ export function ProductGridLayout({ setDisplayProductDetails }) {
                 <div
                     key={item.product_id}
                     className="relative z-0 rounded-lg border bg-card overflow-hidden shadow-lg"
+                    onClick={() => {
+                        setDisplayProductDetails(item);
+                    }}
                 >
                     <span className="absolute left-2 top-2 rounded-lg bg-accent px-2 py-1 text-xs">
                         {item.ctg_name}
@@ -25,9 +28,6 @@ export function ProductGridLayout({ setDisplayProductDetails }) {
                     <div className="space-y-2 p-4 text-center">
                         <p
                             className="w-full cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap text-lg font-bold"
-                            onClick={() => {
-                                setDisplayProductDetails(item);
-                            }}
                         >
                             {item.title}
                         </p>
@@ -38,14 +38,6 @@ export function ProductGridLayout({ setDisplayProductDetails }) {
                         <Button
                             className="w-full"
                             size="sm"
-                            disabled={item?.variants?.[0]?.stock === 0}
-                            onClick={() => {
-                                handleSetCartItem({
-                                    product_id: item.product_id,
-                                    variant_id: item.variants?.[0]?.variant_id,
-                                    acc_id: item?.acc_id
-                                })
-                            }}
                         >
                             Add To Cart
                         </Button>
@@ -60,7 +52,9 @@ export function ProductListLayout({ setDisplayProductDetails }) {
     const { filteredProducts, handleSetCartItem } = useStore();
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 shadow-lg" >
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 shadow-lg" onClick={() => {
+            setDisplayProductDetails(item);
+        }}>
             {filteredProducts.map((item) => (
                 <div key={item?.product_id} className="flex gap-4 rounded-lg border p-4 bg-card cursor-pointer "
                     onClick={() => setDisplayProductDetails(item)}
@@ -85,15 +79,6 @@ export function ProductListLayout({ setDisplayProductDetails }) {
                         </p>
                         <Button
                             size="sm"
-                            disabled={item?.variants?.[0]?.stock === 0}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                handleSetCartItem({
-                                    product_id: item.product_id,
-                                    variant_id: item.variants?.[0]?.variant_id,
-                                    acc_id: item?.acc_id
-                                })
-                            }}
                         >
                             Add to Cart
                         </Button>

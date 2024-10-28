@@ -1,5 +1,6 @@
 import { currencyIcon } from "@/lib/constants";
 import { CheckCircle } from "lucide-react";
+import { Link } from "react-router-dom";
 
 function PriceCard({ title, description, price, features }) {
     return (
@@ -25,9 +26,7 @@ function PriceCard({ title, description, price, features }) {
                 ))}
             </div>
 
-            <button className="home-button mt-9 mb-8 group-even:home-button-white rounded-lg transition duration-200 hover:bg-opacity-80">
-                Order Now
-            </button>
+            <Link to="mailto:info@digitalmartlab.com" className="home-button-white mt-12 md:mt-8 lg:mt-12 inline-block ">Book a Demo</Link>
         </div>
     );
 }
