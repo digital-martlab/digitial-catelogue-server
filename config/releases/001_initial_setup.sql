@@ -19,6 +19,8 @@ DROP TABLE IF EXISTS stores;
 
 DROP TABLE IF EXISTS admins;
 
+DROP TABLE IF EXISTS contact_us;
+
 SET
     FOREIGN_KEY_CHECKS = 1;
 
@@ -136,4 +138,14 @@ CREATE TABLE
         FOREIGN KEY (acc_id) REFERENCES stores (acc_id),
         FOREIGN KEY (gallery_id) REFERENCES gallery (gallery_id) ON DELETE RESTRICT,
         FOREIGN KEY (product_id) REFERENCES products (product_id)
+    );
+
+CREATE TABLE
+    contact_us (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(100) NOT NULL,
+        email VARCHAR(100) NOT NULL,
+        phone VARCHAR(15) NOT NULL,
+        message TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );

@@ -8,6 +8,7 @@ const createResponse = require("./config/create-response-config");
 const { StatusCodes } = require("http-status-codes");
 const adminRoutes = require("./routes/admin-routes");
 const storeRoutes = require("./routes/store-routes");
+const contactRoutes = require("./routes/contact-routes");
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.get('/', (_, res) => {
 app.use('/store', storeRoutes);
 app.use('/super-admin', superAdminRoutes);
 app.use('/admin', adminRoutes);
+app.use('/home', contactRoutes);
 
 // Error Handler
 app.use(errorHandler);
