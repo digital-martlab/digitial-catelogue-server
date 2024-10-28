@@ -4,8 +4,9 @@ import ContactUs from "@/components/Home/contact-us";
 import Feature from "@/components/Home/feature-items";
 import Aos from "aos";
 import "aos/dist/aos.css";
-import { ArrowBigUp, Contact, Mail, Menu, Palette, PhoneCall, PlayIcon, Smartphone, Store, X } from "lucide-react";
+import { ArrowBigUp, Mail, Menu, Palette, PhoneCall, PlayIcon, Smartphone, Store, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 import { Link } from "react-router-dom";
 
 export default function Home() {
@@ -29,8 +30,8 @@ export default function Home() {
                 className="md:container flex justify-between shadow-md md:shadow-none h-20 px-4 items-center sticky top-0 bg-white z-50 animate-in fade-in"
             >
                 <a href={"#header"} className="text-3xl md:text-4xl font-bold h-full py-4">
-                    {/* Catelogue<span className="text-home">Wala</span> */}
-                    <img src="./images/logo.png" className="h-full" />
+                    {/* Catalogue<span className="text-home">Wala</span> */}
+                    <LazyLoadImage src="./images/logo.png" className="h-full" />
                 </a>
                 <div className="hidden md:flex gap-4">
                     <a href={"#header"} className="nav-item">Home</a>
@@ -39,7 +40,7 @@ export default function Home() {
                     <a href={"#price"} className="nav-item">Price</a>
                     <a href={"#testimonial"} className="nav-item">Testimonials</a>
                 </div>
-                <a href="#contact" className="home-button hidden md:block">Contact Us</a>
+                <a href="#contact-us" className="home-button hidden md:block">Contact Us</a>
                 {/* Mobile Menu Button */}
                 <button onClick={toggleMobileNav} className="md:hidden">
                     {isMobileNavOpen ? <X size={24} /> : <Menu size={24} />}
@@ -57,7 +58,7 @@ export default function Home() {
 
             <section className="container mt-4 md:flex flex-row-reverse justify-between items-center text-[#22343D]">
                 <div className="md:max-w-[50%]">
-                    <img src="./images/amico.svg" alt="hero" data-aos="fade-down" />
+                    <LazyLoadImage src="./images/amico.svg" alt="hero" data-aos="fade-down" />
                 </div>
 
                 {/* text section */}
@@ -66,10 +67,10 @@ export default function Home() {
                         Effortless Online Store Creation for Small Businesses!
                     </h1>
                     <p className="mt-4 text-[18px] leading-[28px] font-normal" data-aos="fade-down">
-                        With CatelogueWala, get your store online in just one click—no coding needed, all products directly connected to WhatsApp for easy management and quick orders.
+                        With CatalogueWala, get your store online in just one click—no coding needed, all products directly connected to WhatsApp for easy management and quick orders.
                     </p>
                     <div className="mt-8 flex items-center justify-around sm:justify-start sm:space-x-8" data-aos="fade-down">
-                        <button className="home-button">Get Started</button>
+                        <a href="#contact-us" className="home-button">Get Started</a>
                         <Link to="https://youtu.be/Ukwbw_Pl_zM?si=AxsqGnZYoowRxWa6" target="_blank" className="font-semibold text-home whitespace-nowrap flex items-center underline hover:scale-110 active:scale-95 duration-200 cursor-pointer">
                             <PlayIcon className="h-8" />
                             Watch the Video
@@ -242,7 +243,7 @@ export default function Home() {
                         designation="Ramesh’s Boutique"
                         userImg="./images/user-1.jpg"
                         rating={4}
-                        testimonial={"CatelogueWala made it so easy to set up my store. I can now manage all my products and get orders directly on WhatsApp!"}
+                        testimonial={"CatalogueWala made it so easy to set up my store. I can now manage all my products and get orders directly on WhatsApp!"}
                     />
                     <TestimonialItem
                         name="Priya"
@@ -261,33 +262,18 @@ export default function Home() {
                 </div>
             </section> */}
 
-            <div className="container mt-28">
-                <div className="max-w-[968px] m-auto p-5 rounded-[32px] bg-home flex items-center flex-col md:flex-row justify-between">
-                    <div className="text-center md:text-left md:max-w-[55%] md:mx-6 lg:mx-10">
-                        <h3 className="text-[32px] font-semibold leading-[150%] text-white">
-                            Ready to Take Your Business Online?
-                        </h3>
-                        <a href="tel:+918299207159" className="home-button-white mt-12 md:mt-8 lg:mt-12 inline-block ">Call Now</a>
-                    </div>
-                    <img
-                        className="mt-6 md:mt-0 sm:w-[80%] md:w-[40%] drop-shadow-2xl"
-                        src="./images/product-screens-2.png"
-                        alt=""
-                    />
-                </div>
-            </div>
-
             <ContactUs />
 
-            <footer id="contact" className="mt-24 pt-12 pb-8 bg-gray-900 text-gray-300">
+
+            <footer className="mt-24 pt-12 pb-8 bg-gray-900 text-gray-300">
                 <div className="container mx-auto px-6 grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 text-center sm:text-left">
                     {/* Brand Section */}
                     <div className="flex flex-col items-center sm:items-start lg:col-span-2">
                         <a href="#header" className="text-3xl font-bold mb-4">
-                            Catelogue<span className="text-home">Wala</span>
+                            Catalogue<span className="text-home">Wala</span>
                         </a>
                         <p className="text-sm leading-relaxed">
-                            CatelogueWala is designed to help small businesses set up an online store quickly and manage orders directly via WhatsApp. With customizable themes and seamless product management, you can provide your customers a professional shopping experience, effortlessly.
+                            CatalogueWala is designed to help small businesses set up an online store quickly and manage orders directly via WhatsApp. With customizable themes and seamless product management, you can provide your customers a professional shopping experience, effortlessly.
                         </p>
                     </div>
 
@@ -321,13 +307,13 @@ export default function Home() {
                         {/* Social Media Links */}
                         <div className="mt-4 flex justify-center sm:justify-start space-x-4">
                             <a target="_blank" href="https://www.facebook.com/digitalmartlab.in" className="hover:text-gray-400">
-                                <img className="h-6 w-6" src="./images/fb-icon.svg" alt="Facebook" />
+                                <LazyLoadImage className="h-6 w-6" src="./images/fb-icon.svg" alt="Facebook" />
                             </a>
                             <a target="_blank" href="https://www.instagram.com/digital_mart_lab/" className="hover:text-gray-400">
-                                <img className="h-6 w-6" src="./images/insta-icon.svg" alt="Instagram" />
+                                <LazyLoadImage className="h-6 w-6" src="./images/insta-icon.svg" alt="Instagram" />
                             </a>
                             <a target="_blank" href="https://x.com/DigitalMartLab" className="hover:text-gray-400">
-                                <img className="h-6 w-6" src="./images/twitter-icon.svg" alt="Twitter" />
+                                <LazyLoadImage className="h-6 w-6" src="./images/twitter-icon.svg" alt="Twitter" />
                             </a>
                         </div>
                     </div>
@@ -335,7 +321,7 @@ export default function Home() {
 
                 {/* Footer Bottom Section */}
                 <a href="https://digitalmartlab.in/" className="block mt-8 text-center text-gray-500 text-xs">
-                    © {new Date().getFullYear()} CatelogueWala. All rights reserved.
+                    © {new Date().getFullYear()} CatalogueWala. All rights reserved.
                 </a>
             </footer>
         </div>

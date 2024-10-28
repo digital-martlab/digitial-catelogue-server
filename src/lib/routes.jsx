@@ -10,6 +10,7 @@ import AdminPasswordChange from "@/components/admin/change-password-admin";
 import AdminProductList from "@/pages/admin/product-list-admin";
 import AddUpdateProduct from "@/components/admin/add-update-product";
 import AdminThemeCustomizer from "@/pages/admin/admin-theme-customizer";
+import SuperAdminContactsList from "@/pages/super-admin/super-admin-contacts";
 
 export const protectedRoutes = [
     // SUPER ADMIN ROUTES
@@ -41,6 +42,12 @@ export const protectedRoutes = [
         _id: 5,
         element: <CreateUpdateStore />,
         link: "/super-admin/stores/:status/:store_id",
+        assignedRoles: [ROLES.SUPER_ADMIN]
+    },
+    {
+        _id: 6,
+        element: <SuperAdminContactsList />,
+        link: "/super-admin/contacts",
         assignedRoles: [ROLES.SUPER_ADMIN]
     },
 

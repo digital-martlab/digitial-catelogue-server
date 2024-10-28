@@ -1,7 +1,8 @@
 export const enpoints = {
     super_admin: {
         login: "/super-admin/login",
-        store: "/super-admin/store"
+        store: "/super-admin/store",
+        dashboard: "/super-admin/dashboard"
     },
     admin: {
         login: "/admin/login",
@@ -19,5 +20,8 @@ export const enpoints = {
         filteredProducts: "/store/filtered-products",
         coupon: "/store/coupon",
         order: "/store/order",
+    },
+    home: {
+        contact: "/home/contact"
     }
 }

@@ -1,4 +1,4 @@
-import { ChartBarStacked, LayoutDashboard, Palette, ShoppingBag, StoreIcon, TagIcon } from "lucide-react";
+import { ChartBarStacked, Contact2Icon, LayoutDashboard, Palette, ShoppingBag, StoreIcon, TagIcon } from "lucide-react";
 
 export const SuperAdminSidbarList = [
     {
@@ -13,12 +13,12 @@ export const SuperAdminSidbarList = [
         icon: StoreIcon,
         link: "/super-admin/stores"
     },
-    // {
-    //     _id: 3,
-    //     title: "Themes",
-    //     icon: LayoutGridIcon,
-    //     link: "/super-admin/themes"
-    // }
+    {
+        _id: 3,
+        title: "Contact",
+        icon: Contact2Icon,
+        link: "/super-admin/contacts"
+    }
 ]
 
 export const AdminSidbarList = [
