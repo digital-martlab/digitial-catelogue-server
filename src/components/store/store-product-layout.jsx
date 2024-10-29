@@ -1,9 +1,10 @@
 import useStore from '@/hooks/use-store';
 import { currencyIcon } from '@/lib/constants';
 import { Button } from '../ui/button';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 export function ProductGridLayout({ setDisplayProductDetails }) {
-    const { filteredProducts, handleSetCartItem } = useStore();
+    const { filteredProducts } = useStore();
 
     return (
         <div className="grid gap-4 pt-4 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
@@ -19,10 +20,10 @@ export function ProductGridLayout({ setDisplayProductDetails }) {
                         {item.ctg_name}
                     </span>
                     <div className="h-40">
-                        <img
+                        <LazyLoadImage
                             alt={item.title}
                             src={item.images?.[0]?.url}
-                            className="h-full w-full object-cover"
+                            className="h-full w-full object-contain"
                         />
                     </div>
                     <div className="space-y-2 p-4 text-center">
@@ -49,18 +50,18 @@ export function ProductGridLayout({ setDisplayProductDetails }) {
 }
 
 export function ProductListLayout({ setDisplayProductDetails }) {
-    const { filteredProducts, handleSetCartItem } = useStore();
+    const { filteredProducts } = useStore();
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 shadow-lg" onClick={() => {
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4" onClick={() => {
             setDisplayProductDetails(item);
         }}>
             {filteredProducts.map((item) => (
-                <div key={item?.product_id} className="flex gap-4 rounded-lg border p-4 bg-card cursor-pointer "
+                <div key={item?.product_id} className="flex gap-4 rounded-lg shadow-lg border p-4 bg-card cursor-pointer "
                     onClick={() => setDisplayProductDetails(item)}
                 >
                     <div className="h-40 w-40 rounded-lg border bg-background overflow-hidden">
-                        <img src={item?.images?.[0]?.url} alt="product" className='w-full h-full object-cover' />
+                        <LazyLoadImage src={item?.images?.[0]?.url} alt="product" className='w-full h-full object-container' />
                     </div>
                     <div className="flex-1 space-y-2">
                         <p className="flex gap-2">

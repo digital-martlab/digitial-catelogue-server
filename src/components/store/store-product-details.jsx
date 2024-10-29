@@ -40,7 +40,7 @@ export default function StoreProductDetails({ item, setDisplayProductDetails }) 
                                 <img
                                     alt={item.title}
                                     src={displayImage}
-                                    className="h-full w-full object-cover"
+                                    className="h-full w-full object-contain"
                                 />
                             )}
                         </div>
@@ -57,7 +57,7 @@ export default function StoreProductDetails({ item, setDisplayProductDetails }) 
                                     <img
                                         alt={item.title}
                                         src={img.url}
-                                        className="h-full w-full object-cover rounded-lg"
+                                        className="h-full w-full object-contain rounded-lg"
                                     />
                                 </div>
                             ))}

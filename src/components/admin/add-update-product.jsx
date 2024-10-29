@@ -173,7 +173,7 @@ export default function AddUpdateProduct() {
                                         width={400}
                                         height={400}
                                         alt={`Preview ${index + 1}`}
-                                        className="h-full w-full object-cover"
+                                        className="h-full w-full object-contain"
                                     />
                                     <div className="absolute bottom-2 right-2 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                                         <label

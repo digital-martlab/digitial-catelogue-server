@@ -13,34 +13,40 @@ export default function StoreContextProvider({ children }) {
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [search, setSearch] = useState("");
 
+    const getAllProducts = () => {
+        getAllProductsFn({
+            acc_id: storeInfo?.acc_id,
+            params: {
+                ...(selectedCategories !== 1.9999 && { ctg_id: selectedCategories })
+            }
+        })
+            .then(({ data }) => {
+                setProducts(data);
+            });
+    }
+
+    const getFilterProducts = () => {
+        getFilteredProductsFn({
+            acc_id: storeInfo?.acc_id,
+            params: {
+                ...(selectedCategories !== 1.9999 && { ctg_id: selectedCategories }),
+                search
+            }
+        })
+            .then(({ data }) => {
+                setFilteredProducts(data);
+            });
+    }
+
     useEffect(() => {
         if (storeInfo && categories)
-            getAllProductsFn({
-                acc_id: storeInfo?.acc_id,
-                params: {
-                    ...(selectedCategories !== 1.9999 && { ctg_id: selectedCategories })
-                }
-            })
-                .then(({ data }) => {
-                    setProducts(data);
-                });
+            getAllProducts();
     }, [storeInfo]);
 
     useEffect(() => {
         let timer;
         if (storeInfo && categories)
-            timer = setTimeout(() => {
-                getFilteredProductsFn({
-                    acc_id: storeInfo?.acc_id,
-                    params: {
-                        ...(selectedCategories !== 1.9999 && { ctg_id: selectedCategories }),
-                        search
-                    }
-                })
-                    .then(({ data }) => {
-                        setFilteredProducts(data);
-                    });
-            }, 500);
+            timer = setTimeout(getFilterProducts, 500);
 
         return () => clearTimeout(timer);
     }, [categories, selectedCategories, storeInfo, search]);
@@ -103,7 +109,9 @@ export default function StoreContextProvider({ children }) {
             handelDeleteCartItem,
             filteredProducts,
             search,
-            setSearch
+            setSearch,
+            getAllProducts,
+            getFilterProducts
         }}>
             {children}
         </StoreContext.Provider>

@@ -12,6 +12,7 @@ import { Button } from "../ui/button";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
 import { useNavigate } from "react-router-dom";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const intialCoupon = {
     acc_id: "",
@@ -24,7 +25,8 @@ export default function StoreCart({ setShowCart }) {
     const navigate = useNavigate("");
     const [cartAction, setCartAction] = useState("items");
     const [cartProducts, setCartProducts] = useState([]);
-    const { cartItems, products, handleQuantityChange, handelDeleteCartItem, storeInfo } = useStore();
+    const { cartItems, setCartItems, products, handleQuantityChange, handelDeleteCartItem, storeInfo, getAllProducts,
+        getFilterProducts } = useStore();
     const [search, setSearch] = useState("");
     const [appliedCoupon, setAppliedCoupon] = useState(intialCoupon);
 
@@ -98,7 +100,11 @@ export default function StoreCart({ setShowCart }) {
             .then((data) => {
                 showAlert(data);
                 window.location.href = data?.data;
-                localStorage.removeItem("digital_catelogue_app_cart")
+                localStorage.removeItem("digital_catelogue_app_cart");
+                setCartItems([]);
+                setCartAction("items");
+                getAllProducts();
+                getFilterProducts();
             })
 
     }
@@ -124,7 +130,7 @@ export default function StoreCart({ setShowCart }) {
                                 className="flex gap-6 rounded-lg border shadow-md p-4 transition duration-300 hover:shadow-lg self-start bg-card"
                             >
                                 <div className="h-24 w-24 rounded-lg overflow-hidden border">
-                                    <img
+                                    <LazyLoadImage
                                         src={item?.images[0]?.url}
                                         alt="product"
                                         className="h-full w-full object-cover"
