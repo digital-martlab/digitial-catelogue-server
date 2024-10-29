@@ -9,9 +9,9 @@ function Feature({ Icon, iconBgColor, title, description }) {
       >
         <Icon className="h-6 mb-1 text-white" aria-hidden="true" />
       </div>
-      <h4 id={`${title}-heading`} className="mt-6 font-semibold text-2xl">
+      <h3 id={`${title}-heading`} className="mt-6 font-semibold text-2xl">
         {title}
-      </h4>
+      </h3>
       <p className="text-base mt-2" aria-describedby={`${title}-description`}>
         {description}
       </p>

@@ -31,7 +31,7 @@ export default function Home() {
                 aria-label="Main navigation header"
             >
                 <a href={"#header"} className="text-3xl md:text-4xl font-bold h-full py-4" aria-label="Go to homepage">
-                    <LazyLoadImage src="./images/logo.webp" alt="CatalogueWala" width={100} height={100} />
+                    <LazyLoadImage src="./images/logo.webp" alt="CatalogueWala" width={100} height={54} />
                 </a>
                 <div className="hidden md:flex gap-4" role="navigation" aria-label="Primary navigation">
                     <a href={"#header"} className="nav-item">Home</a>
@@ -151,7 +151,7 @@ export default function Home() {
                     description="Easily manage your entire catalog with no technical hassle. Add products, update categories, and apply coupons with just a few clicks."
                     Content={() => (
                         <div>
-                            <h5 className="mt-6 mb-2 font-semibold">Organize & Update</h5>
+                            <h4 className="mt-6 mb-2 font-semibold">Organize & Update</h4>
                             <p>
                                 Instantly upload and organize your products into categories and make quick edits whenever you need.
                             </p>
@@ -193,7 +193,7 @@ export default function Home() {
                     description="Build a store that reflects your brand. Choose from a variety of themes and customize your look to stand out from the crowd."
                     Content={() => (
                         <div>
-                            <h5 className="mt-6 mb-2 font-semibold">Theme Selection</h5>
+                            <h4 className="mt-6 mb-2 font-semibold">Theme Selection</h4>
                             <p>
                                 Pick a theme that matches your style, and switch themes anytime as your brand evolves.
                             </p>
@@ -310,7 +310,7 @@ export default function Home() {
 
                     {/* Resources Section */}
                     <div>
-                        <h6 className="font-semibold text-lg mb-4">Resources</h6>
+                        <h5 className="font-semibold text-lg mb-4">Resources</h5>
                         <a className="block mb-2 hover:text-gray-400" href="#header" aria-label="Navigate to Home">Home</a>
                         <a className="block mb-2 hover:text-gray-400" href="#features" aria-label="Navigate to Features">Features</a>
                         <a className="block mb-2 hover:text-gray-400" href="#benefits" aria-label="Navigate to Benefits">Benefits</a>
@@ -319,7 +319,7 @@ export default function Home() {
 
                     {/* About Us Section */}
                     <div>
-                        <h6 className="font-semibold text-lg mb-4">About Us</h6>
+                        <h5 className="font-semibold text-lg mb-4">About Us</h5>
                         <a className="block mb-2 hover:text-gray-400" href="#privacy" aria-label="View Privacy Policy">Privacy Policy</a>
                         <a className="block mb-2 hover:text-gray-400" href="#terms" aria-label="View Terms of Service">Terms of Service</a>
                         <a className="block mb-2 hover:text-gray-400" href="#contact" aria-label="Contact Us">Contact Us</a>
@@ -327,7 +327,7 @@ export default function Home() {
 
                     {/* Contact Us Section */}
                     <div>
-                        <h6 className="font-semibold text-lg mb-4">Contact Us</h6>
+                        <h5 className="font-semibold text-lg mb-4">Contact Us</h5>
                         <a className="mb-2 flex items-center justify-center sm:justify-start hover:text-gray-400" href="mailto:info@digitalmartlab.com" aria-label="Email us at info@digitalmartlab.com">
                             <Mail className="mr-2" /> info@digitalmartlab.com
                         </a>

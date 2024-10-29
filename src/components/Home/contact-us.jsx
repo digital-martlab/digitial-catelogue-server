@@ -74,12 +74,14 @@ export default function ContactUs() {
                                 Name
                             </label>
                             <input
+                                id="name"
                                 type="text"
                                 name="name"
                                 value={formData.name}
                                 onChange={handleChange}
                                 required
                                 aria-invalid={formErrors.name ? "true" : "false"}
+                                aria-describedby={formErrors.name ? "name-error" : undefined}
                                 className={`w-full p-3 border ${formErrors.name ? "border-red-500" : "border-gray-300"} rounded-lg focus:outline-none focus:ring-2 focus:ring-home transition duration-300`}
                             />
                             {formErrors.name && <p className="text-red-500 text-sm" id="name-error">{formErrors.name}</p>}
@@ -89,12 +91,14 @@ export default function ContactUs() {
                                 Email
                             </label>
                             <input
+                                id="email"
                                 type="email"
                                 name="email"
                                 value={formData.email}
                                 onChange={handleChange}
                                 required
                                 aria-invalid={formErrors.email ? "true" : "false"}
+                                aria-describedby={formErrors.email ? "email-error" : undefined}
                                 className={`w-full p-3 border ${formErrors.email ? "border-red-500" : "border-gray-300"} rounded-lg focus:outline-none focus:ring-2 focus:ring-home transition duration-300`}
                             />
                             {formErrors.email && <p className="text-red-500 text-sm" id="email-error">{formErrors.email}</p>}
@@ -104,12 +108,14 @@ export default function ContactUs() {
                                 Phone Number
                             </label>
                             <input
+                                id="phone"
                                 type="text"
                                 name="phone"
                                 value={formData.phone}
                                 onChange={handleChange}
                                 required
                                 aria-invalid={formErrors.phone ? "true" : "false"}
+                                aria-describedby={formErrors.phone ? "phone-error" : undefined}
                                 className={`w-full p-3 border ${formErrors.phone ? "border-red-500" : "border-gray-300"} rounded-lg focus:outline-none focus:ring-2 focus:ring-home transition duration-300`}
                             />
                             {formErrors.phone && <p className="text-red-500 text-sm" id="phone-error">{formErrors.phone}</p>}
@@ -119,12 +125,14 @@ export default function ContactUs() {
                                 Message
                             </label>
                             <textarea
+                                id="message"
                                 name="message"
                                 value={formData.message}
                                 onChange={handleChange}
                                 required
                                 rows="5"
                                 aria-invalid={formErrors.message ? "true" : "false"}
+                                aria-describedby={formErrors.message ? "message-error" : undefined}
                                 className={`w-full p-3 border ${formErrors.message ? "border-red-500" : "border-gray-300"} rounded-lg focus:outline-none focus:ring-2 focus:ring-home transition duration-300`}
                             />
                             {formErrors.message && <p className="text-red-500 text-sm" id="message-error">{formErrors.message}</p>}
