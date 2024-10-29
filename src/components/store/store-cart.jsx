@@ -99,12 +99,12 @@ export default function StoreCart({ setShowCart }) {
         cartOrderFn({ userDetails, cartItems, totalAmount, storeInfo, ...(appliedCoupon?.cpn_name && { appliedCoupon }) })
             .then((data) => {
                 showAlert(data);
-                window.location.href = data?.data;
                 localStorage.removeItem("digital_catelogue_app_cart");
                 setCartItems([]);
                 setCartAction("items");
                 getAllProducts();
                 getFilterProducts();
+                window.location.href = data?.data;
             })
 
     }
