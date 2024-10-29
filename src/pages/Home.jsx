@@ -310,7 +310,7 @@ export default function Home() {
 
                     {/* Resources Section */}
                     <div>
-                        <h5 className="font-semibold text-lg mb-4">Resources</h5>
+                        <p className="font-semibold text-lg mb-4">Resources</p>
                         <a className="block mb-2 hover:text-gray-400" href="#header" aria-label="Navigate to Home">Home</a>
                         <a className="block mb-2 hover:text-gray-400" href="#features" aria-label="Navigate to Features">Features</a>
                         <a className="block mb-2 hover:text-gray-400" href="#benefits" aria-label="Navigate to Benefits">Benefits</a>
@@ -319,7 +319,7 @@ export default function Home() {
 
                     {/* About Us Section */}
                     <div>
-                        <h5 className="font-semibold text-lg mb-4">About Us</h5>
+                        <p className="font-semibold text-lg mb-4">About Us</p>
                         <a className="block mb-2 hover:text-gray-400" href="#privacy" aria-label="View Privacy Policy">Privacy Policy</a>
                         <a className="block mb-2 hover:text-gray-400" href="#terms" aria-label="View Terms of Service">Terms of Service</a>
                         <a className="block mb-2 hover:text-gray-400" href="#contact" aria-label="Contact Us">Contact Us</a>
@@ -327,7 +327,7 @@ export default function Home() {
 
                     {/* Contact Us Section */}
                     <div>
-                        <h5 className="font-semibold text-lg mb-4">Contact Us</h5>
+                        <p className="font-semibold text-lg mb-4">Contact Us</p>
                         <a className="mb-2 flex items-center justify-center sm:justify-start hover:text-gray-400" href="mailto:info@digitalmartlab.com" aria-label="Email us at info@digitalmartlab.com">
                             <Mail className="mr-2" /> info@digitalmartlab.com
                         </a>
