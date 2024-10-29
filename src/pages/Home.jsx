@@ -37,8 +37,8 @@ export default function Home() {
                     <a href={"#header"} className="nav-item">Home</a>
                     <a href={"#features"} className="nav-item">Features</a>
                     <a href={"#benefits"} className="nav-item">Benefits</a>
-                    <a href={"#price"} className="nav-item">Price</a>
-                    <a href={"#testimonial"} className="nav-item">Testimonials</a>
+                    {/* <a href={"#price"} className="nav-item">Price</a>
+                    <a href={"#testimonial"} className="nav-item">Testimonials</a> */}
                 </div>
                 <a href="#contact-us" className="home-button hidden md:block">Contact Us</a>
                 {/* Mobile Menu Button */}
@@ -50,8 +50,8 @@ export default function Home() {
                         <a href={"#header"} className="block py-2">Home</a>
                         <a href={"#features"} className="block py-2">Features</a>
                         <a href={"#benefits"} className="block py-2">Benefits</a>
-                        <a href={"#price"} className="block py-2">Price</a>
-                        <a href={"#testimonial"} className="block py-2">Testimonials</a>
+                        {/* <a href={"#price"} className="block py-2">Price</a>
+                        <a href={"#testimonial"} className="block py-2">Testimonials</a> */}
                     </nav>
                 )}
             </header>
@@ -79,7 +79,7 @@ export default function Home() {
                 </div>
             </section>
 
-            <section id="features" className="container mt-24 flex flex-col items-center">
+            <section id="features" className="container pt-24 flex flex-col items-center">
                 <h2 className="text-[32px] font-bold text-center sm:text-left" data-aos="fade-up">
                     Product was Built Specifically for You
                 </h2>
@@ -112,7 +112,7 @@ export default function Home() {
                 </div>
             </section>
 
-            <section id="benefits" className="container mt-24 space-y-24">
+            <section id="benefits" className="container pt-24 space-y-24">
                 <BenefitItem
                     image="./images/benefit-1.svg"
                     heading1="Effortless Product"
