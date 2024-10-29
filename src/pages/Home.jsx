@@ -50,6 +50,7 @@ export default function Home() {
                         <a href={"#header"} className="block py-2">Home</a>
                         <a href={"#features"} className="block py-2">Features</a>
                         <a href={"#benefits"} className="block py-2">Benefits</a>
+                        <a href={"#contact-us"} className="block py-2">Contact Us</a>
                         {/* <a href={"#price"} className="block py-2">Price</a>
                         <a href={"#testimonial"} className="block py-2">Testimonials</a> */}
                     </nav>
