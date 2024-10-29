@@ -111,7 +111,8 @@ export default function StoreContextProvider({ children }) {
             search,
             setSearch,
             getAllProducts,
-            getFilterProducts
+            getFilterProducts,
+            setCartItems
         }}>
             {children}
         </StoreContext.Provider>
