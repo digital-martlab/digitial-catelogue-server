@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { MenuIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "../ui/button";
+import { LazyLoadComponent } from "react-lazy-load-image-component";
 
 export default function StoreSidebar() {
     const { storeInfo, categories, setSelectedCategories, selectedCategories } = useStore();
@@ -11,7 +12,7 @@ export default function StoreSidebar() {
 
     return (
         <aside className="border-r p-4 h-full">
-            <img
+            <LazyLoadComponent
                 src={storeInfo?.logo}
                 alt="logo"
                 className="h-10 object-contain mx-auto"

@@ -1,0 +1,21 @@
+# Allow all web crawlers full access
+User-agent: *
+Allow: /
+
+# Block access to static files, node_modules, or sensitive directories if necessary
+Disallow: /static/
+Disallow: /node_modules/
+
+# Prevent indexing of development or staging environments
+Disallow: /dev/
+Disallow: /staging/
+
+# Block common dynamic routes (e.g., user-specific dashboards)
+Disallow: /admin/
+Disallow: /super-admin/
+
+# Prevent search engines from accessing specific query parameters (optional)
+Disallow: /*?token=
+
+# Optional: Sitemap link (if you have one)
+Sitemap: https://cataloguewala.com/sitemap.xml

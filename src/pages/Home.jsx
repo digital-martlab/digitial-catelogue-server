@@ -28,57 +28,87 @@ export default function Home() {
             {/* Header */}
             <header
                 className="md:container flex justify-between shadow-md md:shadow-none h-20 px-4 items-center sticky top-0 bg-white z-50 animate-in fade-in"
+                aria-label="Main navigation header"
             >
-                <a href={"#header"} className="text-3xl md:text-4xl font-bold h-full py-4">
-                    {/* Catalogue<span className="text-home">Wala</span> */}
-                    <LazyLoadImage src="./images/logo.png" className="h-full" />
+                <a href={"#header"} className="text-3xl md:text-4xl font-bold h-full py-4" aria-label="Go to homepage">
+                    <LazyLoadImage src="./images/logo.webp" alt="CatalogueWala" width={100} height={100} />
                 </a>
-                <div className="hidden md:flex gap-4">
+                <div className="hidden md:flex gap-4" role="navigation" aria-label="Primary navigation">
                     <a href={"#header"} className="nav-item">Home</a>
                     <a href={"#features"} className="nav-item">Features</a>
                     <a href={"#benefits"} className="nav-item">Benefits</a>
-                    {/* <a href={"#price"} className="nav-item">Price</a>
-                    <a href={"#testimonial"} className="nav-item">Testimonials</a> */}
+                    {/* Uncomment these links if needed
+        <a href={"#price"} className="nav-item">Price</a>
+        <a href={"#testimonial"} className="nav-item">Testimonials</a>
+        */}
                 </div>
-                <a href="#contact-us" className="home-button hidden md:block">Contact Us</a>
+                <a href="#contact-us" className="home-button hidden md:block" aria-label="Contact us">Contact Us</a>
                 {/* Mobile Menu Button */}
-                <button onClick={toggleMobileNav} className="md:hidden">
+                <button onClick={toggleMobileNav} className="md:hidden" aria-label={isMobileNavOpen ? "Close mobile navigation" : "Open mobile navigation"}>
                     {isMobileNavOpen ? <X size={24} /> : <Menu size={24} />}
                 </button>
                 {isMobileNavOpen && (
-                    <nav className="md:hidden bg-white shadow-md p-4 absolute w-full left-0 top-16 z-50 animate-in fade-in ">
+                    <nav className="md:hidden bg-white shadow-md p-4 absolute w-full left-0 top-16 z-50 animate-in fade-in" aria-label="Mobile navigation">
                         <a href={"#header"} className="block py-2">Home</a>
                         <a href={"#features"} className="block py-2">Features</a>
                         <a href={"#benefits"} className="block py-2">Benefits</a>
-                        <a href={"#contact-us"} className="block py-2">Contact Us</a>
-                        {/* <a href={"#price"} className="block py-2">Price</a>
-                        <a href={"#testimonial"} className="block py-2">Testimonials</a> */}
+                        <a href={"#contact-us"} className="block py-2" aria-label="Contact us">Contact Us</a>
+                        {/* Uncomment these links if needed
+            <a href={"#price"} className="block py-2">Price</a>
+            <a href={"#testimonial"} className="block py-2">Testimonials</a>
+            */}
                     </nav>
                 )}
             </header>
 
-            <section className="container mt-4 md:flex flex-row-reverse justify-between items-center text-[#22343D]">
+            <section
+                className="container mt-4 md:flex flex-row-reverse justify-between items-center text-[#22343D] aspect-video"
+                aria-labelledby="store-creation-heading"
+            >
                 <div className="md:max-w-[50%]">
-                    <LazyLoadImage src="./images/amico.svg" alt="hero" data-aos="fade-down" />
+                    <LazyLoadImage
+                        src="./images/amico.svg"
+                        alt="Illustration representing online store creation"
+                        data-aos="fade-down"
+                        width={700}
+                        height={700}
+                    />
                 </div>
 
                 {/* text section */}
                 <div className="text-center sm:text-left md:max-w-[40%]">
-                    <h1 className="font-bold text-4xl leading-[60px]" data-aos="fade-down">
+                    <h1
+                        id="store-creation-heading"
+                        className="font-bold text-4xl leading-[60px]"
+                        data-aos="fade-down"
+                    >
                         Effortless Online Store Creation for Small Businesses!
                     </h1>
-                    <p className="mt-4 text-[18px] leading-[28px] font-normal" data-aos="fade-down">
+                    <p
+                        className="mt-4 text-[18px] leading-[28px] font-normal"
+                        data-aos="fade-down"
+                        aria-describedby="store-description"
+                    >
                         With CatalogueWala, get your store online in just one click—no coding needed, all products directly connected to WhatsApp for easy management and quick orders.
                     </p>
-                    <div className="mt-8 flex items-center justify-around sm:justify-start sm:space-x-8" data-aos="fade-down">
-                        <a href="#contact-us" className="home-button">Get Started</a>
-                        <Link to="https://youtu.be/Ukwbw_Pl_zM?si=AxsqGnZYoowRxWa6" target="_blank" className="font-semibold text-home whitespace-nowrap flex items-center underline hover:scale-110 active:scale-95 duration-200 cursor-pointer">
+                    <div
+                        className="mt-8 flex items-center justify-around sm:justify-start sm:space-x-8"
+                        data-aos="fade-down"
+                    >
+                        <a href="#contact-us" className="home-button" aria-label="Get started with CatalogueWala">Get Started</a>
+                        <Link
+                            to="https://youtu.be/Ukwbw_Pl_zM?si=AxsqGnZYoowRxWa6"
+                            target="_blank"
+                            className="font-semibold text-home whitespace-nowrap flex items-center underline hover:scale-110 active:scale-95 duration-200 cursor-pointer"
+                            aria-label="Watch the introductory video about CatalogueWala"
+                        >
                             <PlayIcon className="h-8" />
                             Watch the Video
                         </Link>
                     </div>
                 </div>
             </section>
+
 
             <section id="features" className="container pt-24 flex flex-col items-center">
                 <h2 className="text-[32px] font-bold text-center sm:text-left" data-aos="fade-up">
@@ -266,11 +296,11 @@ export default function Home() {
             <ContactUs />
 
 
-            <footer className="mt-24 pt-12 pb-8 bg-gray-900 text-gray-300">
+            <footer className="mt-24 pt-12 pb-8 bg-gray-900 text-gray-300" aria-label="Footer">
                 <div className="container mx-auto px-6 grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 text-center sm:text-left">
                     {/* Brand Section */}
                     <div className="flex flex-col items-center sm:items-start lg:col-span-2">
-                        <a href="#header" className="text-3xl font-bold mb-4">
+                        <a href="#header" className="text-3xl font-bold mb-4" aria-label="Go to homepage">
                             Catalogue<span className="text-home">Wala</span>
                         </a>
                         <p className="text-sm leading-relaxed">
@@ -281,39 +311,39 @@ export default function Home() {
                     {/* Resources Section */}
                     <div>
                         <h6 className="font-semibold text-lg mb-4">Resources</h6>
-                        <a className="block mb-2 hover:text-gray-400" href="#header">Home</a>
-                        <a className="block mb-2 hover:text-gray-400" href="#features">Features</a>
-                        <a className="block mb-2 hover:text-gray-400" href="#benefits">Benefits</a>
-                        <a className="block mb-2 hover:text-gray-400" href="#price">Price</a>
+                        <a className="block mb-2 hover:text-gray-400" href="#header" aria-label="Navigate to Home">Home</a>
+                        <a className="block mb-2 hover:text-gray-400" href="#features" aria-label="Navigate to Features">Features</a>
+                        <a className="block mb-2 hover:text-gray-400" href="#benefits" aria-label="Navigate to Benefits">Benefits</a>
+                        <a className="block mb-2 hover:text-gray-400" href="#price" aria-label="Navigate to Price">Price</a>
                     </div>
 
                     {/* About Us Section */}
                     <div>
                         <h6 className="font-semibold text-lg mb-4">About Us</h6>
-                        <a className="block mb-2 hover:text-gray-400" href="#privacy">Privacy Policy</a>
-                        <a className="block mb-2 hover:text-gray-400" href="#terms">Terms of Service</a>
-                        <a className="block mb-2 hover:text-gray-400" href="#contact">Contact Us</a>
+                        <a className="block mb-2 hover:text-gray-400" href="#privacy" aria-label="View Privacy Policy">Privacy Policy</a>
+                        <a className="block mb-2 hover:text-gray-400" href="#terms" aria-label="View Terms of Service">Terms of Service</a>
+                        <a className="block mb-2 hover:text-gray-400" href="#contact" aria-label="Contact Us">Contact Us</a>
                     </div>
 
                     {/* Contact Us Section */}
                     <div>
                         <h6 className="font-semibold text-lg mb-4">Contact Us</h6>
-                        <a className="mb-2 flex items-center justify-center sm:justify-start hover:text-gray-400" href="mailto:info@digitalmartlab.com">
+                        <a className="mb-2 flex items-center justify-center sm:justify-start hover:text-gray-400" href="mailto:info@digitalmartlab.com" aria-label="Email us at info@digitalmartlab.com">
                             <Mail className="mr-2" /> info@digitalmartlab.com
                         </a>
-                        <a className="mb-2 flex items-center justify-center sm:justify-start hover:text-gray-400" href="tel:+918299207159">
+                        <a className="mb-2 flex items-center justify-center sm:justify-start hover:text-gray-400" href="tel:+918299207159" aria-label="Call us at +91 82992 07159">
                             <PhoneCall className="mr-2" /> +91 82992 07159
                         </a>
 
                         {/* Social Media Links */}
                         <div className="mt-4 flex justify-center sm:justify-start space-x-4">
-                            <a target="_blank" href="https://www.facebook.com/digitalmartlab.in" className="hover:text-gray-400">
+                            <a target="_blank" rel="noopener noreferrer" href="https://www.facebook.com/digitalmartlab.in" className="hover:text-gray-400" aria-label="Visit our Facebook page">
                                 <LazyLoadImage className="h-6 w-6" src="./images/fb-icon.svg" alt="Facebook" />
                             </a>
-                            <a target="_blank" href="https://www.instagram.com/digital_mart_lab/" className="hover:text-gray-400">
+                            <a target="_blank" rel="noopener noreferrer" href="https://www.instagram.com/digital_mart_lab/" className="hover:text-gray-400" aria-label="Visit our Instagram profile">
                                 <LazyLoadImage className="h-6 w-6" src="./images/insta-icon.svg" alt="Instagram" />
                             </a>
-                            <a target="_blank" href="https://x.com/DigitalMartLab" className="hover:text-gray-400">
+                            <a target="_blank" rel="noopener noreferrer" href="https://x.com/DigitalMartLab" className="hover:text-gray-400" aria-label="Visit our Twitter profile">
                                 <LazyLoadImage className="h-6 w-6" src="./images/twitter-icon.svg" alt="Twitter" />
                             </a>
                         </div>
@@ -321,7 +351,7 @@ export default function Home() {
                 </div>
 
                 {/* Footer Bottom Section */}
-                <a href="https://digitalmartlab.in/" className="block mt-8 text-center text-gray-500 text-xs">
+                <a href="https://digitalmartlab.in/" className="block mt-8 text-center text-gray-500 text-xs" aria-label="Visit Digital Mart Lab">
                     © {new Date().getFullYear()} CatalogueWala. All rights reserved.
                 </a>
             </footer>

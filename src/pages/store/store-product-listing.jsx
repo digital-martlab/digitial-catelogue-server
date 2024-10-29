@@ -11,6 +11,7 @@ import { getStoreInfoFn } from "@/services/store/store-service";
 import { useWindowWidth } from "@react-hook/window-size";
 import { LayoutGrid, ShoppingCart, TableCellsSplitIcon } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import { useNavigate, useParams } from "react-router-dom";
 
 export default function StoreProductListing() {
@@ -43,6 +44,25 @@ export default function StoreProductListing() {
 
     return (
         <section className="grid grid-cols-1 lg:grid-cols-[200px_1fr_400px] h-screen overflow-hidden">
+            <Helmet>
+                <meta charSet="utf-8" />
+                <title>{storeInfo?.store_name} - CatelogueWala</title>
+                <link rel="canonical" href={window.location.href} />
+                <link rel="icon" type="image/svg+xml" href={storeInfo?.logo} />
+                <meta
+                    property="og:title"
+                    content={`${storeInfo?.store_name} - CatelogueWala`}
+                />
+                <meta property="og:image" content={storeInfo?.logo} />
+                <meta property="og:url" content={window.location.href} />
+                <meta property="og:type" content="website" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta
+                    name="twitter:title"
+                    content={`${storeInfo?.store_name} - CatelogueWala`}
+                />
+                <meta name="twitter:image" content={storeInfo?.logo} />
+            </Helmet>
             {onlyWidth >= 1024 && <StoreSidebar />}
             <section className="flex flex-col h-full">
                 <div className="flex justify-between items-center border-b p-4 h-16">

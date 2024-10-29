@@ -38,8 +38,7 @@ export default function ContactUs() {
                     errors[err.path[0]] = err.message;
                 });
                 setFormErrors(errors);
-            }
-            else {
+            } else {
                 setSubmissionStatus("Sorry, there was an error submitting your form. Please try again.");
             }
         } finally {
@@ -48,28 +47,28 @@ export default function ContactUs() {
     };
 
     return (
-        <section id="contact-us" className="container flex flex-col md:flex-row items-center justify-around pt-28 gap-8">
+        <section id="contact-us" className="container flex flex-col md:flex-row items-center justify-around pt-28 gap-8" aria-labelledby="contact-us-heading">
             <div className="rounded-lg bg-home flex flex-col items-center justify-between w-full md:w-[40%] p-5 shadow-xl self-stretch">
                 <div className="text-center px-5 mt-8">
-                    <h3 className="text-2xl sm:text-3xl font-semibold text-white">
+                    <h3 id="contact-us-heading" className="text-2xl sm:text-3xl font-semibold text-white">
                         Ready to Take Your <br /> Business Online?
                     </h3>
-                    <a href="tel:+918299207159" className="home-button-white mx-auto inline-block mt-8">
+                    <a href="tel:+918299207159" className="home-button-white mx-auto inline-block mt-8" aria-label="Call us at +918299207159">
                         Call Now
                     </a>
                 </div>
                 <LazyLoadImage
                     className="mt-6 drop-shadow-2xl w-2/3"
                     src="./images/product-screens-2.png"
-                    alt="Product Screens"
+                    alt="Call to action"
                 />
             </div>
             <div className="w-full md:w-[40%] px-4">
-                <h2 className="text-3xl font-bold text-center" data-aos="fade-up">
+                <h2 className="text-3xl font-bold text-center" data-aos="fade-up" aria-labelledby="contact-form-heading">
                     Get in Touch with Us
                 </h2>
-                <div className="max-w-lg mx-auto p-8 rounded-lg shadow-lg bg-white">
-                    <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="max-w-lg mx-auto p-8 rounded-lg shadow-lg bg-white" aria-live="polite">
+                    <form onSubmit={handleSubmit} className="space-y-4" aria-labelledby="contact-form-heading">
                         <div>
                             <label className="block text-sm font-semibold text-gray-700" htmlFor="name">
                                 Name
@@ -80,9 +79,10 @@ export default function ContactUs() {
                                 value={formData.name}
                                 onChange={handleChange}
                                 required
+                                aria-invalid={formErrors.name ? "true" : "false"}
                                 className={`w-full p-3 border ${formErrors.name ? "border-red-500" : "border-gray-300"} rounded-lg focus:outline-none focus:ring-2 focus:ring-home transition duration-300`}
                             />
-                            {formErrors.name && <p className="text-red-500 text-sm">{formErrors.name}</p>}
+                            {formErrors.name && <p className="text-red-500 text-sm" id="name-error">{formErrors.name}</p>}
                         </div>
                         <div>
                             <label className="block text-sm font-semibold text-gray-700" htmlFor="email">
@@ -94,9 +94,10 @@ export default function ContactUs() {
                                 value={formData.email}
                                 onChange={handleChange}
                                 required
+                                aria-invalid={formErrors.email ? "true" : "false"}
                                 className={`w-full p-3 border ${formErrors.email ? "border-red-500" : "border-gray-300"} rounded-lg focus:outline-none focus:ring-2 focus:ring-home transition duration-300`}
                             />
-                            {formErrors.email && <p className="text-red-500 text-sm">{formErrors.email}</p>}
+                            {formErrors.email && <p className="text-red-500 text-sm" id="email-error">{formErrors.email}</p>}
                         </div>
                         <div>
                             <label className="block text-sm font-semibold text-gray-700" htmlFor="phone">
@@ -108,9 +109,10 @@ export default function ContactUs() {
                                 value={formData.phone}
                                 onChange={handleChange}
                                 required
+                                aria-invalid={formErrors.phone ? "true" : "false"}
                                 className={`w-full p-3 border ${formErrors.phone ? "border-red-500" : "border-gray-300"} rounded-lg focus:outline-none focus:ring-2 focus:ring-home transition duration-300`}
                             />
-                            {formErrors.phone && <p className="text-red-500 text-sm">{formErrors.phone}</p>}
+                            {formErrors.phone && <p className="text-red-500 text-sm" id="phone-error">{formErrors.phone}</p>}
                         </div>
                         <div>
                             <label className="block text-sm font-semibold text-gray-700" htmlFor="message">
@@ -122,14 +124,16 @@ export default function ContactUs() {
                                 onChange={handleChange}
                                 required
                                 rows="5"
+                                aria-invalid={formErrors.message ? "true" : "false"}
                                 className={`w-full p-3 border ${formErrors.message ? "border-red-500" : "border-gray-300"} rounded-lg focus:outline-none focus:ring-2 focus:ring-home transition duration-300`}
                             />
-                            {formErrors.message && <p className="text-red-500 text-sm">{formErrors.message}</p>}
+                            {formErrors.message && <p className="text-red-500 text-sm" id="message-error">{formErrors.message}</p>}
                         </div>
                         <button
                             type="submit"
                             className={`w-full p-3 text-white bg-home rounded-lg hover:bg-home-dark transition duration-300 ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
                             disabled={isSubmitting}
+                            aria-label={isSubmitting ? "Sending your message" : "Send Message"}
                         >
                             {isSubmitting ? "Sending..." : "Send Message"}
                         </button>
