@@ -1,12 +1,15 @@
 import NotFound from "@/components/not-found";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { Switch } from "@/components/ui/switch";
 import { Table, TableBody, TableCell, TableFooter, TableHeader, TableRow } from "@/components/ui/table";
 import Title from "@/components/ui/title";
-import { getAllStoresFn, updateStoreStatusFn } from "@/services/super-admin/store-service";
+import { showAlert } from "@/lib/catch-async-api";
+import { deletSingleStoreFn, getAllStoresFn, updateStoreStatusFn } from "@/services/super-admin/store-service";
 import ShimmerTableBody from "@/shimmer/table-shimmer";
+import { Eye } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -17,6 +20,8 @@ export default function SuperAdminStoreList() {
     const [totalRecords, setTotalRecords] = useState(0);
     const [search, setSearch] = useState("");
     const [stores, setStores] = useState([]);
+    const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const getData = useCallback(() => {
         getAllStoresFn({ search, page: currentPage }).then((data) => {
@@ -39,6 +44,17 @@ export default function SuperAdminStoreList() {
         const timer = setTimeout(() => getData(), [500]);
         return () => clearTimeout(timer);
     }, [getData, search]);
+
+    const handleDeleteStore = (store) => {
+        setIsDeleting(true)
+        deletSingleStoreFn({ store_id: store?.acc_id })
+            .then((data) => {
+                showAlert(data);
+                setDeleteDialogOpen(null);
+                getData();
+            })
+            .finally(() => setIsDeleting(false));
+    }
 
     return (
         <div>
@@ -71,14 +87,15 @@ export default function SuperAdminStoreList() {
                             <TableCell className="text-sm text-center font-bold">Updated Date</TableCell>
                             <TableCell className="text-sm text-center font-bold">Expire Date</TableCell>
                             <TableCell className="text-sm text-center font-bold">Active</TableCell>
+                            <TableCell className="text-sm text-center font-bold">Visit Store</TableCell>
                             <TableCell className="text-sm text-center font-bold">Actions</TableCell>
                         </TableRow>
                     </TableHeader>
-                    {loading && <ShimmerTableBody row={10} coloumn={11} />}
+                    {loading && <ShimmerTableBody row={10} coloumn={12} />}
                     {!loading &&
                         <TableBody>
                             {!loading && stores.length === 0 && (<TableRow>
-                                <TableCell className="min-h-[500px]" colSpan={11}>
+                                <TableCell className="min-h-[500px]" colSpan={12}>
                                     <NotFound className="mx-auto" />
                                 </TableCell>
                             </TableRow>
@@ -107,8 +124,10 @@ export default function SuperAdminStoreList() {
                                             onCheckedChange={() => updateStatus(store.store_id)}
                                         />
                                     </TableCell>
+                                    <TableCell className="text-sm text-center"><Link to={`/store/${store.store_slug}`} target="_blank"><Eye className="mx-auto" /></Link></TableCell>
                                     <TableCell className="text-sm text-center">
                                         <Link to={`/super-admin/stores/update/${store?.store_id}`} className="text-blue-500">Edit</Link>
+                                        <p className="text-red-500 cursor-pointer" onClick={() => setDeleteDialogOpen(store)}>Delete</p>
                                     </TableCell>
                                 </TableRow>
                             ))}
@@ -116,7 +135,7 @@ export default function SuperAdminStoreList() {
                     }
                     <TableFooter>
                         <TableRow>
-                            <TableCell colSpan={11}>
+                            <TableCell colSpan={12}>
                                 <div className="flex justify-between items-center">
                                     <div className="flex items-center">
                                         <Pagination>
@@ -160,6 +179,34 @@ export default function SuperAdminStoreList() {
                     </TableFooter>
                 </Table>
             </div>
+            <Dialog
+                open={!!isDeleteDialogOpen}
+                onOpenChange={() => setDeleteDialogOpen(null)}
+            >
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Are You Sure?</DialogTitle>
+                        <DialogDescription>
+                            Are you sure you want to permanently delete this store? This action cannot be undone.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="flex justify-end">
+                        <Button
+                            variant={"outline"}
+                            onClick={() => setDeleteDialogOpen(null)}
+                            className="mr-2"
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            variant={"destructive"}
+                            onClick={() => handleDeleteStore(isDeleteDialogOpen)}
+                        >
+                            {isDeleting ? "Deleting..." : "Delete"}
+                        </Button>
+                    </div>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }

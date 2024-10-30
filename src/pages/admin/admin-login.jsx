@@ -1,3 +1,4 @@
+import LoadingSpinner from "@/components/loading-spinner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -8,6 +9,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function AdminLogin() {
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const { setAuthFn, auth, authLoading } = useAuth();
     const [storeId, setStoreId] = useState("");
@@ -19,25 +21,20 @@ export default function AdminLogin() {
             return showAlert({ message: "Store ID and password are required." }, true);
         }
 
-        const data = await loginAdminFn({
+        setLoading(true);
+        loginAdminFn({
             store_id: storeId,
             password
-        });
-        showAlert(data);
-        if (data?.data?.token) {
-            setAuthFn(data?.data?.token);
-            navigate("/admin/");
-        }
+        })
+            .then((data) => {
+                setAuthFn(data?.data?.token);
+                navigate("/admin/");
+                showAlert(data);
+            })
+            .finally(() => setLoading(false));
     };
 
     useEffect(() => {
-        // if (auth && !authLoading) {
-        //     if (auth?.role === ROLES.ADMIN)
-        //         navigate("/admin/")
-        //     else
-        //         navigate("/super-admin/")
-        // }
-
         return () => {
             setStoreId("");
             setPassword("");
@@ -77,8 +74,8 @@ export default function AdminLogin() {
                     />
                 </div>
 
-                <Button type="submit" className="w-full" size="sm">
-                    Login
+                <Button type="submit" className="w-full" size="sm" disabled={loading}>
+                    {loading ? <LoadingSpinner className={"w-4 h-4 mx-auto text-background"} /> : "Login"}
                 </Button>
             </form>
         </div>

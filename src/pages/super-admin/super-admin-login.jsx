@@ -1,9 +1,9 @@
+import LoadingSpinner from "@/components/loading-spinner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import useAuth from "@/hooks/use-auth";
 import { showAlert } from "@/lib/catch-async-api";
-import { ROLES } from "@/lib/roles";
 import { loginSuperAdminFn } from "@/services/super-admin/login-service";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -13,30 +13,26 @@ export default function SuperAdminLogin() {
   const { setAuthFn, auth, authLoading } = useAuth();
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!userName || !password)
       return showAlert({ message: "username and password is required." }, true);
 
-    const data = await loginSuperAdminFn({
+    loginSuperAdminFn({
       user_name: userName,
       password
     })
-    showAlert(data);
-    localStorage.setItem("digital_catelogue_app_token", data?.data?.token);
-    setAuthFn(data?.data?.token)
-    navigate("/super-admin/")
+      .then((data) => {
+        showAlert(data);
+        localStorage.setItem("digital_catelogue_app_token", data?.data?.token);
+        setAuthFn(data?.data?.token)
+        navigate("/super-admin/")
+      })
   };
 
   useEffect(() => {
-    // if (auth && !authLoading) {
-    //   if (auth?.role === ROLES.SUPER_ADMIN)
-    //     navigate("/super-admin/")
-    //   else
-    //     navigate("/admin/")
-    // }
-
     return () => {
       setUserName("");
       setPassword("");
@@ -76,8 +72,8 @@ export default function SuperAdminLogin() {
           />
         </div>
 
-        <Button type="submit" className="w-full" size="sm">
-          Login
+        <Button type="submit" className="w-full" size="sm" disabled={loading}>
+          {loading ? <LoadingSpinner className={"w-4 h-4 mx-auto"} /> : "Login"}
         </Button>
       </form>
     </div>

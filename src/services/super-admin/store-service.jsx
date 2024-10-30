@@ -27,3 +27,6 @@ export const updateSingleStoreFn = apiAsyncHandle(async ({ store_id, formData })
         headers: multpartHeader
     })
 })
+export const deletSingleStoreFn = apiAsyncHandle(async (payload) => {
+    return apiRequest.delete(enpoints.super_admin.store, { data: payload })
+})
