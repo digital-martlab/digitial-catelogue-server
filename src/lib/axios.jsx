@@ -6,8 +6,8 @@ export const multpartHeader = {
 };
 
 export const apiRequest = axios.create({
-    // baseURL: "https://cataloguewala.com/api",
-    baseURL: "http://localhost:3001",
+    baseURL: "https://cataloguewala.com/api",
+    // baseURL: "http://localhost:3001",
     headers: {
         "Content-Type": "application/json"
     }
