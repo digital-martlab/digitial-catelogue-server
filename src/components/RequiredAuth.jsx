@@ -42,7 +42,12 @@ const RequireAuth = ({ allowedRoles }) => {
         ) : auth?.user_name || auth?.name ? (
             <Navigate to="/" state={{ from: location }} replace />
         ) : (
-            <Navigate to="/admin/login" state={{ from: location }} replace />
+            <>
+                {window.location.href.includes('super-admin')
+                    ? <Navigate to="/super-admin/login" state={{ from: location }} replace />
+                    : <Navigate to="/admin/login" state={{ from: location }} replace />
+                }
+            </>
         )
     );
 };

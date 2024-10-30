@@ -6,7 +6,7 @@ import { ROLES } from "@/lib/roles";
 const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
-    const [auth, setAuth] = useState({});
+    const [auth, setAuth] = useState(null);
     const [authLoading, setAuthLoading] = useState(true);
     const navigate = useNavigate();
 

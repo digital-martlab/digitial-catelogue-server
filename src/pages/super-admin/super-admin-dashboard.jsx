@@ -29,7 +29,7 @@ export default function SuperAdminDashboard() {
                         <div className="text-2xl mb-2">
                             <Store />
                         </div>
-                        <h3 className="text-center text-lg font-semibold">Total Categories</h3>
+                        <h3 className="text-center text-lg font-semibold">Total Stores</h3>
                         <p className="text-xl font-bold">{dashboardData?.total_stores}</p>
                     </div>
                 </Link>
@@ -40,7 +40,7 @@ export default function SuperAdminDashboard() {
                         <div className="text-2xl mb-2">
                             <Contact2 />
                         </div>
-                        <h3 className="text-center text-lg font-semibold">Total Active Products</h3>
+                        <h3 className="text-center text-lg font-semibold">Total Contact Us</h3>
                         <p className="text-xl font-bold">{dashboardData?.total_contacts}</p>
                     </div>
                 </Link>

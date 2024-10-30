@@ -81,7 +81,7 @@ export default function StoreProductListing() {
                             ? (
                                 <>
                                     <div className="flex items-end justify-between">
-                                        <h3 className="text-3xl font-bold">Products</h3>
+                                        <h3 className="text-3xl font-bold text-primary">Products</h3>
                                         <div className="flex items-center gap-2">
                                             <div className="flex items-center gap-2">
                                                 Sort By:
