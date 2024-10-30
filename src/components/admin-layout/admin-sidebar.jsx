@@ -18,7 +18,7 @@ export default function AdminSidebar() {
             <img
                 src={
                     auth?.role === ROLES.SUPER_ADMIN
-                        ? "https://digicatalog.top/storage/uploads/logo/logo-dark.png?timestamp=1729508148"
+                        ? "/images/logo.webp"
                         : auth?.logo
                 }
                 alt="logo"
