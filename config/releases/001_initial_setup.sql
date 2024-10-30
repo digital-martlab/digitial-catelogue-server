@@ -25,29 +25,6 @@ SET
     FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE
-    stores (
-        acc_id INT AUTO_INCREMENT PRIMARY KEY,
-        name VARCHAR(50) NOT NULL,
-        email VARCHAR(50) UNIQUE NOT NULL,
-        number VARCHAR(15) NOT NULL,
-        store_name VARCHAR(50) UNIQUE NOT NULL,
-        store_slug VARCHAR(50) UNIQUE NOT NULL,
-        store_id VARCHAR(50) UNIQUE NOT NULL,
-        is_active BOOLEAN DEFAULT true,
-        plan_expires_in DATETIME DEFAULT CURRENT_TIMESTAMP,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-        logo TEXT NOT NULL,
-        logo_id VARCHAR(255) NOT NULL,
-        CHECK (
-            CHAR_LENGTH(number) >= 10
-            AND CHAR_LENGTH(number) <= 15
-        ),
-        role ENUM ('ADMIN') DEFAULT 'ADMIN',
-        password VARCHAR(255) NOT NULL
-    );
-
-CREATE TABLE
     admins (
         admin_id INT AUTO_INCREMENT PRIMARY KEY,
         user_name VARCHAR(255) NOT NULL UNIQUE,
@@ -64,12 +41,35 @@ VALUES
     );
 
 CREATE TABLE
+    stores (
+        acc_id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(50) NOT NULL,
+        email VARCHAR(50) UNIQUE NOT NULL,
+        number VARCHAR(15) NOT NULL,
+        store_name VARCHAR(50) UNIQUE NOT NULL,
+        store_slug VARCHAR(50) UNIQUE NOT NULL,
+        store_id VARCHAR(50) UNIQUE NOT NULL,
+        is_active BOOLEAN DEFAULT true,
+        plan_expires_in DATETIME,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        logo TEXT NOT NULL,
+        logo_id VARCHAR(255) NOT NULL,
+        CHECK (
+            CHAR_LENGTH(number) >= 10
+            AND CHAR_LENGTH(number) <= 15
+        ),
+        role ENUM ('ADMIN') DEFAULT 'ADMIN',
+        password VARCHAR(255) NOT NULL
+    );
+
+CREATE TABLE
     theme (
         theme_id INT PRIMARY KEY AUTO_INCREMENT,
         theme_color VARCHAR(20) NOT NULL DEFAULT 'zinc',
         theme_mod ENUM ('light', 'dark', 'system') DEFAULT 'dark',
         acc_id INT NOT NULL,
-        FOREIGN KEY (acc_id) REFERENCES stores (acc_id)
+        FOREIGN KEY (acc_id) REFERENCES stores (acc_id) ON DELETE CASCADE
     );
 
 CREATE TABLE
@@ -77,7 +77,7 @@ CREATE TABLE
         ctg_id INT PRIMARY KEY AUTO_INCREMENT,
         ctg_name VARCHAR(50) NOT NULL,
         acc_id INT NOT NULL,
-        FOREIGN KEY (acc_id) REFERENCES stores (acc_id)
+        FOREIGN KEY (acc_id) REFERENCES stores (acc_id) ON DELETE CASCADE
     );
 
 CREATE TABLE
@@ -86,7 +86,7 @@ CREATE TABLE
         cpn_name VARCHAR(50) NOT NULL COLLATE utf8mb4_bin,
         cpn_discount INT NOT NULL,
         acc_id INT NOT NULL,
-        FOREIGN KEY (acc_id) REFERENCES stores (acc_id),
+        FOREIGN KEY (acc_id) REFERENCES stores (acc_id) ON DELETE CASCADE,
         CHECK (
             cpn_discount > 0
             AND cpn_discount <= 100
@@ -103,8 +103,8 @@ CREATE TABLE
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         is_active BOOLEAN NOT NULL DEFAULT true,
-        FOREIGN KEY (ctg_id) REFERENCES product_category (ctg_id),
-        FOREIGN KEY (acc_id) REFERENCES stores (acc_id)
+        FOREIGN KEY (ctg_id) REFERENCES product_category (ctg_id) ON DELETE RESTRICT,
+        FOREIGN KEY (acc_id) REFERENCES stores (acc_id) ON DELETE CASCADE
     );
 
 CREATE TABLE
@@ -116,7 +116,7 @@ CREATE TABLE
         stock INT NOT NULL,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-        FOREIGN KEY (product_id) REFERENCES products (product_id)
+        FOREIGN KEY (product_id) REFERENCES products (product_id) ON DELETE CASCADE
     );
 
 CREATE TABLE
@@ -126,7 +126,7 @@ CREATE TABLE
         url VARCHAR(255) NOT NULL,
         public_id VARCHAR(255) NOT NULL,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (acc_id) REFERENCES stores (acc_id)
+        FOREIGN KEY (acc_id) REFERENCES stores (acc_id) ON DELETE CASCADE
     );
 
 CREATE TABLE
@@ -135,9 +135,9 @@ CREATE TABLE
         acc_id INT NOT NULL,
         gallery_id INT NOT NULL,
         product_id INT NOT NULL,
-        FOREIGN KEY (acc_id) REFERENCES stores (acc_id),
+        FOREIGN KEY (acc_id) REFERENCES stores (acc_id) ON DELETE CASCADE,
         FOREIGN KEY (gallery_id) REFERENCES gallery (gallery_id) ON DELETE RESTRICT,
-        FOREIGN KEY (product_id) REFERENCES products (product_id)
+        FOREIGN KEY (product_id) REFERENCES products (product_id) ON DELETE CASCADE
     );
 
 CREATE TABLE

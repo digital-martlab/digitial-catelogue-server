@@ -11,11 +11,12 @@ const superAdminRoutes = express.Router();
 superAdminRoutes.post('/login', loginSuperAdminController);
 
 // Authentication
-superAdminRoutes.use('/dashboard', verifyJWT([ROLES.SUPER_ADMIN]), superAdminDashboard);
-superAdminRoutes.use('/store', verifyJWT([ROLES.SUPER_ADMIN]));
+superAdminRoutes.use(verifyJWT([ROLES.SUPER_ADMIN]));
+superAdminRoutes.get('/dashboard', superAdminDashboard);
 superAdminRoutes.route('/store')
     .post(storesAdminController.createStore)
-    .get(verifyJWT([ROLES.SUPER_ADMIN]), storesAdminController.getAllStores)
+    .get(storesAdminController.getAllStores)
+    .delete(storesAdminController.deleteStore)
 
 superAdminRoutes.route('/store/:store_id')
     .get(storesAdminController.getSingleStore)

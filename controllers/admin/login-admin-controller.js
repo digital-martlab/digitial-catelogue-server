@@ -30,8 +30,15 @@ module.exports = catchAsyncHandler(async (req, res, next) => {
     }
 
     const store = data[0];
+    console.log(store);
 
-    // Verify password
+    if (!store?.is_active)
+        next(new ErrorCreator(StatusCodes.BAD_GATEWAY, "You have been blocked by the administrator. Please contact them for further assistance."));
+
+    // if ((new Date()) > (new Date(store?.plan_expires_in)))
+    //     next(new ErrorCreator(StatusCodes.FORBIDDEN, "Your plan has expired. Please contact the administrator for assistance."));
+
+    // // Verify password
     const isVerified = await bcrypt.compare(password, store?.password);
     if (!isVerified) {
         return next(new ErrorCreator(StatusCodes.BAD_REQUEST, "Store_id or password is wrong."));

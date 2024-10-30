@@ -34,9 +34,12 @@ module.exports = {
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, constantVariables.SALT);
 
+        const planExpiresIn = new Date(new Date());
+        planExpiresIn.setFullYear(planExpiresIn.getFullYear() + 1);
+
         // SQL query to insert a new store
-        const insertSql = `INSERT INTO stores (name, email, number, store_name, store_slug, store_id, password, logo, logo_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-        const insertedData = await sqlQueryRunner(insertSql, [name, email, number, store_name, slug, store_id, hashedPassword, imageObj.url, imageObj.public_id]);
+        const insertSql = `INSERT INTO stores (name, email, number, store_name, store_slug, store_id, password, logo, logo_id, plan_expires_in) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+        const insertedData = await sqlQueryRunner(insertSql, [name, email, number, store_name, slug, store_id, hashedPassword, imageObj.url, imageObj.public_id, planExpiresIn]);
 
         const themeSql = `INSERT INTO theme (acc_id) VALUES (?)`;
         await sqlQueryRunner(themeSql, [insertedData?.insertId]);
@@ -53,7 +56,7 @@ module.exports = {
         const offset = (page - 1) * limit;
 
         // Base query to fetch all stores, excluding sensitive fields
-        let baseSql = `SELECT acc_id, name, email, number, store_name, store_id, is_active, plan_expires_in, created_at, updated_at, logo 
+        let baseSql = `SELECT acc_id, name, email, number, store_name, store_slug, store_id, is_active, plan_expires_in, created_at, updated_at, logo 
                    FROM stores`;
 
         // Prepare search condition: search by name, store_name, store_id, or number
@@ -189,6 +192,15 @@ module.exports = {
 
         await sqlQueryRunner(updateSql, updateValues);
         return createResponse(res, StatusCodes.OK, "Store updated successfully.");
-    })
+    }),
 
+    deleteStore: catchAsyncHandler(async (req, res, next) => {
+        const { store_id } = req?.body;
+
+        if (!store_id)
+            next(new ErrorCreator(StatusCodes.BAD_REQUEST, "Store Id is required."))
+
+        await sqlQueryRunner('DELETE FROM stores WHERE acc_id = ?', [store_id]);
+        return createResponse(res, StatusCodes.OK, "Store deleted permanently.");
+    })
 };

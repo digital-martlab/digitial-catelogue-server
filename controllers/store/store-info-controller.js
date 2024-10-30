@@ -17,6 +17,9 @@ module.exports = {
             return next(new ErrorCreator(StatusCodes.NOT_FOUND, "Store not found."));
         }
 
+        if ((new Date()) > (new Date(store?.plan_expires_in)) || !store?.is_active)
+            next(new ErrorCreator(StatusCodes.FORBIDDEN, "Store is not active."));
+
         // Fetch categories based on acc_id from store data
         const categorySql = `SELECT * FROM product_category WHERE acc_id = ?`;
         const categories = await sqlQueryRunner(categorySql, [store.acc_id]);

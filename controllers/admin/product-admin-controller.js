@@ -176,43 +176,37 @@ module.exports = {
     }),
 
     deleteProduct: catchAsyncHandler(async (req, res, next) => {
-        const { product_id } = req.body; // Assuming product_id is passed as a URL parameter
+        const { product_id } = req.body;
 
         if (!product_id) {
-            return next(new ErrorCreator(StatusCodes.BAD_REQUEST, "product_id is required."));
+            return next(new ErrorCreator(StatusCodes.BAD_REQUEST, "Product ID is required."));
         }
 
         const connection = await beginTransaction();
 
         try {
             // Check if the product exists
-            const productCheckSql = `SELECT * FROM products WHERE product_id = ?`;
-            const [productCheckResult] = await connection.execute(productCheckSql, [product_id]);
+            const [productCheckResult] = await connection.execute(
+                `SELECT * FROM products WHERE product_id = ?`,
+                [product_id]
+            );
 
             if (productCheckResult.length === 0) {
+                await rollbackTransaction(connection);
                 return next(new ErrorCreator(StatusCodes.NOT_FOUND, "Product not found."));
             }
 
-            // Delete associated images from product_images
-            const deleteImagesSql = `DELETE FROM product_images WHERE product_id = ?`;
-            await connection.execute(deleteImagesSql, [product_id]);
-
-            // Delete associated variants from product_variants
-            const deleteVariantsSql = `DELETE FROM product_variants WHERE product_id = ?`;
-            await connection.execute(deleteVariantsSql, [product_id]);
-
-            // Delete the product itself
-            const deleteProductSql = `DELETE FROM products WHERE product_id = ?`;
-            await connection.execute(deleteProductSql, [product_id]);
+            // Delete the product itself, and let cascading delete associated records
+            await connection.execute(`DELETE FROM products WHERE product_id = ?`, [product_id]);
 
             // Commit the transaction
             await commitTransaction(connection);
 
-            return createResponse(res, StatusCodes.OK, "Product deleted successfully.");
+            return createResponse(res, StatusCodes.OK, "Product and associated data deleted successfully.");
         } catch (error) {
             // Rollback in case of error
             await rollbackTransaction(connection);
-            next(error); // Pass the error to the error handler middleware
+            next(error);
         }
     }),
 
