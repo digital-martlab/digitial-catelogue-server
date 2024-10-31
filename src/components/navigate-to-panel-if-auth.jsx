@@ -9,8 +9,6 @@ export default function PanelNavigationIfAuth() {
     if (authLoading)
         return <WindowLoading />;
 
-    console.log(auth);
-
     return auth
         ? auth?.role === ROLES.ADMIN
             ? <Navigate to="/admin/" replace />

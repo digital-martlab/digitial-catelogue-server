@@ -22,7 +22,6 @@ export default function AdminPasswordChange() {
             return;
         }
 
-        console.log("Password updated successfully!");
         setLoading(true);
         passwordChangeAdminFn({
             current_password: currentPassword,
