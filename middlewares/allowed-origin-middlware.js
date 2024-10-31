@@ -1,7 +1,7 @@
 const { StatusCodes } = require("http-status-codes");
 const ErrorCreator = require("../config/error-creator-config");
 
-const allowedOrigins = ['https://cataloguewala.com', 'http://localhost:5173'];
+const allowedOrigins = ['https://cataloguewala.com'];
 
 module.exports = function (origin, callback) {
     if (allowedOrigins.includes(origin) || !origin) {
