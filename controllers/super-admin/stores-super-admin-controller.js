@@ -112,8 +112,6 @@ module.exports = {
             return next(new ErrorCreator(StatusCodes.BAD_REQUEST, "Store doesn't exist with this id."));
         }
 
-        console.log(`Current active status: ${data[0].is_active}`);
-
         const newStatus = !data[0].is_active;
         const updateSql = `UPDATE stores SET is_active = ? WHERE store_id = ?`;
         await sqlQueryRunner(updateSql, [newStatus, store_id]);

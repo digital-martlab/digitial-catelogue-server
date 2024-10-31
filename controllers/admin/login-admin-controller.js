@@ -30,7 +30,6 @@ module.exports = catchAsyncHandler(async (req, res, next) => {
     }
 
     const store = data[0];
-    console.log(store);
 
     if (!store?.is_active)
         next(new ErrorCreator(StatusCodes.BAD_GATEWAY, "You have been blocked by the administrator. Please contact them for further assistance."));

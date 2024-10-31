@@ -5,7 +5,6 @@ const catchAsyncHandler = require("../../middlewares/catch-async-handler-middlew
 
 module.exports = {
     getTheme: catchAsyncHandler(async (req, res) => {
-        console.log(req?.user?.acc_id);
         const themeSql = `SELECT * FROM theme WHERE acc_id = ?`;
         const data = await sqlQueryRunner(themeSql, [req?.user?.acc_id]);
         createResponse(res, StatusCodes.OK, "Data fetched successfully.", data[0]);
