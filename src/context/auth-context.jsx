@@ -1,11 +1,14 @@
+import { useTheme } from "@/hooks/use-theme";
+import { defaultTheme } from "@/lib/constants";
+import { ROLES } from "@/lib/roles";
+import { jwtDecode } from "jwt-decode";
 import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
-import { ROLES } from "@/lib/roles";
 
 const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
+    const { setColor, setTheme } = useTheme();
     const [auth, setAuth] = useState(null);
     const [authLoading, setAuthLoading] = useState(true);
     const navigate = useNavigate();
@@ -20,6 +23,8 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem("digital_catelogue_app_token");
         setAuth(null);
         setAuthLoading(false);
+        setColor(defaultTheme.color);
+        setTheme(defaultTheme.mod);
         if (auth?.role === ROLES.SUPER_ADMIN) {
             navigate("/super-admin/login");
         } else {

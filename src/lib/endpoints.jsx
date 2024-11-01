@@ -12,7 +12,9 @@ export const enpoints = {
         product: "/admin/product",
         gallery: "/admin/gallery",
         dashboard: "/admin/dashboard",
-        theme: "/admin/theme"
+        theme: "/admin/theme",
+        forgotPassword: "/admin/forgot-password",
+        resetPassword: "/admin/reset-password"
     },
     store: {
         storeInfo: "/store",

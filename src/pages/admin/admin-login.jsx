@@ -1,19 +1,23 @@
 import LoadingSpinner from "@/components/loading-spinner";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import useAuth from "@/hooks/use-auth";
 import { showAlert } from "@/lib/catch-async-api";
-import { loginAdminFn } from "@/services/admin/login-service";
+import { forgotAdminFn, loginAdminFn } from "@/services/admin/login-service";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function AdminLogin() {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-    const { setAuthFn, auth, authLoading } = useAuth();
+    const { setAuthFn } = useAuth();
     const [storeId, setStoreId] = useState("");
     const [password, setPassword] = useState("");
+    const [mail, setMail] = useState("");
+    const [forgotPassword, setForgotPassword] = useState(false);
+    const [forgotLoading, setForgotLoading] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -34,12 +38,28 @@ export default function AdminLogin() {
             .finally(() => setLoading(false));
     };
 
+    const toggleSubmit = () => {
+        setForgotPassword(prev => !prev);
+        setMail("");
+    }
+
+    const handleSubmitForgotPassword = (e) => {
+        e.preventDefault();
+        setForgotLoading(true);
+        forgotAdminFn({ email: mail })
+            .then((data) => {
+                showAlert(data);
+                toggleSubmit();
+            })
+            .finally(() => setForgotLoading(false));
+    }
+
     useEffect(() => {
         return () => {
             setStoreId("");
             setPassword("");
         };
-    }, [navigate, auth, authLoading]);
+    }, []);
 
     return (
         <div className="flex justify-center items-center h-screen">
@@ -77,7 +97,20 @@ export default function AdminLogin() {
                 <Button type="submit" className="w-full" size="sm" disabled={loading}>
                     {loading ? <LoadingSpinner className={"w-4 h-4 mx-auto text-background"} /> : "Login"}
                 </Button>
+                <p onClick={toggleSubmit} className="text-sm text-center mt-2 cursor-pointer">Forgot Password</p>
             </form>
+
+            <Dialog open={forgotPassword} onOpenChange={toggleSubmit}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Forgot Password</DialogTitle>
+                    </DialogHeader>
+                    <form onSubmit={handleSubmitForgotPassword}>
+                        <Input type="email" required placeholder="Enter your registered email address" value={mail} onChange={(e) => setMail(e.target.value)} />
+                        <Button className="mt-4 w-20">{forgotLoading ? <LoadingSpinner className={"w-4 h-4 text-background"} /> : "Send"}</Button>
+                    </form>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }

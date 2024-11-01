@@ -40,7 +40,7 @@ export default function AdminTopBar() {
                             </>
                         )}
                         <DropdownMenuItem>
-                            <div className="flex gap-1 items-center cursor-pointer" onClick={logoutFn}>
+                            <div className="flex gap-1 items-center cursor-pointer w-full" onClick={logoutFn}>
                                 <LogOut className="w-4 h-4" /> Logout
                             </div>
                         </DropdownMenuItem>
