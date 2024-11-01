@@ -9,6 +9,7 @@ const productAdminController = require("../controllers/admin/product-admin-contr
 const galleryAdminController = require("../controllers/admin/gallery-admin-controller");
 const adminDashboardController = require("../controllers/admin/admin-dashboard-controller");
 const adminThemeController = require("../controllers/admin/admin-theme-controller");
+const resetPasswordController = require("../controllers/admin/reset-password-controller");
 
 const adminRoutes = express.Router();
 
@@ -55,5 +56,8 @@ adminRoutes.route("/theme")
 adminRoutes.get("/product/:product_id", verifyJWT([ROLES.ADMIN]), productAdminController.getSingleProduct)
 
 adminRoutes.post("/change-password", verifyJWT([ROLES.ADMIN]), passwordChangeAdmin)
+
+adminRoutes.post("/forgot-password", resetPasswordController.sendResetMail);
+adminRoutes.post("/reset-password", resetPasswordController.resetPassword);
 
 module.exports = adminRoutes;
