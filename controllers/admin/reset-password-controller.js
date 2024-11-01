@@ -68,7 +68,7 @@ module.exports = {
         <p>Dear ${name},</p>
         <p>We received a request to reset the password associated with your account.</p>
         <p>Please use the link below to reset your password. Note that this link will expire in 5 minutes for security reasons:</p>
-        <p><a href="http://localhost:5173/admin/reset-password/${token}">Reset Password</a></p>
+        <p><a href="https://cataloguewala.com/admin/reset-password/${token}">Reset Password</a></p>
         <p>If you did not request this password reset, please disregard this message.</p>
         <p>Best regards,<br>The Support Team</p>
     </div>
