@@ -208,11 +208,12 @@ module.exports = {
     }),
 
     deleteStore: catchAsyncHandler(async (req, res, next) => {
-        const { store_id } = req?.body;
+        const { store_id, logo_id } = req?.body;
 
         if (!store_id)
             next(new ErrorCreator(StatusCodes.BAD_REQUEST, "Store Id is required."))
 
+        await deleteImage(logo_id);
         await sqlQueryRunner('DELETE FROM stores WHERE acc_id = ?', [store_id]);
         return createResponse(res, StatusCodes.OK, "Store deleted permanently.");
     })
