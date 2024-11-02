@@ -47,7 +47,7 @@ export default function SuperAdminStoreList() {
 
     const handleDeleteStore = (store) => {
         setIsDeleting(true)
-        deletSingleStoreFn({ store_id: store?.acc_id })
+        deletSingleStoreFn(store)
             .then((data) => {
                 showAlert(data);
                 setDeleteDialogOpen(null);
