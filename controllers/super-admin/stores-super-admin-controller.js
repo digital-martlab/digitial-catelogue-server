@@ -5,8 +5,10 @@ const createSlug = require("../../config/slug-creator-config")
 const ErrorCreator = require("../../config/error-creator-config");
 const { sqlQueryRunner } = require("../../config/database");
 const bcrypt = require('bcrypt');
-const { uploadImage, deleteImage, uploadMultipleImages } = require("../../config/cloudinary-config");
+const { uploadImage, deleteImage } = require("../../config/cloudinary-config");
 const constantVariables = require("../../config/constant-variables");
+const { transporter, mailOptions } = require("../../config/email-config");
+const { createStoreHtmlEmailTemplate, createStoreWhatsAppMessage } = require("../../templates/create-store-template");
 
 module.exports = {
     createStore: catchAsyncHandler(async (req, res, next) => {
@@ -44,7 +46,20 @@ module.exports = {
         const themeSql = `INSERT INTO theme (acc_id) VALUES (?)`;
         await sqlQueryRunner(themeSql, [insertedData?.insertId]);
 
-        return createResponse(res, StatusCodes.CREATED, "Store created successfully.");
+        req.body.plan_expires_in = planExpiresIn
+        const subject = "Welcome to Catalogue Wala! Your New Store is Ready"
+        const content = createStoreHtmlEmailTemplate(req.body, password);
+
+        await transporter.sendMail(mailOptions(email, subject, content));
+        const whatsAppData = createStoreWhatsAppMessage(req.body, password);
+
+        return createResponse(
+            res,
+            StatusCodes.CREATED,
+            "Store created successfully.",
+            `https://wa.me/91${number}?text=${encodeURIComponent(whatsAppData)}
+            `
+        );
     }),
 
     getAllStores: catchAsyncHandler(async (req, res, next) => {
