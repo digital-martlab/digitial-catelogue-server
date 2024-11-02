@@ -3,7 +3,7 @@ const createResponse = require("../../config/create-response-config");
 const catchAsyncHandler = require("../../middlewares/catch-async-handler-middleware");
 const createSlug = require("../../config/slug-creator-config")
 const ErrorCreator = require("../../config/error-creator-config");
-const { sqlQueryRunner } = require("../../config/database");
+const { sqlQueryRunner, beginTransaction, commitTransaction, rollbackTransaction } = require("../../config/database");
 const bcrypt = require('bcrypt');
 const { uploadImage, deleteImage } = require("../../config/cloudinary-config");
 const constantVariables = require("../../config/constant-variables");
@@ -71,7 +71,7 @@ module.exports = {
         const offset = (page - 1) * limit;
 
         // Base query to fetch all stores, excluding sensitive fields
-        let baseSql = `SELECT acc_id, name, email, number, store_name, store_slug, store_id, is_active, plan_expires_in, created_at, updated_at, logo 
+        let baseSql = `SELECT acc_id, name, email, number, store_name, store_slug, store_id, is_active, plan_expires_in, created_at, updated_at, logo, logo_id 
                    FROM stores`;
 
         // Prepare search condition: search by name, store_name, store_id, or number
@@ -208,13 +208,35 @@ module.exports = {
     }),
 
     deleteStore: catchAsyncHandler(async (req, res, next) => {
-        const { store_id, logo_id } = req?.body;
+        const { acc_id, logo_id } = req.body;
 
-        if (!store_id)
-            next(new ErrorCreator(StatusCodes.BAD_REQUEST, "Store Id is required."))
+        if (!acc_id) {
+            return next(new ErrorCreator(StatusCodes.BAD_REQUEST, "Store Id is required."));
+        }
 
-        await deleteImage(logo_id);
-        await sqlQueryRunner('DELETE FROM stores WHERE acc_id = ?', [store_id]);
-        return createResponse(res, StatusCodes.OK, "Store deleted permanently.");
+        const connection = await beginTransaction();
+
+        try {
+            const images = await sqlQueryRunner('SELECT public_id FROM gallery WHERE acc_id = ?', [acc_id]);
+
+            await Promise.all(images.map(image => deleteImage(image.public_id)));
+
+            if (logo_id) {
+                await deleteImage(logo_id);
+            }
+
+            await connection.execute('DELETE FROM product_images WHERE acc_id = ?', [acc_id]);
+            await connection.execute('DELETE FROM products WHERE acc_id = ?', [acc_id]);
+            await connection.execute('DELETE FROM gallery WHERE acc_id = ?', [acc_id]);
+            await connection.execute('DELETE FROM stores WHERE acc_id = ?', [acc_id]);
+
+            await commitTransaction(connection);
+
+            return createResponse(res, StatusCodes.OK, "Store and related images deleted permanently.");
+        } catch (error) {
+            console.log(error);
+            await rollbackTransaction(connection);
+            return next(new ErrorCreator(StatusCodes.INTERNAL_SERVER_ERROR, "Failed to delete store and images."));
+        }
     })
 };
