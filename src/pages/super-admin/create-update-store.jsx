@@ -20,13 +20,14 @@ import {
     updateSingleStoreFn,
 } from "@/services/super-admin/store-service";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CameraIcon } from "lucide-react";
+import { CameraIcon, CopyCheckIcon, CopyIcon } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 
 export default function CreateUpdateStore() {
     const [loading, setLoading] = useState(false);
+    const [copySuccess, setCopySuccess] = useState(false);
     const navigate = useNavigate();
     const { status, store_id } = useParams();
     const defaultValues = useMemo(
@@ -36,7 +37,7 @@ export default function CreateUpdateStore() {
             number: "",
             store_name: "",
             store_id: status === "add" ? generateStoreID() : "",
-            ...(status === "add" && { password: generateStoreID().split("-")[1] }),
+            ...(status === "add" && { password: "" }),
         }),
         [status]
     );
@@ -71,6 +72,7 @@ export default function CreateUpdateStore() {
             createStoreFn(formData)
                 .then((data) => {
                     navigate("/super-admin/stores");
+                    window.location.href = data?.data;
                     showAlert(data);
                 })
                 .finally(() => setLoading(false));
@@ -110,6 +112,15 @@ export default function CreateUpdateStore() {
         }
     }, [form, status, store_id]);
 
+    const handleCopy = () => {
+        const storeId = form.getValues("store_id");
+        navigator.clipboard.writeText(storeId).then(() => {
+            setCopySuccess(true);
+            showAlert({ message: "Store copied successfully." })
+            setTimeout(() => setCopySuccess(false), 5000);
+        });
+    };
+
     return (
         <div className="max-w-[1000px] mx-auto">
             <Title title={status === "add" ? "Add New Store" : "Update Store"} />
@@ -133,6 +144,16 @@ export default function CreateUpdateStore() {
                         className="hidden"
                         onChange={handleImage}
                     />
+                </div>
+                <div className="my-4">
+                    <code className="bg-accent px-1 py-2 flex gap-2 items-center w-72">
+                        Store ID: {form.getValues("store_id")}
+                        {copySuccess ? (
+                            <CopyCheckIcon className="w-4 h-4 text-green-500" />
+                        ) : (
+                            <CopyIcon className="w-4 h-4 cursor-pointer" onClick={handleCopy} />
+                        )}
+                    </code>
                 </div>
 
                 <Form {...form}>
@@ -219,7 +240,7 @@ export default function CreateUpdateStore() {
                                         <FormItem>
                                             <FormLabel>Store Password</FormLabel>
                                             <FormControl>
-                                                <Input disabled {...field} />
+                                                <Input placeholder='Store Password' {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>

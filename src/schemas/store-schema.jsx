@@ -9,5 +9,5 @@ export const storeShema = z.object({
         .regex(/^\d+$/, "Phone number must contain only numbers"),
     store_name: z.string().min(1, "Store name is required"),
     store_id: z.string(),
-    password: z.string().optional()
+    password: z.string().min(7, "Password must have atleast 7 characters.").optional()
 });
