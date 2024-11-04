@@ -13,7 +13,7 @@ export default function AdminLayout() {
     return (
         <UploadImagesContextProvider>
             <SelectImageContextProvider>
-                <section className="grid grid-cols-1 lg:grid-cols-[200px_1fr] h-screen overflow-hidden">
+                <section className="grid grid-cols-1 lg:grid-cols-[200px_1fr] h-screen overflow-hidden bg-background">
                     {onlyWidth >= 1024 && <AdminSidebar />}
                     <section>
                         <AdminTopBar />

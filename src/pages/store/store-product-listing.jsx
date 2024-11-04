@@ -43,7 +43,7 @@ export default function StoreProductListing() {
     }
 
     return (
-        <section className="grid grid-cols-1 lg:grid-cols-[200px_1fr_400px] h-screen overflow-hidden">
+        <section className="grid grid-cols-1 lg:grid-cols-[200px_1fr_400px] h-screen overflow-hidden bg-background">
             <Helmet>
                 <meta charSet="utf-8" />
                 <title>{storeInfo?.store_name} - CatelogueWala</title>
@@ -70,7 +70,7 @@ export default function StoreProductListing() {
                         <StoreSidebarMobile />
                         <h1 className="text-xl md:text-2xl lg:text-3xl font-bold">{storeInfo?.store_name}</h1>
                     </div>
-                    <div>
+                    <div className="flex items-center gap-2">
                         <Input value={search} onChange={(e) => setSearch(e.target.value)} className="hidden md:block" placeholder={"search"} />
                         <ShoppingCart className="lg:hidden" onClick={() => setShowCart(!showCart)} />
                     </div>

@@ -14,7 +14,7 @@ export default function AdminSidebar() {
 
 
     return (
-        <aside className="border-r p-4 h-full">
+        <aside className="border-r p-4 h-full bg-background">
             <img
                 src={
                     auth?.role === ROLES.SUPER_ADMIN

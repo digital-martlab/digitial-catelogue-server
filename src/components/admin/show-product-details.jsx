@@ -25,13 +25,13 @@ export default function AdminProductDetailsShow({ item, setDisplayProductDetails
 
     return (
         <Dialog open={!!item} onOpenChange={() => setDisplayProductDetails(null)}>
-            <DialogContent className="max-w-[700px] p-6 rounded-lg shadow-lg">
+            <DialogContent className="w-[95vw] max-w-[700px] p-4 sm:p-6 rounded-lg shadow-lg bg-card">
                 <DialogHeader>
                     <DialogTitle className="text-xl font-semibold">{item.title}</DialogTitle>
                 </DialogHeader>
-                <div className="grid gap-4 md:grid-cols-[300px_1fr]">
-                    <div>
-                        <div className="h-64 w-full rounded-lg border overflow-hidden">
+                <div className="grid gap-4 sm:grid-cols-[300px_1fr]">
+                    <div className="flex sm:flex-col gap-2 sm:gap-4">
+                        <div className="h-52 sm:h-64 w-full rounded-lg border overflow-hidden">
                             {displayImage && (
                                 <img
                                     alt={item.title}
@@ -40,15 +40,15 @@ export default function AdminProductDetailsShow({ item, setDisplayProductDetails
                                 />
                             )}
                         </div>
-                        <div className="grid grid-cols-3 gap-4 pt-4">
-                            {item.images.map((img) => (
+                        <div className="flex flex-col md:flex-row gap-2 sm:gap-4">
+                            {item?.images.map((img) => (
                                 <div
                                     key={img.img_id}
                                     className={cn(
-                                        'h-20 cursor-pointer rounded-lg border transition duration-200 ease-in-out',
+                                        'h-16 sm:h-20 cursor-pointer rounded-lg border transition duration-200 ease-in-out',
                                         displayImage === img.url ? 'border-primary transform scale-105' : ''
                                     )}
-                                    onClick={() => setDisplayImage(img.url)}  // Set the clicked image as display
+                                    onClick={() => setDisplayImage(img.url)}
                                 >
                                     <img
                                         alt={item.title}
@@ -59,11 +59,11 @@ export default function AdminProductDetailsShow({ item, setDisplayProductDetails
                             ))}
                         </div>
                     </div>
-                    <div className="space-y-4">
+                    <div className="space-y-2 sm:space-y-4">
                         <div className="flex gap-2">
                             <span className="rounded-sm bg-accent px-2 py-1 text-xs">{item.ctg_name}</span>
                         </div>
-                        <p className="text-2xl font-bold">{item.title}</p>
+                        <p className="text-lg sm:text-2xl font-bold">{item.title}</p>
                         <p className="text-sm text-gray-600">{item.description}</p>
 
                         <div>
