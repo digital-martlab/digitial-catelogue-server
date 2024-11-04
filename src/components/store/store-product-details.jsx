@@ -29,12 +29,12 @@ export default function StoreProductDetails({ item, setDisplayProductDetails }) 
 
     return (
         <Dialog open={!!item} onOpenChange={() => setDisplayProductDetails(null)}>
-            <DialogContent className="max-w-[700px] p-6 rounded-lg shadow-lg">
+            <DialogContent className="w-[95vw] max-w-[700px] p-6 rounded-lg shadow-lg">
                 <DialogHeader>
                     <DialogTitle className="text-xl font-semibold">{item.title}</DialogTitle>
                 </DialogHeader>
                 <div className="grid gap-4 md:grid-cols-[300px_1fr]">
-                    <div>
+                    <div className="flex gap-4">
                         <div className="h-64 w-full rounded-lg border overflow-hidden">
                             {displayImage && (
                                 <img
@@ -44,7 +44,7 @@ export default function StoreProductDetails({ item, setDisplayProductDetails }) 
                                 />
                             )}
                         </div>
-                        <div className="grid grid-cols-3 gap-4 pt-4">
+                        <div className="grid grid-rows-3 md:grid-cols-3 gap-4 md:pt-4">
                             {item?.images.map((img) => (
                                 <div
                                     key={img.img_id}
@@ -63,7 +63,7 @@ export default function StoreProductDetails({ item, setDisplayProductDetails }) 
                             ))}
                         </div>
                     </div>
-                    <div className="space-y-4">
+                    <div className="space-y-0 md:space-y-4">
                         <div className="flex gap-2">
                             <span className="rounded-sm bg-accent px-2 py-1 text-xs">{item.ctg_name}</span>
                         </div>
