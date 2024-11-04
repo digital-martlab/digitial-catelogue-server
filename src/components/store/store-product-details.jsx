@@ -1,15 +1,17 @@
-import { cn } from "@/lib/utils";
+import useCarousal from "@/hooks/use-carousel";
+import useStore from "@/hooks/use-store";
 import { currencyIcon } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
+import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
-import { Button } from "../ui/button";
-import useStore from "@/hooks/use-store";
 
 export default function StoreProductDetails({ item, setDisplayProductDetails }) {
     const [displayImage, setDisplayImage] = useState(null);
     const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
     const { handleSetCartItem } = useStore();
+    const { handleSetImages } = useCarousal();
 
     useEffect(() => {
         if (item) {
@@ -34,9 +36,10 @@ export default function StoreProductDetails({ item, setDisplayProductDetails }) 
                 </DialogHeader>
                 <div className="grid gap-4 sm:grid-cols-[300px_1fr]">
                     <div className="flex sm:flex-col gap-2 sm:gap-4">
-                        <div className="h-52 sm:h-64 w-full rounded-lg border overflow-hidden">
+                        <div className="h-52 sm:h-64 w-full rounded-lg border overflow-hidden cursor-pointer">
                             {displayImage && (
                                 <img
+                                    onClick={() => handleSetImages(item?.images?.map((img) => img?.url))}
                                     alt={item.title}
                                     src={displayImage}
                                     className="h-full w-full object-contain"
