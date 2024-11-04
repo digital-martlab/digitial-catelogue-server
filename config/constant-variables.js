@@ -16,8 +16,8 @@ module.exports = {
     CLOUDINARY_NAME: "dipgig7oy",
     CLOUDINARY_API_KEY: "342668552755793",
     CLOUDINARY_SECRET_KEY: "AgBtOs9pw9-LFQuYeeP-G_qLgbw",
-    EMAIL_HOST: "smtp.gmail.com",
+    EMAIL_HOST: "smtp.hostinger.com",
     EMAIL_PORT: 465,
-    EMAIL: "cocmax250@gmail.com",
-    APP_PASSWORD: "zwernflmuclphdhf"
+    EMAIL: "info@digitalmartlab.in",
+    APP_PASSWORD: "Digitalmartlab@5437."
 }
