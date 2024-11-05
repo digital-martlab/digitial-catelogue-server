@@ -37,6 +37,7 @@ const verifyJWT = (allowedRoles) => catchAsyncHandler(async (req, res, next) => 
 
             if ((new Date()) > (new Date(userExist[0]?.plan_expires_in)))
                 next(new ErrorCreator(StatusCodes.FORBIDDEN, "Your plan has expired. Please contact the administrator for assistance."));
+            req.user = userExist[0];
         }
 
         next();

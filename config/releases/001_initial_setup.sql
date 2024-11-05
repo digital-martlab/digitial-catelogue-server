@@ -60,7 +60,9 @@ CREATE TABLE
             AND CHAR_LENGTH(number) <= 15
         ),
         role ENUM ('ADMIN') DEFAULT 'ADMIN',
-        password VARCHAR(255) NOT NULL
+        password VARCHAR(255) NOT NULL,
+        orders INT NOT NULL DEFAULT 0,
+        views INT NOT NULL DEFAULT 0
     );
 
 CREATE TABLE

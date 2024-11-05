@@ -10,6 +10,8 @@ module.exports = catchAsyncHandler(async (req, res, next) => {
         total_active_products: 0,
         total_products: 0, // Added total_products
         total_coupons: 0,
+        total_views: 0,
+        total_orders: 0
     };
 
     // Query to count total categories
@@ -47,6 +49,10 @@ module.exports = catchAsyncHandler(async (req, res, next) => {
     `;
     const couponsData = await sqlQueryRunner(couponsCountQuery, [req?.user?.acc_id]);
     result.total_coupons = couponsData[0]?.total_coupons || 0;
+
+    const storeInfo = await sqlQueryRunner(`SELECT * FROM stores WHERE acc_id = ?`, [req?.user?.acc_id]);
+    result.total_views = storeInfo[0]?.views;
+    result.total_orders = storeInfo[0]?.orders;
 
     // Send the response
     return createResponse(res, StatusCodes.OK, "Data fetched successfully.", result);

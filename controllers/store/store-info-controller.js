@@ -24,6 +24,8 @@ module.exports = {
         const categorySql = `SELECT * FROM product_category WHERE acc_id = ?`;
         const categories = await sqlQueryRunner(categorySql, [store.acc_id]);
 
+        await sqlQueryRunner("UPDATE stores SET views = ? WHERE acc_id = ?", [store?.views + 1, store?.acc_id])
+
         return createResponse(res, StatusCodes.OK, "Store info fetched successfully.", {
             store,
             categories
