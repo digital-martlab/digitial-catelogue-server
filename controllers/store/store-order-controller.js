@@ -25,7 +25,6 @@ module.exports = {
 
             for (const item of cartItems) {
                 const { product_id, variant_id, quantity } = item;
-
                 // Step 1: Check if enough stock is available
                 const checkStockQuery = `
                 SELECT stock FROM product_variants 
@@ -68,7 +67,6 @@ module.exports = {
 
                 // Find the selected variant details and calculate subtotal
                 const selectedVariant = variants[0].find((v) => v.variant_id === variant_id);
-                const productSubtotal = selectedVariant.price * quantity;
 
                 // Combine product data with images and selected variant
                 products.push({
@@ -76,7 +74,6 @@ module.exports = {
                     variantTitle: selectedVariant.variant_title,
                     quantity,
                     price: selectedVariant.price,
-                    subtotal: productSubtotal,
                     images: images[0],
                     ctg_name: productData[0][0].ctg_name
                 });
@@ -84,30 +81,27 @@ module.exports = {
 
             // Prepare the WhatsApp message with store information
             const message = `
-            Store Information:
-            Name: ${storeDetails.name}
-            Store Name: ${storeDetails.store_name}
-            Contact:+91 ${storeDetails.number}
+Store Information:
+- Name: ${storeDetails.name}
+- Store Name: ${storeDetails.store_name}
+- Contact: +91 ${storeDetails.number}
 
-            Order Confirmation:
-            Name: ${userDetails.name}
-            Phone: ${userDetails.phone}
-            Pincode: ${userDetails.pincode}
-            Address: ${userDetails.address}
+Order Confirmation:
+- Customer Name: ${userDetails.name}
+- Phone: +91 ${userDetails.phone}
+- Pincode: ${userDetails.pincode}
+- Address: ${userDetails.address}
 
-            Products:
-            ${products.map(
-                (product, index) =>
-                    `${index + 1}. ${product.title} - ${product.variantTitle}  
-                    Image: ${product?.images[0]?.url}
-                    Quantity: ${product.quantity}  
-                    Price: ₹${product.price}  
-                    Subtotal: ₹${product.subtotal}`
+Products:
+${products.map((product, index) =>
+                `${index + 1}. ${product.title} (${product.variantTitle})
+           - Image: ${product.images[0]?.url || "No image available"}
+           - Quantity: ${product.quantity}
+           - Price: ₹${product.price}`
             ).join('\n\n')}
 
-            Total Amount: ₹${totalAmount}
-            ${appliedCoupon ? `Discount Applied: ${appliedCoupon?.cpn_name}-${appliedCoupon?.cpn_discount}%` : ''}
-            `.trim();
+Total Amount: ₹${appliedCoupon ? totalAmount - (totalAmount * (appliedCoupon?.cpn_discount / 100)) : totalAmount}
+${appliedCoupon ? `Discount Applied: ${appliedCoupon.cpn_name} - ${appliedCoupon.cpn_discount}%` : ''}`.trim();
 
             // Update store order count
             await connection.execute(`UPDATE stores SET orders = ? WHERE acc_id = ?`, [storeDetails?.orders + 1, storeDetails?.acc_id]);
