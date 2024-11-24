@@ -9,56 +9,117 @@ const { uploadImage, deleteImage } = require("../../config/cloudinary-config");
 const constantVariables = require("../../config/constant-variables");
 const { transporter, mailOptions } = require("../../config/email-config");
 const { createStoreHtmlEmailTemplate, createStoreWhatsAppMessage } = require("../../templates/create-store-template");
+const { generateStoreID, expiryDateGenerator } = require("../../config/generateStoreId");
 
 module.exports = {
     createStore: catchAsyncHandler(async (req, res, next) => {
         const file = req?.files[0];
-        const { name, email, number, store_name, store_id, password } = req.body;
+        const {
+            name,
+            email,
+            number,
+            store_name,
+            password,
+            state,
+            city,
+            area,
+            meta_title,
+            meta_description,
+            meta_keywords,
+            plan_id,
+        } = req.body;
 
-        // Check for required fields
-        if (!file || !name || !email || !number || !store_name || !store_id || !password) {
+        // Validate required fields
+        if (
+            !file ||
+            !name ||
+            !email ||
+            !number ||
+            !store_name ||
+            !password ||
+            !state ||
+            !city ||
+            !area ||
+            !meta_title ||
+            !meta_description ||
+            !meta_keywords ||
+            !plan_id
+        ) {
             return next(new ErrorCreator(StatusCodes.BAD_REQUEST, "All fields are required"));
         }
 
-        // Create store slug
+        // Generate store slug
         const slug = createSlug(store_name);
 
-        // SQL query to check if email or store_slug already exists
-        const sql = `SELECT * FROM stores WHERE email = ? OR store_slug = ?`;
-        const data = await sqlQueryRunner(sql, [email, slug]);
-
-        if (data.length > 0) {
+        // Check if email or store slug already exists
+        const existingStoreQuery = "SELECT * FROM stores WHERE email = ? OR store_slug = ?";
+        const existingStore = await sqlQueryRunner(existingStoreQuery, [email, slug]);
+        if (existingStore.length > 0) {
             return next(new ErrorCreator(StatusCodes.CONFLICT, "Email or Store Name already exists"));
         }
 
+        // Verify plan existence
+        const planQuery = "SELECT * FROM plans WHERE plan_id = ?";
+        const planData = await sqlQueryRunner(planQuery, [plan_id]);
+        if (planData.length === 0) {
+            return next(new ErrorCreator(StatusCodes.BAD_REQUEST, "Invalid plan_id provided."));
+        }
+
+        // Calculate plan expiry
+        const planExpiresIn = expiryDateGenerator(planData[0]?.plan_duration_months);
+
+        // Upload store logo to cloud storage
         const imageObj = await uploadImage(file);
 
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, constantVariables.SALT);
 
-        const planExpiresIn = new Date(new Date());
-        planExpiresIn.setFullYear(planExpiresIn.getFullYear() + 1);
+        // Insert new store data into the database
+        const insertStoreQuery = `
+        INSERT INTO stores 
+        (name, email, number, store_name, store_slug, store_id, password, logo, logo_id, plan_expires_in, 
+        meta_title, meta_description, meta_keywords, state, city, area, plan_id, paid_status)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+        const insertedStore = await sqlQueryRunner(insertStoreQuery, [
+            name,
+            email,
+            number,
+            store_name,
+            slug,
+            generateStoreID(),
+            hashedPassword,
+            imageObj.url,
+            imageObj.public_id,
+            planExpiresIn,
+            meta_title,
+            meta_description,
+            meta_keywords,
+            state,
+            city,
+            area,
+            plan_id,
+            "PAID"
+        ]);
 
-        // SQL query to insert a new store
-        const insertSql = `INSERT INTO stores (name, email, number, store_name, store_slug, store_id, password, logo, logo_id, plan_expires_in) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-        const insertedData = await sqlQueryRunner(insertSql, [name, email, number, store_name, slug, store_id, hashedPassword, imageObj.url, imageObj.public_id, planExpiresIn]);
+        // Assign default theme to the store
+        const themeQuery = "INSERT INTO theme (acc_id) VALUES (?)";
+        await sqlQueryRunner(themeQuery, [insertedStore?.insertId]);
 
-        const themeSql = `INSERT INTO theme (acc_id) VALUES (?)`;
-        await sqlQueryRunner(themeSql, [insertedData?.insertId]);
+        // Prepare email and WhatsApp notifications
+        req.body.plan_expires_in = planExpiresIn;
+        req.body.plan_type = planData[0]?.plan_type;
+        const subject = "Welcome to Catalogue Wala! Your New Store is Ready";
+        const emailContent = createStoreHtmlEmailTemplate(req.body, password);
 
-        req.body.plan_expires_in = planExpiresIn
-        const subject = "Welcome to Catalogue Wala! Your New Store is Ready"
-        const content = createStoreHtmlEmailTemplate(req.body, password);
-
-        await transporter.sendMail(mailOptions(email, subject, content));
-        const whatsAppData = createStoreWhatsAppMessage(req.body, password);
+        await transporter.sendMail(mailOptions(email, subject, emailContent));
+        const whatsAppMessage = createStoreWhatsAppMessage(req.body, password);
 
         return createResponse(
             res,
             StatusCodes.CREATED,
             "Store created successfully.",
-            `https://wa.me/91${number}?text=${encodeURIComponent(whatsAppData)}
-            `
+            `https://wa.me/91${number}?text=${encodeURIComponent(whatsAppMessage)}`
         );
     }),
 
@@ -71,34 +132,47 @@ module.exports = {
         const offset = (page - 1) * limit;
 
         // Base query to fetch all stores, excluding sensitive fields
-        let baseSql = `SELECT acc_id, name, email, number, store_name, store_slug, store_id, is_active, plan_expires_in, created_at, updated_at, logo, logo_id 
-                   FROM stores`;
+        let baseSql = `
+        SELECT acc_id, name, email, number, store_name, store_slug, store_id, is_active, 
+               plan_expires_in, created_at, updated_at, logo, logo_id, state, city, area 
+        FROM stores
+    `;
 
-        // Prepare search condition: search by name, store_name, store_id, or number
+        // Prepare search condition: search by name, store_name, store_id, number, city, or state
+        const conditions = [];
+        const values = [];
+
         if (search) {
-            search = `%${search}%`;
-            baseSql += ` WHERE LOWER(name) LIKE LOWER(?) OR LOWER(store_name) LIKE LOWER(?) 
-                     OR store_id LIKE ? OR number LIKE ?`;
+            const searchQuery = `%${search}%`;
+            conditions.push(`
+            LOWER(name) LIKE LOWER(?) OR LOWER(store_name) LIKE LOWER(?) 
+            OR store_id LIKE ? OR number LIKE ? OR LOWER(city) LIKE LOWER(?) 
+            OR LOWER(state) LIKE LOWER(?)
+        `);
+            values.push(searchQuery, searchQuery, searchQuery, searchQuery, searchQuery, searchQuery);
         }
 
-        // Add LIMIT and OFFSET for pagination
-        // baseSql += ` LIMIT ? OFFSET ?`;
+        // Add WHERE clause if there are any conditions
+        if (conditions.length) {
+            baseSql += ` WHERE ${conditions.join(" AND ")}`;
+        }
 
-        // Values to be passed to the query
-        const values = search ? [search, search, search, search, limit, offset] : [limit, offset];
+        // Add ORDER BY, LIMIT, and OFFSET for pagination
+        // baseSql += ` ORDER BY created_at DESC LIMIT ? OFFSET ?`;
+        // values.push(limit, offset);
 
         try {
             // Execute the main query
             const data = await sqlQueryRunner(baseSql, values);
 
             // Query to get the total number of records
-            const countSql = search
-                ? `SELECT COUNT(*) as total FROM stores WHERE LOWER(name) LIKE LOWER(?) 
-               OR LOWER(store_name) LIKE LOWER(?) OR store_id LIKE ? OR number LIKE ?`
+            const countSql = conditions.length
+                ? `
+                SELECT COUNT(*) as total FROM stores 
+                WHERE ${conditions.join(" AND ")}
+              `
                 : `SELECT COUNT(*) as total FROM stores`;
-
-            const totalValues = search ? [search, search, search, search] : [];
-            const totalData = await sqlQueryRunner(countSql, totalValues);
+            const totalData = await sqlQueryRunner(countSql, values.slice(0, -2)); // Exclude LIMIT and OFFSET
             const totalRecords = totalData[0]?.total || 0;
 
             // Return the paginated and filtered data
@@ -108,11 +182,11 @@ module.exports = {
                 totalPages: Math.ceil(totalRecords / limit),
                 totalRecords,
             });
-
         } catch (error) {
             throw error;
         }
     }),
+
 
     updateStoreActiveStatus: catchAsyncHandler(async (req, res, next) => {
         const { store_id } = req.params;
@@ -150,46 +224,61 @@ module.exports = {
 
     updateStore: catchAsyncHandler(async (req, res, next) => {
         const { store_id } = req.params;
-        const { name, email, number, store_name } = req.body;
+        const { name, email, number, store_name, city, state, area } = req.body;
         const files = req?.files;
 
+        // Validate required fields
         if (!store_name) {
             return next(new ErrorCreator(StatusCodes.BAD_REQUEST, "Store name is required."));
         }
 
+        // Fetch the store to update
         const sql = "SELECT * FROM stores WHERE store_id = ?";
         const data = await sqlQueryRunner(sql, [store_id]);
         if (data.length === 0) {
             return next(new ErrorCreator(StatusCodes.BAD_REQUEST, "Store doesn't exist with this id."));
         }
 
+        // Create a slug for the store name
         const slug = createSlug(store_name);
 
-        const checkSql = `SELECT * FROM stores WHERE (email = ? OR store_slug = ?) AND store_id != ?`;
+        // Check for duplicate email or slug
+        const checkSql = `
+        SELECT * 
+        FROM stores 
+        WHERE (email = ? OR store_slug = ?) 
+        AND store_id != ?`;
         const existingData = await sqlQueryRunner(checkSql, [email, slug, store_id]);
 
         if (existingData.length > 0) {
             return next(new ErrorCreator(StatusCodes.CONFLICT, "Email or Store Name already exists"));
         }
 
+        // Handle logo upload and deletion
         let imageObj = {};
         if (files && files.length > 0) {
+            // Delete old logo if it exists
             if (data[0]?.logo_id) {
                 await deleteImage(data[0]?.logo_id);
             }
+            // Upload new logo
             imageObj = await uploadImage(files[0]);
         }
 
+        // Update query with additional fields: city, state, and area
         const updateSql = `
         UPDATE stores 
         SET 
-        name = ?, 
-        email = ?, 
-        number = ?, 
-        store_name = ?, 
-        store_slug = ?,
-        logo = ?, 
-        logo_id = ?
+            name = ?, 
+            email = ?, 
+            number = ?, 
+            store_name = ?, 
+            store_slug = ?, 
+            city = ?, 
+            state = ?, 
+            area = ?, 
+            logo = ?, 
+            logo_id = ? 
         WHERE store_id = ?`;
 
         const updateValues = [
@@ -198,12 +287,18 @@ module.exports = {
             number,
             store_name,
             slug,
+            city || data[0]?.city,
+            state || data[0]?.state,
+            area || data[0]?.area,
             files && files.length > 0 ? imageObj.url : data[0]?.logo,
             files && files.length > 0 ? imageObj.public_id : data[0]?.logo_id,
-            store_id
+            store_id,
         ];
 
+        // Execute the update query
         await sqlQueryRunner(updateSql, updateValues);
+
+        // Send response
         return createResponse(res, StatusCodes.OK, "Store updated successfully.");
     }),
 

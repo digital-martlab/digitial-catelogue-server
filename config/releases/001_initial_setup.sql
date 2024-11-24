@@ -17,6 +17,8 @@ DROP TABLE IF EXISTS theme;
 
 DROP TABLE IF EXISTS stores;
 
+DROP TABLE IF EXISTS plans;
+
 DROP TABLE IF EXISTS admins;
 
 DROP TABLE IF EXISTS contact_us;
@@ -41,6 +43,17 @@ VALUES
     );
 
 CREATE TABLE
+    plans (
+        plan_id INT PRIMARY KEY AUTO_INCREMENT,
+        plan_type VARCHAR(50) NOT NULL,
+        plan_price INT NOT NULL,
+        plan_duration_months INT NOT NULL,
+        is_active BOOLEAN DEFAULT true,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    );
+
+CREATE TABLE
     stores (
         acc_id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(50) NOT NULL,
@@ -53,8 +66,11 @@ CREATE TABLE
         plan_expires_in DATETIME,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-        logo TEXT NOT NULL,
-        logo_id VARCHAR(255) NOT NULL,
+        logo TEXT,
+        logo_id VARCHAR(255),
+        state VARCHAR(100) NOT NULL,
+        city VARCHAR(100) NOT NULL,
+        area VARCHAR(255) NOT NULL,
         CHECK (
             CHAR_LENGTH(number) >= 10
             AND CHAR_LENGTH(number) <= 15
@@ -62,7 +78,14 @@ CREATE TABLE
         role ENUM ('ADMIN') DEFAULT 'ADMIN',
         password VARCHAR(255) NOT NULL,
         orders INT NOT NULL DEFAULT 0,
-        views INT NOT NULL DEFAULT 0
+        views INT NOT NULL DEFAULT 0,
+        plan_id INT NOT NULL,
+        paid_status ENUM ('PAID', 'UNPAID') DEFAULT 'UNPAID',
+        meta_title VARCHAR(255),
+        meta_description TEXT,
+        meta_keywords TEXT,
+        order_id VARCHAR(255) DEFAULT NULL,
+        FOREIGN KEY (plan_id) REFERENCES plans (plan_id) ON DELETE CASCADE
     );
 
 CREATE TABLE
@@ -148,6 +171,7 @@ CREATE TABLE
         name VARCHAR(100) NOT NULL,
         email VARCHAR(100) NOT NULL,
         phone VARCHAR(15) NOT NULL,
+        referral_id VARCHAR(50),
         message TEXT NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );

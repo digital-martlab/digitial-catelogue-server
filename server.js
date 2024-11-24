@@ -11,6 +11,7 @@ const adminRoutes = require("./routes/admin-routes");
 const storeRoutes = require("./routes/store-routes");
 const contactRoutes = require("./routes/contact-routes");
 const allowedOriginMiddlware = require("./middlewares/allowed-origin-middlware");
+const buyPlanRoutes = require("./routes/buy-plan-route");
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.use('/store', storeRoutes);
 app.use('/super-admin', superAdminRoutes);
 app.use('/admin', adminRoutes);
 app.use('/home', contactRoutes);
+app.use('/buy-plan', buyPlanRoutes);
 
 // Error Handler
 app.use(errorHandler);

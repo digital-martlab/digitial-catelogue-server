@@ -1,0 +1,174 @@
+const Razorpay = require('razorpay');
+const catchAsyncHandler = require('../middlewares/catch-async-handler-middleware');
+const ErrorCreator = require('../config/error-creator-config');
+const { StatusCodes } = require('http-status-codes');
+const { sqlQueryRunner } = require('../config/database');
+const createResponse = require('../config/create-response-config');
+const constantVariables = require('../config/constant-variables');
+const { generateStoreID, expiryDateGenerator } = require('../config/generateStoreId');
+const bcrypt = require('bcrypt');
+const createSlug = require('../config/slug-creator-config');
+const { createStoreHtmlEmailTemplate } = require('../templates/create-store-template');
+const { transporter, mailOptions } = require('../config/email-config');
+const crypto = require("crypto");
+
+module.exports = {
+    createStore: catchAsyncHandler(async (req, res, next) => {
+        // Initialize Razorpay instance with key ID and secret from environment variables
+        const razorpayInstance = new Razorpay({
+            key_id: constantVariables.RAZORPAY_KEY_ID,
+            key_secret: constantVariables.RAZORPAY_KEY_SECRET,
+        });
+
+        // Destructure the request body to get store data
+        const {
+            name,
+            email,
+            number,
+            store_name,
+            password,
+            state,
+            city,
+            area,
+            plan_id,
+        } = req.body;
+
+        // Step 1: Validate Required Fields
+        // Check if any required field is missing and send a bad request error if true
+        if (
+            !name ||
+            !email ||
+            !number ||
+            !store_name ||
+            !password ||
+            !state ||
+            !city ||
+            !area ||
+            !plan_id
+        ) {
+            next(new ErrorCreator(StatusCodes.BAD_REQUEST, "All fields are required"));
+        }
+
+        // Step 2: Generate Store Slug from Store Name
+        const slug = createSlug(store_name);
+
+
+        // Step 3: Check for Existing Store (Email or Store Slug Duplication)
+        // Query the database to check if email or store slug already exists
+        const existingStoreQuery = "SELECT * FROM stores WHERE email = ? OR store_slug = ?";
+        const existingStore = await sqlQueryRunner(existingStoreQuery, [email, slug]);
+        if (existingStore.length > 0) {
+            next(new ErrorCreator(StatusCodes.CONFLICT, "Email or Store Name already exists"));
+        }
+
+        // Step 4: Verify Plan Existence
+        // Check if the provided plan ID exists in the 'plans' table
+        const planQuery = "SELECT * FROM plans WHERE plan_id = ?";
+        const planData = await sqlQueryRunner(planQuery, [plan_id]);
+        if (planData.length === 0) {
+            next(new ErrorCreator(StatusCodes.BAD_REQUEST, "Invalid plan_id provided."));
+        }
+
+        // Step 5: Calculate Plan Amount and Expiry
+        // Razorpay requires the amount in paise (1 INR = 100 paise)
+        const planAmount = planData[0]?.plan_price * 100;
+        const planExpiresIn = expiryDateGenerator(planData[0]?.plan_duration_months);
+
+        // Step 6: Create Razorpay Order
+        // Call the Razorpay API to create an order for the store
+        let razorpayOrder;
+        try {
+            razorpayOrder = await razorpayInstance.orders.create({
+                amount: planAmount, // Amount in paise
+                currency: "INR",    // Currency
+                receipt: `receipt_${Date.now()}`, // Unique receipt ID
+                notes: {
+                    store_name, // Store name in the order notes
+                    email,      // Store owner's email
+                    plan_id,    // Plan ID
+                },
+            });
+        } catch (err) {
+            // Handle error in order creation and return an internal server error
+            next(new ErrorCreator(StatusCodes.INTERNAL_SERVER_ERROR, "Failed to create Razorpay order."));
+        }
+
+        // Step 7: Hash the Password for security before storing it in the database
+        const hashedPassword = await bcrypt.hash(password, constantVariables.SALT);
+
+        // Step 8: Insert Store Data into the Database
+        const insertStoreQuery = `
+            INSERT INTO stores 
+            (name, email, number, store_name, store_slug, store_id, password, plan_expires_in, 
+            state, city, area, plan_id, order_id)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `;
+
+        // Insert the new store data (including Razorpay order ID) into the 'stores' table
+        let insertedStore = await sqlQueryRunner(insertStoreQuery, [
+            name,
+            email,
+            number,
+            store_name,
+            slug,
+            generateStoreID(),
+            hashedPassword,
+            planExpiresIn,
+            state,
+            city,
+            area,
+            plan_id,
+            razorpayOrder.id,
+        ]);
+
+        // Step 9: Assign Default Theme to the Store
+        // Insert a default theme record for the new store in the 'theme' table
+        const themeQuery = "INSERT INTO theme (acc_id) VALUES (?)";
+        await sqlQueryRunner(themeQuery, [insertedStore?.insertId]);
+
+        return createResponse(res, StatusCodes.CREATED, "Order Created Successfully", {
+            razorpayOrder,
+            storeId: insertedStore.insertId,
+            paymentData: {
+                key: constantVariables.RAZORPAY_KEY_ID,
+                amount: razorpayOrder.amount,
+                currency: razorpayOrder.currency,
+                name: store_name,
+                description: `Purchase plan: ${planData[0]?.plan_type}`,
+                order_id: razorpayOrder.id,
+                prefill: {
+                    name,
+                    email,
+                    contact: number,
+                },
+                notes: razorpayOrder.notes,
+                theme: {
+                    color: "#169285",
+                },
+            },
+        });
+    }),
+
+    paymentVerfication: catchAsyncHandler(async (req, res, next) => {
+        const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+
+        const body = razorpay_order_id + '|' + razorpay_payment_id;
+        const expectedSignature = crypto
+            .createHmac('sha256', constantVariables.RAZORPAY_KEY_SECRET)
+            .update(body.toString())
+            .digest('hex');
+
+        if (expectedSignature !== razorpay_signature)
+            next(new ErrorCreator(StatusCodes.BAD_REQUEST, "Payment is invalid."))
+
+        await sqlQueryRunner(`UPDATE stores SET paid_status = "PAID" WHERE order_id = ?`, [razorpay_order_id]);
+        const data = await sqlQueryRunner('SELECT * FROM stores WHERE order_id = ?', [razorpay_order_id]);
+        const store = data[0];
+
+        const subject = "Welcome to Catalogue Wala! Your New Store is Ready";
+        const emailContent = createStoreHtmlEmailTemplate(store);
+        await transporter.sendMail(mailOptions(store.email, subject, emailContent));
+
+        return createResponse(res, StatusCodes.CREATED, "Payment successful! The store information has been sent to your email.")
+    })
+};

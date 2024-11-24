@@ -6,7 +6,7 @@ const { sqlQueryRunner } = require("../config/database");
 
 module.exports = {
     createContact: catchAsyncHandler(async (req, res, next) => {
-        const { name, email, phone, message } = req.body;
+        const { name, email, phone, message, referral_id } = req.body;
 
         // Validate the incoming data
         if (!name || !email || !phone || !message) {
@@ -15,11 +15,11 @@ module.exports = {
 
         // SQL query to insert contact data
         const sql = `
-            INSERT INTO contact_us (name, email, phone, message)
-            VALUES (?, ?, ?, ?)
+            INSERT INTO contact_us (name, email, phone, message, referral_id)
+            VALUES (?, ?, ?, ?, ?)
         `;
 
-        const params = [name, email, phone, message];
+        const params = [name, email, phone, message, referral_id];
 
         await sqlQueryRunner(sql, params);
         return createResponse(res, StatusCodes.CREATED, "Contact message submitted successfully!");
