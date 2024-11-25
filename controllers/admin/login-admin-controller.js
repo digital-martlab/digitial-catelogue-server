@@ -31,6 +31,9 @@ module.exports = catchAsyncHandler(async (req, res, next) => {
 
     const store = data[0];
 
+    if (store?.paid_status === "UNPAID")
+        next(new ErrorCreator(StatusCodes.FORBIDDEN, "Your store is not active. Please contact the administrator."))
+
     if (!store?.is_active)
         next(new ErrorCreator(StatusCodes.BAD_GATEWAY, "You have been blocked by the administrator. Please contact them for further assistance."));
 

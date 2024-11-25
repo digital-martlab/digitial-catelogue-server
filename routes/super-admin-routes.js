@@ -25,6 +25,9 @@ superAdminRoutes.route('/store/:store_id')
     .post(storesAdminController.updateStoreActiveStatus)
     .patch(storesAdminController.updateStore)
 
+superAdminRoutes.route('/store/payment-status/:store_id')
+    .patch(storesAdminController.updateStorePaidStatus)
+
 superAdminRoutes.route('/plan')
     .get(superAdminPlanController.getPlans)
     .post(superAdminPlanController.createPlan)

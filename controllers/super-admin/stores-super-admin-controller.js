@@ -124,67 +124,24 @@ module.exports = {
     }),
 
     getAllStores: catchAsyncHandler(async (req, res, next) => {
-        let { search, page = 1, limit = 10 } = req.query;
+        let { search } = req.query;
 
-        // Ensure `page` and `limit` are numbers
-        page = parseInt(page, 10);
-        limit = parseInt(limit, 10);
-        const offset = (page - 1) * limit;
-
-        // Base query to fetch all stores, excluding sensitive fields
-        let baseSql = `
-        SELECT acc_id, name, email, number, store_name, store_slug, store_id, is_active, 
-               plan_expires_in, created_at, updated_at, logo, logo_id, state, city, area 
-        FROM stores
-    `;
-
-        // Prepare search condition: search by name, store_name, store_id, number, city, or state
-        const conditions = [];
+        let baseSql = `SELECT * FROM stores WHERE 1=1`;
         const values = [];
 
         if (search) {
-            const searchQuery = `%${search}%`;
-            conditions.push(`
-            LOWER(name) LIKE LOWER(?) OR LOWER(store_name) LIKE LOWER(?) 
-            OR store_id LIKE ? OR number LIKE ? OR LOWER(city) LIKE LOWER(?) 
-            OR LOWER(state) LIKE LOWER(?)
-        `);
-            values.push(searchQuery, searchQuery, searchQuery, searchQuery, searchQuery, searchQuery);
+            search = `%${search}%`;
+            baseSql += ` AND (LOWER(name) LIKE LOWER(?) OR LOWER(store_name) LIKE LOWER(?) 
+                     OR store_id LIKE ? OR number LIKE ?) OR LOWER(state) LIKE LOWER(?) OR LOWER(city) LIKE LOWER(?) OR LOWER(area) LIKE LOWER(?) OR LOWER(order_id) LIKE LOWER(?)`;
+            values.push(search, search, search, search, search, search, search, search);
         }
 
-        // Add WHERE clause if there are any conditions
-        if (conditions.length) {
-            baseSql += ` WHERE ${conditions.join(" AND ")}`;
-        }
+        const data = await sqlQueryRunner(baseSql, values);
 
-        // Add ORDER BY, LIMIT, and OFFSET for pagination
-        // baseSql += ` ORDER BY created_at DESC LIMIT ? OFFSET ?`;
-        // values.push(limit, offset);
-
-        try {
-            // Execute the main query
-            const data = await sqlQueryRunner(baseSql, values);
-
-            // Query to get the total number of records
-            const countSql = conditions.length
-                ? `
-                SELECT COUNT(*) as total FROM stores 
-                WHERE ${conditions.join(" AND ")}
-              `
-                : `SELECT COUNT(*) as total FROM stores`;
-            const totalData = await sqlQueryRunner(countSql, values.slice(0, -2)); // Exclude LIMIT and OFFSET
-            const totalRecords = totalData[0]?.total || 0;
-
-            // Return the paginated and filtered data
-            return createResponse(res, StatusCodes.OK, "Stores fetched successfully.", {
-                stores: data,
-                currentPage: page,
-                totalPages: Math.ceil(totalRecords / limit),
-                totalRecords,
-            });
-        } catch (error) {
-            throw error;
-        }
+        return createResponse(res, StatusCodes.OK, "Stores fetched successfully.", {
+            stores: data,
+            totalRecords: data.length,
+        });
     }),
 
 
@@ -206,6 +163,25 @@ module.exports = {
         await sqlQueryRunner(updateSql, [newStatus, store_id]);
 
         return createResponse(res, StatusCodes.OK, "Store active status updated successfully.");
+    }),
+
+    updateStorePaidStatus: catchAsyncHandler(async (req, res, next) => {
+        const { store_id } = req.params;
+
+        if (!store_id)
+            next(new ErrorCreator(StatusCodes.BAD_REQUEST, "store_id is required."));
+
+        const sql = `SELECT * FROM stores WHERE store_id = ?`;
+        const data = await sqlQueryRunner(sql, [store_id]);
+
+        if (data.length === 0) {
+            return next(new ErrorCreator(StatusCodes.BAD_REQUEST, "Store doesn't exist with this id."));
+        }
+
+        const updateSql = `UPDATE stores SET paid_status = "PAID" WHERE store_id = ?`;
+        await sqlQueryRunner(updateSql, [store_id]);
+
+        return createResponse(res, StatusCodes.OK, "Store paid status updated successfully.");
     }),
 
     getSingleStore: catchAsyncHandler(async (req, res, next) => {
@@ -333,5 +309,5 @@ module.exports = {
             await rollbackTransaction(connection);
             return next(new ErrorCreator(StatusCodes.INTERNAL_SERVER_ERROR, "Failed to delete store and images."));
         }
-    })
+    }),
 };

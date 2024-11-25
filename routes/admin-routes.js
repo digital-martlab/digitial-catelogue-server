@@ -10,37 +10,34 @@ const galleryAdminController = require("../controllers/admin/gallery-admin-contr
 const adminDashboardController = require("../controllers/admin/admin-dashboard-controller");
 const adminThemeController = require("../controllers/admin/admin-theme-controller");
 const resetPasswordController = require("../controllers/admin/reset-password-controller");
+const profileAdminController = require("../controllers/admin/profile-admin-controller");
 
 const adminRoutes = express.Router();
 
 adminRoutes.post("/login", loginAdminController);
+adminRoutes.post("/forgot-password", resetPasswordController.sendResetMail);
+adminRoutes.post("/reset-password", resetPasswordController.resetPassword);
 
-adminRoutes.get("/dashboard", verifyJWT([ROLES.ADMIN]), adminDashboardController);
+adminRoutes.use(verifyJWT([ROLES.ADMIN]))
+adminRoutes.get("/dashboard", adminDashboardController);
 
-// Category Section
-adminRoutes.use("/category", verifyJWT([ROLES.ADMIN]))
 adminRoutes.route("/category")
     .post(categoryAdminController.createCategory)
     .get(categoryAdminController.getAllCategory)
     .patch(categoryAdminController.updateCategory)
     .delete(categoryAdminController.deleteCategory);
 
-// Coupon Section
-adminRoutes.use("/coupon", verifyJWT([ROLES.ADMIN]))
 adminRoutes.route("/coupon")
     .post(couponAdminController.createCoupon)
     .get(couponAdminController.getAllCoupons)
     .patch(couponAdminController.updateCoupon)
     .delete(couponAdminController.deleteCoupon);
 
-adminRoutes.use("/gallery", verifyJWT([ROLES.ADMIN]));
 adminRoutes.route("/gallery")
     .post(galleryAdminController.uploadImages)
     .get(galleryAdminController.getAllImages)
     .delete(galleryAdminController.deleteImage);
 
-// Product Section
-adminRoutes.use("/product", verifyJWT([ROLES.ADMIN]))
 adminRoutes.route("/product")
     .post(productAdminController.createProduct)
     .get(productAdminController.getAllProducts)
@@ -48,16 +45,13 @@ adminRoutes.route("/product")
     .delete(productAdminController.deleteProduct)
     .patch(productAdminController.updateProduct);
 
-adminRoutes.use("/theme", verifyJWT([ROLES.ADMIN]))
 adminRoutes.route("/theme")
     .get(adminThemeController.getTheme)
     .patch(adminThemeController.updateTheme);
 
-adminRoutes.get("/product/:product_id", verifyJWT([ROLES.ADMIN]), productAdminController.getSingleProduct)
+adminRoutes.patch("/profile", profileAdminController.updateProfile);
+adminRoutes.get("/product/:product_id", productAdminController.getSingleProduct)
 
-adminRoutes.post("/change-password", verifyJWT([ROLES.ADMIN]), passwordChangeAdmin)
-
-adminRoutes.post("/forgot-password", resetPasswordController.sendResetMail);
-adminRoutes.post("/reset-password", resetPasswordController.resetPassword);
+adminRoutes.post("/change-password", passwordChangeAdmin)
 
 module.exports = adminRoutes;
