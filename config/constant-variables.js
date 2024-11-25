@@ -8,7 +8,7 @@ module.exports = {
     DB_USER: "new-db",
     // DB_USER: "root",
     DB_PASSWORD: "123@123@123",
-    DB_PASSWORD: "root",
+    // DB_PASSWORD: "root",
     DB_NAME: "digital_catelogue_app",
     PORT: 3001,
     JWT_SECRET_KEY: "$2b$12$Rzxx6pFwVvDmYVTMPCzQeeU1/seWXap.kKMQJGYZMA4KypY5s/lvq",
