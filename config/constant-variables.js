@@ -3,11 +3,11 @@ const dotenv = require("dotenv")
 dotenv.config();
 
 module.exports = {
-    // DB_HOST: "35.154.28.45",
-    DB_HOST: "localhost",
-    // DB_USER: "new-db",
-    DB_USER: "root",
-    // DB_PASSWORD: "123@123@123",
+    DB_HOST: "35.154.28.45",
+    // DB_HOST: "localhost",
+    DB_USER: "new-db",
+    // DB_USER: "root",
+    DB_PASSWORD: "123@123@123",
     DB_PASSWORD: "root",
     DB_NAME: "digital_catelogue_app",
     PORT: 3001,
