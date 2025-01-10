@@ -81,13 +81,15 @@ module.exports = {
         meta_title, meta_description, meta_keywords, state, city, area, plan_id, paid_status)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
+        const storeId = generateStoreID();
+        req.body.store_id = storeId;
         const insertedStore = await sqlQueryRunner(insertStoreQuery, [
             name,
             email,
             number,
             store_name,
             slug,
-            generateStoreID(),
+            storeId,
             hashedPassword,
             imageObj.url,
             imageObj.public_id,
